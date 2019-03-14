@@ -15,7 +15,7 @@ public class BaseDaoImpl implements BaseDao {
     @Autowired
     private EntityManagerFactory entityManagerFactory;
 
-    public Session getSession() {
+    private Session getSession() {
         return entityManagerFactory.unwrap(SessionFactory.class).openSession();
     }
 
@@ -23,6 +23,15 @@ public class BaseDaoImpl implements BaseDao {
     public List findBySql(String sql) {
         Session session = getSession();
         Query query = session.createSQLQuery(sql);
+        return query.list();
+    }
+
+    @Override
+    public List findByHqlParams(String hql, String paramName, Object paramValue) {
+        Session session = getSession();
+        Query query = session.createQuery(hql);
+        query.setParameter(paramName, paramValue);
+
         return query.list();
     }
 }
