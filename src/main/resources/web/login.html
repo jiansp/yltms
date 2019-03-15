@@ -1,80 +1,89 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" >
 <head>
-    <base id="base" href="${base}">
-    <meta charset="UTF-8">
-    <title>登录</title>
-    <script type="text/javascript" th:src="@{/jquery/jquery.min.js}"></script>
-    <link rel="stylesheet" type="text/css" th:href="@{/ylt/css/normalize.css}" />
-    <link rel="stylesheet" type="text/css" th:href="@{/ylt/css/demo.css}" />
-    <!--必要样式-->
-    <link rel="stylesheet" type="text/css" th:href="@{/ylt/css/component.css}" />
+    <meta charset="utf-8">
+    <title>layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link th:href="@{/layui/css/layui.css}" rel="stylesheet"/>
+
 </head>
 <body>
-<div class="container demo-1">
-    <div class="content">
-        <div id="large-header" class="large-header">
-            <canvas id="demo-canvas"></canvas>
-            <div class="logo_box">
-                <h3>亿路通汽车</h3>
-                <form action="#" name="f" method="post">
-                    <div class="input_outer">
-                        <span class="u_user"></span>
-                        <input name="username" class="text" style="color: #FFFFFF !important" type="text" placeholder="请输入用户名">
-                    </div>
-                    <div class="input_outer">
-                        <span class="us_uer"></span>
-                        <input name="password" class="text" style="color: #FFFFFF !important; position:absolute; z-index:100;" value="" type="password" placeholder="请输入密码">
-                    </div>
-                    <div class="mb2"><a id = "sub" lay-filter="sub" class="act-but submit" href="javascript:" style="color: #FFFFFF">登录</a></div>
-                </form>
-            </div>
+<form class="layui-form layui-form-pane" action="">
+    <div class="layui-form-item">
+        <label class="layui-form-label">短输入框</label>
+        <div class="layui-input-inline">
+            <input type="text" name="username" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
         </div>
     </div>
-</div><!-- /container -->
+    <div class="layui-form-item">
+        <label class="layui-form-label">密码</label>
+        <div class="layui-input-inline">
+            <input type="password" name="password" placeholder="请输入密码" lay-verify="pass" autocomplete="off" class="layui-input">
+        </div>
+        <div class="layui-form-mid layui-word-aux">请务必填写用户名</div>
+    </div>
+    <div class="layui-form-item">
+        <button class="layui-btn" lay-submit="" lay-filter="demo2">跳转式提交</button>
+    </div>
+</form>
 
-<script th:src="@{/ylt/TweenLite.min.js}"></script>
-<script th:src="@{/ylt/EasePack.min.js}"></script>
-<script th:src="@{/ylt/rAF.js}"></script>
-<script th:src="@{/ylt/demo-1.js}"></script>
 <script th:src="@{/layui/layui.js}"></script>
-</body>
+
 <script>
-    //加载弹出层组件
-    layui.use('layer',function(){
+    layui.use(['form', 'layedit', 'laydate'], function(){
+        var form = layui.form
+            ,layer = layui.layer
+            ,layedit = layui.layedit
+            ,laydate = layui.laydate;
 
-        var layer = layui.layer;
-
-        //登录的点击事件
-        $("#sub").on("click",function(){
-            login();
+        //日期
+        laydate.render({
+            elem: '#date'
+        });
+        laydate.render({
+            elem: '#date1'
         });
 
-        $("body").keydown(function(){
-            if(event.keyCode === "13"){
-                login();
+        //创建一个编辑器
+        var editIndex = layedit.build('LAY_demo_editor');
+
+        //自定义验证规则
+        form.verify({
+            title: function(value){
+                if(value.length < 5){
+                    return '标题至少得5个字符啊';
+                }
+            }
+            ,pass: [
+                /^[\S]{6,12}$/
+                ,'密码必须6到12位，且不能出现空格'
+            ]
+            ,content: function(value){
+                layedit.sync(editIndex);
             }
         });
 
-        //登录函数
-        function login(){
-            var username = $(" input[ name='username' ] ").val();
-            var password = $(" input[ name='password' ] ").val();
-            $.ajax({
-                url:"login",
-                data:{"username":username,"password":password},
-                type:"post",
-                dataType:"json",
-                success:function(data){
-                    if(data.success){
-                        window.location = "index";
-                    }else{
-                        layer.msg(data.msg);
-                    }
-                }
+        //监听指定开关
+        form.on('switch(switchTest)', function(data){
+            layer.msg('开关checked：'+ (this.checked ? 'true' : 'false'), {
+                offset: '6px'
+            });
+            layer.tips('温馨提示：请注意开关状态的文字可以随意定义，而不仅仅是ON|OFF', data.othis)
+        });
+
+        //监听提交
+        form.on('submit(demo1)', function(data){
+            layer.alert(JSON.stringify(data.field), {
+                title: '最终的提交信息'
             })
-        }
-    })
+            return false;
+        });
+
+
+    });
 </script>
+
+</body>
 </html>
