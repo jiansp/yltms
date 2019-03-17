@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" >
-<head th:fragment="commonHeader(title)">
+<head>
     <meta http-equiv="Content-Type" content="text/html charset=UTF-8" />
-    <title th:text="${title}"></title>
+    <title>亿路通汽车</title>
     <link th:href="@{/layui/css/layui.css}" rel="stylesheet"/>
 </head>
 <body class="layui-layout-body">
 <div class="layui-layout layui-layout-admin">
-    <div class="layui-header">
+    <div class="layui-header" th:fragment="header">
         <div class="layui-logo">layui 后台布局</div>
         <!-- 头部区域（可配合layui已有的水平导航） -->
         <ul class="layui-nav layui-layout-left">
@@ -76,12 +76,6 @@
     </div>
 </div>
 <script th:src="@{/layui/layui.js}"></script>
-<script>
-    //JavaScript代码区域
-    layui.use('element', function(){
-        var element = layui.element
-
-    })
-</script>
+<div th:include="::footer"></div>
 </body>
 </html>

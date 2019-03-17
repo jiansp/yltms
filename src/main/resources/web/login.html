@@ -1,89 +1,77 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" >
 <head>
-    <meta charset="utf-8">
-    <title>layui</title>
-    <meta name="renderer" content="webkit">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta charset="UTF-8">
+    <title>登录</title>
     <link th:href="@{/layui/css/layui.css}" rel="stylesheet"/>
+    <link th:href="@{/css/login.css}" rel="stylesheet"/>
+    <script th:src="@{/layui/layui.js}"></script>
+    <script type="text/javascript" th:src="@{/jquery/jquery.min.js}"></script>
 
 </head>
 <body>
-<form class="layui-form layui-form-pane" action="">
-    <div class="layui-form-item">
-        <label class="layui-form-label">短输入框</label>
-        <div class="layui-input-inline">
-            <input type="text" name="username" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
-        </div>
+<div class="bg">
+    <div>
+        <i id="admPage" class="layui-icon layui-icon-set-fill admin-icon"></i>
     </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">密码</label>
-        <div class="layui-input-inline">
-            <input type="password" name="password" placeholder="请输入密码" lay-verify="pass" autocomplete="off" class="layui-input">
-        </div>
-        <div class="layui-form-mid layui-word-aux">请务必填写用户名</div>
+    <div id="signInDiv" class="logo_box">
+        <h3>亿路通汽车</h3>
+        <form action="#" name="f" method="post">
+            <div class="input_outer">
+                <span class="u_user"></span>
+                <input name="username" class="text" type="text" placeholder="请输入用户名">
+            </div>
+            <div class="input_outer">
+                <span class="us_uer"></span>
+                <input name="password" class="text" style="position:absolute; z-index:100;" value="" type="password" placeholder="请输入密码">
+            </div>
+            <div class="mb2"><a id = "sub" lay-filter="sub" class="act-but submit" href="javascript:" style="color: #FFFFFF">登录</a></div>
+            <div class="su"><a id="signUp" href="javascript:" style="color: #ffb800">还不是会员？注册</a></div>
+        </form>
     </div>
-    <div class="layui-form-item">
-        <button class="layui-btn" lay-submit="" lay-filter="demo2">跳转式提交</button>
-    </div>
-</form>
-
-<script th:src="@{/layui/layui.js}"></script>
-
-<script>
-    layui.use(['form', 'layedit', 'laydate'], function(){
-        var form = layui.form
-            ,layer = layui.layer
-            ,layedit = layui.layedit
-            ,laydate = layui.laydate;
-
-        //日期
-        laydate.render({
-            elem: '#date'
+</div>
+<script type="text/javascript" th:inline="javascript">
+    /*<![CDATA[*/
+    layui.use('layer',function(){
+        var layer = layui.layer;
+        //登录的点击事件
+        $("#sub").on("click",function(){
+            login();
         });
-        laydate.render({
-            elem: '#date1'
+        $("#admPage").on("click",function(){
+            window.location = [[@{/index}]];
         });
 
-        //创建一个编辑器
-        var editIndex = layedit.build('LAY_demo_editor');
-
-        //自定义验证规则
-        form.verify({
-            title: function(value){
-                if(value.length < 5){
-                    return '标题至少得5个字符啊';
-                }
+        $(document).ready(function(){
+            document.onkeydown = function (event){
+                if (event.keyCode===13) //回车键的键值为13
+                    $('#sub').click();
+            };
+        });
+        function login(){
+            var username = $(" input[ name='username' ] ").val();
+            var password = $(" input[ name='password' ] ").val();
+            var empPattern = /^\s*$/;
+            if (empPattern.test(username) || empPattern.test(password)){
+                layer.msg('用户名或密码不能为空');
+                return;
             }
-            ,pass: [
-                /^[\S]{6,12}$/
-                ,'密码必须6到12位，且不能出现空格'
-            ]
-            ,content: function(value){
-                layedit.sync(editIndex);
-            }
-        });
+            $.ajax({
+                url:[[@{/login}]],
+                data:{"username":username,"password":password},
+                type:"post",
+                    dataType:"json",
 
-        //监听指定开关
-        form.on('switch(switchTest)', function(data){
-            layer.msg('开关checked：'+ (this.checked ? 'true' : 'false'), {
-                offset: '6px'
-            });
-            layer.tips('温馨提示：请注意开关状态的文字可以随意定义，而不仅仅是ON|OFF', data.othis)
-        });
+                success:function(req){
+                    if(req.success == true){
+                        window.location = [[@{/index}]];
+                        }
+                    }
+                })
+        }
 
-        //监听提交
-        form.on('submit(demo1)', function(data){
-            layer.alert(JSON.stringify(data.field), {
-                title: '最终的提交信息'
-            })
-            return false;
-        });
-
-
-    });
+    })
+    /*]]>*/
 </script>
-
 </body>
 </html>
