@@ -21,6 +21,11 @@ public class LoginController {
         return "login";
     }
 
+    @RequestMapping("/signUp")
+    public String signUp() {
+        return "signUp";
+    }
+
     @RequestMapping("/login")
     @ResponseBody
     public Result content(HttpSession session, String username, String password) {
