@@ -4,10 +4,11 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import java.util.Date;
-import java.util.Objects;
 
 @Entity
 public class User extends BaseModel {
+    public static final String ADMIN_USER = "1";
+    public static final String GENERAL_USER = "2";
     private String username;
     private String password;
     private String name;
@@ -17,6 +18,7 @@ public class User extends BaseModel {
     private String phone;
     private String mail;
     private String address;
+    private String type;
 
 
     @Basic
@@ -109,24 +111,13 @@ public class User extends BaseModel {
         this.address = address;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return Objects.equals(username, user.username) &&
-                Objects.equals(password, user.password) &&
-                Objects.equals(name, user.name) &&
-                Objects.equals(sex, user.sex) &&
-                Objects.equals(age, user.age) &&
-                Objects.equals(birthday, user.birthday) &&
-                Objects.equals(phone, user.phone) &&
-                Objects.equals(mail, user.mail) &&
-                Objects.equals(address, user.address);
+    @Basic
+    @Column(name = "TYPE")
+    public String getType() {
+        return type;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(username, password, name, sex, age, birthday, phone, mail, address);
+    public void setType(String type) {
+        this.type = type;
     }
 }
