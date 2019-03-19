@@ -1,6 +1,6 @@
 package com.haoche.yltms.system.service.impl;
 
-import com.haoche.yltms.system.dao.UserDao;
+import com.haoche.yltms.system.repository.UserRepository;
 import com.haoche.yltms.system.model.User;
 import com.haoche.yltms.system.service.UserService;
 import com.haoche.yltms.utils.UUIDGenerator;
@@ -12,7 +12,7 @@ import java.util.Date;
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
-    private UserDao userDao;
+    private UserRepository userRepository;
 
     @Override
     public void save(User user) {
@@ -20,6 +20,6 @@ public class UserServiceImpl implements UserService {
         user.setId(UUIDGenerator.getUUID());
         user.setType(User.GENERAL_USER);
         user.setCreateTime(now);
-        this.userDao.save(user);
+        this.userRepository.save(user);
     }
 }

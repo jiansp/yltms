@@ -11,6 +11,8 @@ import java.util.Objects;
 public class User {
     public static final String ADMIN_USER = "1";
     public static final String GENERAL_USER = "2";
+    @GeneratedValue(generator = "jpa-uuid")
+    @Column(length = 32)
     private String id;
     private Date createTime;
     private String creator;

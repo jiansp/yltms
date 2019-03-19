@@ -1,6 +1,6 @@
 package com.haoche.yltms.system.service.impl;
 
-import com.haoche.yltms.system.dao.UserDao;
+import com.haoche.yltms.system.repository.UserDao;
 import com.haoche.yltms.system.model.User;
 import com.haoche.yltms.system.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
