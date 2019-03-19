@@ -1,5 +1,6 @@
 package com.haoche.yltms.system.controller;
 
+import com.haoche.yltms.system.model.User;
 import com.haoche.yltms.system.service.UserService;
 import com.haoche.yltms.system.vo.Result;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,16 +16,16 @@ public class UserController {
 
     @RequestMapping("/saveUser")
     @ResponseBody
-    public Result saveUser(String username){
+    public Result saveUser(User user){
         Result result = new Result();
-        /*try{
+        try{
             this.userService.save(user);
             result.setSuccess(true);
         } catch (Exception e){
             e.printStackTrace();
             result.setSuccess(false);
             result.setMsg(e.getMessage());
-        }*/
+        }
         return result;
 
     }

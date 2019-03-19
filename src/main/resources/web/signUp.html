@@ -79,7 +79,7 @@
 
             <div class="layui-form-item">
                 <div class="layui-input-block">
-                    <button class="layui-btn"  id="qwr">立即提交</button>
+                    <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
                     <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                 </div>
             </div>
@@ -97,14 +97,11 @@
             elem: '#date'
         });
 
-        $("#qwr").on("click",function(){
-            login();
-        });
         //监听提交
-        function login(){
+        form.on('submit(formDemo)', function(data){
             $.ajax({
                 url:[[@{user/saveUser}]],
-            data:{username:"123"},
+                data:data.field,
                 type:"post",
                 dataType:"json",
                 success:function(result){
@@ -112,17 +109,10 @@
                     layer.msg("保存成功，请返回登录");
                 }
             },
-            error: function (XMLHttpRequest, textStatus, errorThrown) {
-                // 状态码
-                console.log(XMLHttpRequest.status);
-                // 状态
-                console.log(XMLHttpRequest.readyState);
-                // 错误信息
-                console.log(textStatus);
-            }
 
         });
-        }
+            return false;
+        });
 
     })
     /*]]>*/

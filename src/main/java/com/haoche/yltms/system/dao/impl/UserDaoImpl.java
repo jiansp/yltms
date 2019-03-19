@@ -15,6 +15,6 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
 
     @Override
     public void save(User user) {
-        this.save(user);
+        super.save(user);
     }
 }

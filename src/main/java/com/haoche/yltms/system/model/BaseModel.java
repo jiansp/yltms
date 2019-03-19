@@ -1,14 +1,13 @@
 package com.haoche.yltms.system.model;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
 @MappedSuperclass
 public class BaseModel implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private String id;
 
     private Date createTime;
     private String creator;
@@ -18,13 +17,6 @@ public class BaseModel implements Serializable {
     private String deleter;
     private String isDelete;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     @Basic
     @Column(name = "CREATE_TIME")

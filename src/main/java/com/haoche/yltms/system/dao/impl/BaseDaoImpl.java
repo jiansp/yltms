@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManagerFactory;
+import java.io.Serializable;
 import java.util.List;
 
 @Repository
@@ -33,5 +34,16 @@ public class BaseDaoImpl implements BaseDao {
         query.setParameter(paramName, paramValue);
 
         return query.list();
+    }
+
+    public Serializable save(Object object)
+    {
+        Serializable id = getSession().save(object);
+        return id;
+    }
+
+    public void update(Object object)
+    {
+        getSession().update(object);
     }
 }
