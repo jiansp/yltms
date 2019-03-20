@@ -9,6 +9,7 @@ import java.util.Date;
 @MappedSuperclass
 public class BaseModel implements Serializable {
 
+    private String id;
     private Date createTime;
     private String creator;
     private Date modifyTime;
@@ -17,6 +18,16 @@ public class BaseModel implements Serializable {
     private String deleter;
     private String isDelete;
 
+
+    @Id
+    @Column(name = "id")
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     @Basic
     @Column(name = "CREATE_TIME")

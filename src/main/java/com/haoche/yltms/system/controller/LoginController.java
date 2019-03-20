@@ -1,13 +1,16 @@
 package com.haoche.yltms.system.controller;
 
+import com.haoche.yltms.config.LoginInterceptor;
 import com.haoche.yltms.system.model.User;
 import com.haoche.yltms.system.service.LoginService;
 import com.haoche.yltms.system.vo.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @Controller
@@ -26,23 +29,37 @@ public class LoginController {
         return "signUp";
     }
 
+    @RequestMapping("/admLogin")
+    public String admLogin() {
+        return "admLogin";
+    }
+
     @RequestMapping("/login")
     @ResponseBody
-    public Result content(HttpSession session, String username, String password) {
-        User user = this.loginService.getUserByUsername(username);
-        if(user != null){
-            session.setAttribute("USER", user);
-        }
+    public Result content(HttpSession session, String username, String password,String type) {
         Result result = new Result();
-        result.setSuccess(true);
-        result.setMsg(username + password);
-        result.setObj(session.getAttribute("USER"));
+        User user = this.loginService.getUserByUsername(username, type);
+        if(user != null && password.equals(user.getPassword())){
+            session.setAttribute(LoginInterceptor.SESSION_KEY, user);
+            result.setSuccess(true);
+        }else{
+            result.setSuccess(false);
+            result.setMsg("用户名或密码错误");
+        }
         return result;
     }
 
     @RequestMapping("/index")
-    public String index() {
+    public String index(Model model) {
+        model.addAttribute("username","jsppppp");
         return "index";
+    }
+
+
+    @RequestMapping("/logout")
+    public String logout(HttpSession session){
+        session.removeAttribute(LoginInterceptor.SESSION_KEY);
+        return "redirect:/";
     }
 
 

@@ -7,7 +7,7 @@ html,body{
 .bg{
     min-width: 1200px;
     height: 100%;
-    background-image: url(../img/signUp-bg.jpg);
+    background-image: url(../img/login.png);
     background-position: center center;
     background-size: 100% 100%;
     background-repeat: no-repeat;
@@ -23,18 +23,29 @@ html,body{
     line-height: 0;
     visibility: hidden;
 }
-.logo_box{
-    width: 390px;
-    height: 530px;
-    background: #fff;
+
+.login_box{
+    width: 500px;
+    height: 300px;
+    background: rgba(22,19,14,0.3);
     border-radius: 10px;
     float: left;
-    margin-left:16%;
-    margin-top:3%;
-    padding-top: 15px;
+    margin-left:6%;
+    margin-top:180px;
 }
-.box-title{
-    font-size: 22px;
-    margin-bottom: 20px;
-    margin-left: 37%;
+
+.logo_box{
+    padding: 35px;
+    margin-left: 52%;
+    margin-top: 20%;
+    background-color: #fff;
+    width: 20%;
+    text-align: center;
+
+}
+.logo_box input{
+    margin-top: 20px;
+}
+.logo_box button{
+    margin-top: 20px;
 }

@@ -17,10 +17,9 @@ public class WebConfigurer implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
     }
 
-    // 这个方法用来注册拦截器，我们自己写好的拦截器需要通过这里添加注册才能生效
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        String[] path = {"/","/login","/signUp", "/user/saveUser","/img/**", "/jquery/**", "/layui/**", "/css/**"};
+        String[] path = {"/admLogin","/js/**","/","/login","/signUp", "/user/saveUser","/img/**", "/jquery/**", "/layui/**", "/css/**"};
         registry.addInterceptor(loginInterceptor).addPathPatterns("/**").excludePathPatterns(path);
     }
 
