@@ -9,8 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @Controller
@@ -50,8 +50,8 @@ public class LoginController {
     }
 
     @RequestMapping("/index")
-    public String index(Model model) {
-        model.addAttribute("username","jsppppp");
+    public String index(@SessionAttribute(LoginInterceptor.SESSION_KEY)User user, Model model) {
+        model.addAttribute("account",user);
         return "index";
     }
 
@@ -60,6 +60,11 @@ public class LoginController {
     public String logout(HttpSession session){
         session.removeAttribute(LoginInterceptor.SESSION_KEY);
         return "redirect:/";
+    }
+
+    @RequestMapping("/editPass")
+    public String editPass(){
+        return "passForm";
     }
 
 
