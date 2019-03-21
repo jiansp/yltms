@@ -4,6 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html charset=UTF-8" />
     <title>亿路通汽车</title>
     <link th:href="@{/layui/css/layui.css}" rel="stylesheet"/>
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/img/car.ico}" />
     <script type="text/javascript" th:src="@{/jquery/jquery.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/encode64.js}"></script>
 </head>
@@ -28,7 +29,7 @@
         <ul class="layui-nav layui-layout-right">
             <li class="layui-nav-item">
                 <a href="javascript:">
-                    <span th:text="${account.name}"></span>
+                    <span th:text="${account.username}"></span>
                 </a>
                 <dl class="layui-nav-child">
                     <dd><a href="">基本资料</a></dd>
@@ -87,9 +88,21 @@
         });
         function editPass(){
             layer.open({
+                id: 'insert-form',
                 type: 2,
+                title:"修改密码",
+                area: ['450px', '320px'],
+                btn: ['确定'],
+                yes: function(index, layero){
+                    insertSubmit();
+                },
                 content: [[@{/editPass}]]
             });
+        }
+
+        function insertSubmit(){
+            var frameId=document.getElementById('insert-form').getElementsByTagName("iframe")[0].id;
+            $('#'+frameId)[0].contentWindow.onSubmit();
         }
 
     });

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.thymeleaf.util.StringUtils;
 
 @Controller
 @RequestMapping("/user")
@@ -19,17 +20,19 @@ public class UserController {
 
     @RequestMapping("/saveUser")
     @ResponseBody
-    public Result saveUser(User user){
+    public Result saveUser(User user) {
         Result result = new Result();
-        try{
-            if(this.loginService.getUserByUsername(user.getUsername(), User.GENERAL_USER) !=null){
+        try {
+            if (this.loginService.getUserByUsername(user.getUsername(), User.GENERAL_USER) != null && StringUtils.isEmpty(user.getId())) {
                 result.setSuccess(false);
                 result.setMsg("该用户名已被使用");
-            }else{
-                this.userService.save(user);
-                result.setSuccess(true);
+                return result;
             }
-        } catch (Exception e){
+
+            this.userService.save(user);
+            result.setSuccess(true);
+
+        } catch (Exception e) {
             e.printStackTrace();
 
         }

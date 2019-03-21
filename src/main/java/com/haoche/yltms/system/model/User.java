@@ -24,6 +24,9 @@ public class User extends BaseModel{
     private String username;
     private String type;
 
+    @Transient
+    private String passwordO;
+
 
     @Basic
     @Column(name = "address")
@@ -125,4 +128,11 @@ public class User extends BaseModel{
         this.type = type;
     }
 
+    public String getPasswordO() {
+        return passwordO;
+    }
+
+    public void setPasswordO(String passwordO) {
+        this.passwordO = passwordO;
+    }
 }
