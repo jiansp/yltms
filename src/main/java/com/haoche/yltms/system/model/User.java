@@ -4,7 +4,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.Objects;
 
 @Entity
 @Table(name = "user", schema = "ylt", catalog = "")
@@ -24,7 +23,6 @@ public class User extends BaseModel{
     private String username;
     private String type;
 
-    @Transient
     private String passwordO;
 
 
@@ -128,6 +126,7 @@ public class User extends BaseModel{
         this.type = type;
     }
 
+    @Transient
     public String getPasswordO() {
         return passwordO;
     }

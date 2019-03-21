@@ -63,7 +63,8 @@ public class LoginController {
     }
 
     @RequestMapping("/editPass")
-    public String editPass(){
+    public String editPass(@SessionAttribute(LoginInterceptor.SESSION_KEY)User user, Model model){
+        model.addAttribute("account",user);
         return "passForm";
     }
 
