@@ -6,6 +6,7 @@ import com.haoche.yltms.system.service.UserService;
 import com.haoche.yltms.utils.CopyUtils;
 import com.haoche.yltms.utils.UUIDGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -40,4 +41,5 @@ public class UserServiceImpl implements UserService {
     public List<User> findUsers() {
         return this.userRepository.findAll();
     }
+
 }

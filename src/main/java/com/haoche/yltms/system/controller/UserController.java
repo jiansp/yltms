@@ -4,9 +4,11 @@ import com.haoche.yltms.config.LoginInterceptor;
 import com.haoche.yltms.system.model.User;
 import com.haoche.yltms.system.service.LoginService;
 import com.haoche.yltms.system.service.UserService;
-import com.haoche.yltms.system.vo.PageData;
+import com.haoche.yltms.system.vo.Page;
+import com.haoche.yltms.system.vo.TableData;
 import com.haoche.yltms.system.vo.Result;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -72,17 +74,18 @@ public class UserController {
 
     @ResponseBody
     @RequestMapping("/getUserTable")
-    public PageData getUserTable(){
-        PageData pageData = new PageData();
+    public TableData getUserTable(Integer page, Integer limit){
+        TableData tableData = new TableData();
+        Sort sort = new Sort(Sort.DEFAULT_DIRECTION,"id");
         try {
             List<User> list = this.userService.findUsers();
-            pageData.setCode(PageData.SUCCESS);
-            pageData.setCount(list.size());
-            pageData.setData(list);
+            tableData.setCode(TableData.SUCCESS);
+            tableData.setCount(list.size());
+            tableData.setData(list);
         } catch (Exception e){
             e.printStackTrace();
-            pageData.setMsg(e.getMessage());
+            tableData.setMsg(e.getMessage());
         }
-        return pageData;
+        return tableData;
     }
 }

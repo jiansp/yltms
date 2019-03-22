@@ -1,6 +1,6 @@
 package com.haoche.yltms.system.vo;
 
-public class PageData {
+public class TableData {
     public static final String SUCCESS = "0";
     private String code;
     private String msg;
