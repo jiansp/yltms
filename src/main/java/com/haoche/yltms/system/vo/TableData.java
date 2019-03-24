@@ -4,7 +4,7 @@ public class TableData {
     public static final String SUCCESS = "0";
     private String code;
     private String msg;
-    private int count;
+    private Long count;
     private Object data;
 
     public String getCode() {
@@ -23,11 +23,11 @@ public class TableData {
         this.msg = msg;
     }
 
-    public int getCount() {
+    public Long getCount() {
         return count;
     }
 
-    public void setCount(int count) {
+    public void setCount(Long count) {
         this.count = count;
     }
 

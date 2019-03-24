@@ -7,13 +7,14 @@ import java.util.Date;
 
 @Entity
 @Table(name = "user", schema = "ylt", catalog = "")
-public class User extends BaseModel{
+public class User extends BaseModel {
     public static final String ADMIN_USER = "1";
     public static final String GENERAL_USER = "2";
+    public static final String IS_DETELE = "1";
 
     private String address;
     private String age;
-    @DateTimeFormat(pattern="yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birthday;
     private String mail;
     private String name;

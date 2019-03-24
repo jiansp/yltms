@@ -4,11 +4,10 @@ import com.haoche.yltms.config.LoginInterceptor;
 import com.haoche.yltms.system.model.User;
 import com.haoche.yltms.system.service.LoginService;
 import com.haoche.yltms.system.service.UserService;
-import com.haoche.yltms.system.vo.Page;
-import com.haoche.yltms.system.vo.TableData;
 import com.haoche.yltms.system.vo.Result;
+import com.haoche.yltms.system.vo.TableData;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +15,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.thymeleaf.util.StringUtils;
 
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/user")
@@ -49,14 +51,36 @@ public class UserController {
 
     @ResponseBody
     @RequestMapping("/update")
-    public Result update(User user){
+    public Result update(HttpServletRequest request, User user){
         Result result = new Result();
         try {
             if(StringUtils.isEmpty(user.getPasswordO())){
+                HttpSession session = request.getSession();
+                User account = (User) session.getAttribute(LoginInterceptor.SESSION_KEY);
+                user.setModifier(account.getId());
                 this.userService.save(user);
                 result.setSuccess(true);
             }else{
                 this.userService.changePassword(user);
+                result.setSuccess(true);
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+            result.setMsg(e.getMessage());
+        }
+        return result;
+    }
+
+    @ResponseBody
+    @RequestMapping("/del")
+    public Result del(@SessionAttribute(LoginInterceptor.SESSION_KEY)User user,String id){
+        Result result = new Result();
+        try {
+            if(StringUtils.isEmpty(id)){
+                result.setMsg("删除失败，无法确定id");
+                result.setSuccess(false);
+            }else{
+                this.userService.del(id, user.getId());
                 result.setSuccess(true);
             }
         } catch (Exception e){
@@ -72,16 +96,24 @@ public class UserController {
         return "user/query";
     }
 
+    @RequestMapping("/edit")
+    public String edit(String id, Model model){
+        User user = this.userService.findById(id);
+        model.addAttribute("user",user);
+        return "user/edit";
+    }
+
     @ResponseBody
     @RequestMapping("/getUserTable")
-    public TableData getUserTable(Integer page, Integer limit){
+    public TableData getUserTable(Integer page, Integer limit, String username){
         TableData tableData = new TableData();
-        Sort sort = new Sort(Sort.DEFAULT_DIRECTION,"id");
+        Map<String,String> params = new HashMap<>();
+        params.put("username",username);
         try {
-            List<User> list = this.userService.findUsers();
+            Page<User> userPage = this.userService.findUsers(page,limit,params);
             tableData.setCode(TableData.SUCCESS);
-            tableData.setCount(list.size());
-            tableData.setData(list);
+            tableData.setCount(userPage.getTotalElements());
+            tableData.setData(userPage.getContent());
         } catch (Exception e){
             e.printStackTrace();
             tableData.setMsg(e.getMessage());

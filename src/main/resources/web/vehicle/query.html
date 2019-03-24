@@ -9,22 +9,21 @@
     <script type="text/html" id="toolbarDemo">
         <div class="layui-input-block">
             <div class="layui-input-inline">
-                <input id="username" type="text" placeholder="请输入用户名" class="layui-input">
+                <input id="license" type="text" placeholder="请输入车牌照" class="layui-input">
             </div>
             <div class="layui-input-inline">
                 <button class="layui-btn" lay-event="search">搜索</button>
             </div>
-            <!--<div class="layui-input-inline">
-                <button class="layui-btn">
+            <div class="layui-input-inline">
+                <button class="layui-btn" lay-event="add">
                     <i class="layui-icon">&#xe654;</i>
                 </button>
-            </div>-->
+            </div>
         </div>
     </script>
     <script type="text/html" id="barDemo">
         <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
-        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="reset">重置密码</a>
     </script>
     <script th:src="@{/js/utils.js}"></script>
     <script type="text/javascript" th:inline="javascript">
@@ -34,7 +33,7 @@
                 elem: '#userTable'
                 ,url:[[@{/user/getUserTable}]]
                 ,toolbar: '#toolbarDemo'
-                ,title: '用户数据表'
+                ,title: '车辆数据表'
                 ,limit: 10
                 ,limits: [10, 15, 20]
                 ,cols: [
@@ -55,7 +54,7 @@
                     ,{field:'createTime', title:'加入时间', width:120, templet: function(res){
                             return '<em>'+ formatDate("yyyy-MM-dd hh:mm:ss",new Date(res.createTime)) +'</em>'
                         }}
-                    ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:190}
+                    ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
                 ]
             ]
                 ,page: true
@@ -128,26 +127,6 @@
                             insertSubmit();
                         },
                         content: [[@{/user/edit?id=}]]+data.id
-                    });
-                }else if(obj.event === 'reset'){
-                    layer.confirm('是否确定重置密码？', function(index){
-                        var index_ = layer.load(1);
-                        $.ajax({
-                            url:[[@{/user/update}]],
-                            data:{"id":data.id,"password":encode64("123456")},
-                            type:"post",
-                            dataType:"json",
-                            success:function(result){
-                            if(result.success){
-                                layer.msg("重置成功");
-                                userTable.reload();
-                                layer.close(index);
-                            }else{
-                                layer.msg(result.msg);
-                            }
-                            layer.close(index_);
-                        },
-                    });
                     });
                 }
             });
