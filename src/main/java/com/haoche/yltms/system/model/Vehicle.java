@@ -14,7 +14,7 @@ public class Vehicle extends BaseModel {
     private String model;
     private String seatNum;
     private String colour;
-    private String vic;
+    private String vin;
     private Timestamp firstLicense;
     private String isDelete;
     private String rent;
@@ -71,13 +71,13 @@ public class Vehicle extends BaseModel {
     }
 
     @Basic
-    @Column(name = "VIC")
-    public String getVic() {
-        return vic;
+    @Column(name = "VIN")
+    public String getVin() {
+        return vin;
     }
 
-    public void setVic(String vic) {
-        this.vic = vic;
+    public void setVin(String vin) {
+        this.vin = vin;
     }
 
     @Basic

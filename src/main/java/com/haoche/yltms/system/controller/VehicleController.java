@@ -9,6 +9,7 @@ import com.haoche.yltms.system.vo.TableData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -24,13 +25,9 @@ public class VehicleController {
     private VehicleService vehicleService;
 
     @RequestMapping("/query")
-    public String query(){
+    public String query(@SessionAttribute(LoginInterceptor.SESSION_KEY)User user, Model model){
+        model.addAttribute("account",user);
         return "vehicle/query";
-    }
-
-    @RequestMapping("/add")
-    public String add(){
-        return "vehicle/edit";
     }
 
     @RequestMapping("/edit")

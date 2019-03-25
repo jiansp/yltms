@@ -13,11 +13,11 @@
 <body>
     <div style="padding: 30px">
         <form class="layui-form" action="">
-            <input type="hidden" name="id" th:value="${user.id}" class="layui-input">
+            <input type="hidden" name="id" th:value="${obj.id}" class="layui-input">
             <div class="layui-form-item">
                 <label class="layui-form-label">姓名</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="name" th:value="${user.name}" required lay-verify="required" placeholder="请输入姓名" autocomplete="off" class="layui-input">
+                    <input type="text" name="name" th:value="${obj.name}" required lay-verify="required" placeholder="请输入姓名" autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item">
@@ -36,19 +36,19 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">电话</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="phone" th:value="${user.phone}" required lay-verify="phone" placeholder="请输入联系方式" autocomplete="off" class="layui-input">
+                    <input type="text" name="phone" th:value="${obj.phone}" required lay-verify="phone" placeholder="请输入联系方式" autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">邮箱</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="mail" th:value="${user.mail}" required lay-verify="mail" placeholder="请输入邮箱" autocomplete="off" class="layui-input">
+                    <input type="text" name="mail" th:value="${obj.mail}" required lay-verify="mail" placeholder="请输入邮箱" autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">地址</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="address" th:value="${user.address}" placeholder="请输入地址" autocomplete="off" class="layui-input">
+                    <input type="text" name="address" th:value="${obj.address}" placeholder="请输入地址" autocomplete="off" class="layui-input">
                 </div>
             </div>
              <button style="display:none" id="onSubmit" class="layui-btn" lay-submit lay-filter="formSubmit">立即提交</button>

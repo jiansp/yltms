@@ -13,42 +13,60 @@
 <body>
     <div style="padding: 30px">
         <form class="layui-form" action="">
-            <input type="hidden" name="id" th:value="${user.id}" class="layui-input">
+            <input type="hidden" name="id" th:value="${obj.id}" class="layui-input">
             <div class="layui-form-item">
-                <label class="layui-form-label">姓名</label>
+                <label class="layui-form-label">车牌</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="name" th:value="${user.name}" required lay-verify="required" placeholder="请输入姓名" autocomplete="off" class="layui-input">
+                    <input type="text" name="license" th:value="${obj.license}" required lay-verify="license" placeholder="请输入车牌号" autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">性别</label>
+                <label class="layui-form-label">品牌</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="brand" th:value="${obj.brand}" required lay-verify="required" placeholder="请输入品牌" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">车型</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="model" th:value="${obj.model}" required lay-verify="required" placeholder="请输入车型" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">座位数</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="seatNum" th:value="${obj.seatNum}" required lay-verify="required" placeholder="请输入姓名" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">颜色</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="colour" th:value="${obj.colour}" required lay-verify="required" placeholder="请输入颜色" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">VIN码</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="vin" th:value="${obj.vin}" required lay-verify="required" placeholder="请输入VIN码" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">首次上牌时间</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="firstLicense" th:value="${#dates.format(obj.firstLicense, 'yyyy-MM-dd')}"  id="date" lay-verify="date" placeholder="请选择首次上牌日期" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">租金</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="rent" th:value="${obj.rent}" required lay-verify="phone" placeholder="请输入租金" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">停用标志</label>
                 <div class="layui-input-block">
-                    <input type="radio" name="sex" value="1" title="男" th:field="*{user.sex}">
-                    <input type="radio" name="sex" value="2" title="女" th:field="*{user.sex}">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">生日</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="birthday" th:value="${#dates.format(user.birthday, 'yyyy-MM-dd')}"  id="date" lay-verify="date" placeholder="请选择出生日期" autocomplete="off" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">电话</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="phone" th:value="${user.phone}" required lay-verify="phone" placeholder="请输入联系方式" autocomplete="off" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">邮箱</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="mail" th:value="${user.mail}" required lay-verify="mail" placeholder="请输入邮箱" autocomplete="off" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">地址</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="address" th:value="${user.address}" placeholder="请输入地址" autocomplete="off" class="layui-input">
+                    <input type="radio" name="isStop" value="1" title="男" th:field="*{obj.isStop}">
+                    <input type="radio" name="isStop" value="2" title="女" th:field="*{obj.isStop}">
                 </div>
             </div>
              <button style="display:none" id="onSubmit" class="layui-btn" lay-submit lay-filter="formSubmit">立即提交</button>
@@ -69,9 +87,9 @@
         });
 
         form.verify({
-            phone: [
-                /^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,5-9]))\d{8}$/
-                ,'手机号格式错误'
+            license: [
+                /^(([京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领][A-Z](([0-9]{5}[DF])|([DF]([A-HJ-NP-Z0-9])[0-9]{4})))|([京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领][A-Z][A-HJ-NP-Z0-9]{4}[A-HJ-NP-Z0-9挂学警港澳使领]))$/
+                ,'车牌号码错误'
             ],
             mail: [
                 /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/

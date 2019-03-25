@@ -40,20 +40,19 @@
                     [
                     {type: 'checkbox', fixed: 'left'}
                     ,{field:'id', title:'id',width:50 }
-                    ,{field:'username', title:'用户名', width:120,fixed: 'left', edit: 'text'}
-                    ,{field:'name', title:'姓名', width:120, edit: 'text'}
-                    ,{field:'sex', title:'性别', width:80, edit: 'text', templet: function(res){
-                            return '<em>'+ formatSex(res.sex) +'</em>'
+                    ,{field:'license', title:'用户名', width:120,fixed: 'left', edit: 'text'}
+                    ,{field:'brand', title:'姓名', width:120, edit: 'text'}
+                    ,{field:'model', title:'性别', width:80, edit: 'text'}
+                    ,{field:'seatNum', title:'生日', width:100}
+                    ,{field:'colour', title:'电话', width:150}
+                    ,{field:'VIN', title:'邮箱', edit: 'text'}
+                    ,{field:'rent', title:'地址'}
+                    ,{field:'firstLicense', title:'加入时间', width:120, templet: function(res){
+                            return '<em>'+ formatDate("yyyy-MM-dd hh:mm:ss",new Date(res.firstLicense)) +'</em>'
                         }}
-                    ,{field:'birthday', title:'生日', width:100, templet: function(res){
-                            return '<em>'+ formatDate("yyyy-MM-dd",new Date(res.birthday)) +'</em>'
-                        }}
-                    ,{field:'phone', title:'电话', width:150}
-                    ,{field:'mail', title:'邮箱', edit: 'text'}
-                    ,{field:'address', title:'地址'}
                     ,{field:'createTime', title:'加入时间', width:120, templet: function(res){
-                            return '<em>'+ formatDate("yyyy-MM-dd hh:mm:ss",new Date(res.createTime)) +'</em>'
-                        }}
+                        return '<em>'+ formatDate("yyyy-MM-dd hh:mm:ss",new Date(res.createTime)) +'</em>'
+                    }}
                     ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
                 ]
             ]
@@ -76,13 +75,13 @@
                             yes: function(index, layero){
                                 insertSubmit();
                             },
-                            content: [[@{/user/edit}]]
+                            content: [[@{/vehicle/edit}]]
                         });
                         break;
                     case 'search':
                         userTable.reload({
                             where: { //设定异步数据接口的额外参数，任意设
-                                username: $("#username").val()
+                                license: $("#license").val()
                             }
                             ,page: {
                                 curr: 1 //重新从第 1 页开始

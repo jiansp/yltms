@@ -99,7 +99,7 @@ public class UserController {
     @RequestMapping("/edit")
     public String edit(String id, Model model){
         User user = this.userService.findById(id);
-        model.addAttribute("user",user);
+        model.addAttribute("obj",user);
         return "user/edit";
     }
 
