@@ -67,6 +67,4 @@ public class VehicleController {
         }
         return result;
     }
-
-
 }
