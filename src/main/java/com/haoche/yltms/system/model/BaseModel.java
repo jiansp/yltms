@@ -8,6 +8,7 @@ import java.util.Date;
 
 @MappedSuperclass
 public class BaseModel implements Serializable {
+    public static final String IS_DETELE = "1";
 
     private String id;
     private Date createTime;

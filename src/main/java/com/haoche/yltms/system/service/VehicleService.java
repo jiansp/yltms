@@ -10,4 +10,8 @@ public interface VehicleService {
     Page<Vehicle> findVehicles(Integer page, Integer limit, Map<String, String> params);
 
     void saveAndUpdate(Vehicle vehicle, User user);
+
+    Vehicle findById(String id);
+
+    void del(String id, String id1);
 }

@@ -23,14 +23,14 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">性别</label>
                 <div class="layui-input-block">
-                    <input type="radio" name="sex" value="1" title="男" th:field="*{user.sex}">
-                    <input type="radio" name="sex" value="2" title="女" th:field="*{user.sex}">
+                    <input type="radio" name="sex" value="1" title="男" th:field="*{obj.sex}">
+                    <input type="radio" name="sex" value="2" title="女" th:field="*{obj.sex}">
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">生日</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="birthday" th:value="${#dates.format(user.birthday, 'yyyy-MM-dd')}"  id="date" lay-verify="date" placeholder="请选择出生日期" autocomplete="off" class="layui-input">
+                    <input type="text" name="birthday" th:value="${#dates.format(obj.birthday, 'yyyy-MM-dd')}"  id="date" lay-verify="date" placeholder="请选择出生日期" autocomplete="off" class="layui-input test-item">
                 </div>
             </div>
             <div class="layui-form-item">
@@ -64,8 +64,13 @@
         var form = layui.form;
         var laydate = layui.laydate;
 
-        laydate.render({
-            elem: '#date'
+        lay('.test-item').each(function(){
+            laydate.render({
+                elem: this
+                ,format:'yyyy-MM-dd'
+                ,type:'date'
+                ,trigger: 'click'
+            });
         });
 
         form.verify({

@@ -3,7 +3,7 @@
       th:replace="inc">
 <body>
 <div th:fragment="content">
-    <table class="layui-hide" id="userTable" lay-filter="test"></table>
+    <table class="layui-hide" id="vehicleTable" lay-filter="test"></table>
 </div>
 <footer  th:fragment="footer">
     <script type="text/html" id="toolbarDemo">
@@ -29,31 +29,32 @@
     <script type="text/javascript" th:inline="javascript">
         layui.use('table', function(){
             var table = layui.table;
-            var userTable = table.render({
-                elem: '#userTable'
-                ,url:[[@{/user/getUserTable}]]
+            var vehicleTable = table.render({
+                elem: '#vehicleTable'
+                ,url:[[@{/vehicle/getVehicleTable}]]
                 ,toolbar: '#toolbarDemo'
                 ,title: '车辆数据表'
                 ,limit: 10
                 ,limits: [10, 15, 20]
                 ,cols: [
                     [
-                    {type: 'checkbox', fixed: 'left'}
-                    ,{field:'id', title:'id',width:50 }
-                    ,{field:'license', title:'用户名', width:120,fixed: 'left', edit: 'text'}
-                    ,{field:'brand', title:'姓名', width:120, edit: 'text'}
-                    ,{field:'model', title:'性别', width:80, edit: 'text'}
-                    ,{field:'seatNum', title:'生日', width:100}
-                    ,{field:'colour', title:'电话', width:150}
-                    ,{field:'VIN', title:'邮箱', edit: 'text'}
-                    ,{field:'rent', title:'地址'}
-                    ,{field:'firstLicense', title:'加入时间', width:120, templet: function(res){
-                            return '<em>'+ formatDate("yyyy-MM-dd hh:mm:ss",new Date(res.firstLicense)) +'</em>'
+                    {field:'id', title:'id',width:50 }
+                    ,{field:'license', title:'车牌号', width:120,fixed: 'left', templet: function(res){
+                            return res.isStop == '0'?res.license+'  <span class="layui-badge-dot layui-bg-green"></span>':res.license+'  <span class="layui-badge-dot"></span>';
+                        }}
+                    ,{field:'brand', title:'品牌', width:120, edit: 'text'}
+                    ,{field:'model', title:'车型', width:80, edit: 'text'}
+                    ,{field:'seatNum', title:'座位数', width:100}
+                    ,{field:'colour', title:'颜色'}
+                    ,{field:'vin', title:'VIN码', edit: 'text', width:100}
+                    ,{field:'rent', title:'租金'}
+                    ,{field:'firstLicense', title:'首次上牌时间', width:120, templet: function(res){
+                            return '<em>'+ formatDate("yyyy-MM-dd",new Date(res.firstLicense)) +'</em>'
                         }}
                     ,{field:'createTime', title:'加入时间', width:120, templet: function(res){
                         return '<em>'+ formatDate("yyyy-MM-dd hh:mm:ss",new Date(res.createTime)) +'</em>'
                     }}
-                    ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
+                    ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:120}
                 ]
             ]
                 ,page: true
@@ -69,8 +70,8 @@
                         layer.open({
                             id: 'insert-form',
                             type: 2,
-                            title:"修改密码",
-                            area: ['450px', '320px'],
+                            title:"编辑",
+                            area: ['450px', '520px'],
                             btn: ['确定'],
                             yes: function(index, layero){
                                 insertSubmit();
@@ -79,7 +80,7 @@
                         });
                         break;
                     case 'search':
-                        userTable.reload({
+                        vehicleTable.reload({
                             where: { //设定异步数据接口的额外参数，任意设
                                 license: $("#license").val()
                             }
@@ -99,14 +100,14 @@
                     layer.confirm('真的删除行么', function(index){
                         var index_ = layer.load(1);
                         $.ajax({
-                            url:[[@{/user/del}]],
+                            url:[[@{/vehicle/del}]],
                             data:{"id":data.id},
                             type:"post",
                             dataType:"json",
                             success:function(result){
                             if(result.success){
                                 layer.msg("删除成功");
-                                userTable.reload();
+                                vehicleTable.reload();
                                 layer.close(index);
                             }else{
                                 layer.msg(result.msg);
@@ -125,7 +126,7 @@
                         yes: function(index, layero){
                             insertSubmit();
                         },
-                        content: [[@{/user/edit?id=}]]+data.id
+                        content: [[@{/vehicle/edit?id=}]]+data.id
                     });
                 }
             });

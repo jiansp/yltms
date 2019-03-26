@@ -31,7 +31,13 @@ public class VehicleController {
     }
 
     @RequestMapping("/edit")
-    public String edit(){
+    public String edit(String id,Model model){
+        if(!StringUtils.isEmpty(id)){
+            Vehicle vehicle = this.vehicleService.findById(id);
+            model.addAttribute("obj",vehicle);
+        }else{
+            model.addAttribute("obj",new Vehicle());
+        }
         return "vehicle/edit";
     }
 
@@ -64,6 +70,25 @@ public class VehicleController {
             e.printStackTrace();
             result.setMsg(e.getMessage());
             result.setSuccess(false);
+        }
+        return result;
+    }
+
+    @ResponseBody
+    @RequestMapping("/del")
+    public Result del(@SessionAttribute(LoginInterceptor.SESSION_KEY)User user,String id){
+        Result result = new Result();
+        try {
+            if(StringUtils.isEmpty(id)){
+                result.setMsg("删除失败，无法确定id");
+                result.setSuccess(false);
+            }else{
+                this.vehicleService.del(id, user.getId());
+                result.setSuccess(true);
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+            result.setMsg(e.getMessage());
         }
         return result;
     }

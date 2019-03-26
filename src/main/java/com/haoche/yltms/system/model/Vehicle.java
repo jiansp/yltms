@@ -1,11 +1,15 @@
 package com.haoche.yltms.system.model;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import java.sql.Timestamp;
+import javax.persistence.Table;
+import java.util.Date;
 
 @Entity
+@Table(name = "vehicle", schema = "ylt", catalog = "")
 public class Vehicle extends BaseModel {
     public static final String ENABLE = "0";
     public static final String DISABLE = "1";
@@ -15,7 +19,8 @@ public class Vehicle extends BaseModel {
     private String seatNum;
     private String colour;
     private String vin;
-    private Timestamp firstLicense;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date firstLicense;
     private String isDelete;
     private String rent;
     private String isStop;
@@ -82,11 +87,11 @@ public class Vehicle extends BaseModel {
 
     @Basic
     @Column(name = "FIRST_LICENSE")
-    public Timestamp getFirstLicense() {
+    public Date getFirstLicense() {
         return firstLicense;
     }
 
-    public void setFirstLicense(Timestamp firstLicense) {
+    public void setFirstLicense(Date firstLicense) {
         this.firstLicense = firstLicense;
     }
 

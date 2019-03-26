@@ -30,12 +30,14 @@ public class VehicleServiceImpl implements VehicleService {
         Specification<Vehicle> specification = (Specification<Vehicle>) (root, criteriaQuery, criteriaBuilder) -> {
             Path<String> isDelete = root.get("isDelete");
             Predicate p1 = criteriaBuilder.isNull(isDelete);
+            Predicate p3 = criteriaBuilder.notEqual(isDelete,"1");
+            Predicate p = criteriaBuilder.or(p1,p3);
             if (!StringUtils.isEmpty(license)) {
                 Path<String> licensePath = root.get("license");
                 Predicate p2 = criteriaBuilder.like(licensePath, "%" + license + "%");
-                return criteriaBuilder.and(p1, p2);
+                return criteriaBuilder.and(p, p2);
             }
-            return p1;
+            return p;
         };
         Sort sort = new Sort(Sort.DEFAULT_DIRECTION, "license");
         PageRequest pageable = PageRequest.of(pageNo - 1, limit, sort);
@@ -59,5 +61,20 @@ public class VehicleServiceImpl implements VehicleService {
             this.vehicleRepository.save(old);
 
         }
+    }
+
+    @Override
+    public Vehicle findById(String id) {
+        return this.vehicleRepository.getOne(id);
+    }
+
+    @Override
+    public void del(String id, String userId) {
+        Date now = new Date();
+        Vehicle vehicle = this.vehicleRepository.getOne(id);
+        vehicle.setIsDelete(Vehicle.IS_DETELE);
+        vehicle.setDeleter(userId);
+        vehicle.setDeleteTime(now);
+        this.vehicleRepository.save(vehicle);
     }
 }
