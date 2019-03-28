@@ -68,6 +68,14 @@
                     <input type="checkbox" name="isStop" checked lay-skin="switch" value="0" lay-text="启用|停用">
                 </div>
             </div>
+            <div class="layui-upload">
+                <button type="button" class="layui-btn" id="uploadImg">上传图片</button>
+                <div class="layui-upload-list">
+                    <img class="layui-upload-img" id="demo1" th:src="@{/uploaded/1553699366682谢溢月.jpg}">
+                    <p id="demoText"></p>
+                </div>
+            </div>
+
              <button style="display:none" id="onSubmit" class="layui-btn" lay-submit lay-filter="formSubmit">立即提交</button>
         </form>
     </div>
@@ -77,9 +85,22 @@
     function onSubmit(){
         $("#onSubmit").click();
     }
-    layui.use(['form','laydate'], function(){
+    layui.use(['form','laydate','upload'], function(){
         var form = layui.form;
         var laydate = layui.laydate;
+        var upload = layui.upload;
+
+        var uploadInst = upload.render({
+            elem: '#uploadImg' //绑定元素
+            ,url: [[@{/upload/uploadImg}]] //上传接口
+            ,done: function(res){
+                console.log("-------------img-------------"+res.msg);
+            }
+            ,error: function(){
+                //请求异常回调
+                console.log("-------------error-------------");
+            }
+        });
 
         lay('.test-item').each(function(){
             laydate.render({
