@@ -13,6 +13,10 @@ import java.util.Date;
 public class Vehicle extends BaseModel {
     public static final String ENABLE = "0";
     public static final String DISABLE = "1";
+
+    public static final String NORMAL = "1";
+    public static final String LUXURY = "2";
+
     private String license;
     private String brand;
     private String model;
@@ -24,6 +28,19 @@ public class Vehicle extends BaseModel {
     private String isDelete;
     private String rent;
     private String isStop;
+    private String imgPath;
+    private String type;
+
+
+    @Basic
+    @Column(name = "IMG_PATH")
+    public String getImgPath() {
+        return imgPath;
+    }
+
+    public void setImgPath(String imgPath) {
+        this.imgPath = imgPath;
+    }
 
     @Basic
     @Column(name = "LICENSE")
@@ -125,4 +142,13 @@ public class Vehicle extends BaseModel {
         this.isStop = isStop;
     }
 
+    @Basic
+    @Column(name = "TYPE")
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 }

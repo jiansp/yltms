@@ -21,7 +21,7 @@ public class LoginController {
 
     @RequestMapping("/")
     public String login() {
-        return "login";
+        return "ylt/index";
     }
 
     @RequestMapping("/signUp")
@@ -52,7 +52,7 @@ public class LoginController {
     @RequestMapping("/index")
     public String index(@SessionAttribute(LoginInterceptor.SESSION_KEY)User user, Model model) {
         model.addAttribute("account",user);
-        return "index";
+        return "admIndex";
     }
 
 

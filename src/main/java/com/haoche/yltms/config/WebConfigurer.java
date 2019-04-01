@@ -19,7 +19,7 @@ public class WebConfigurer implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        String[] path = {"/admLogin","/js/**","/","/login","/signUp", "/user/saveUser","/img/**", "/jquery/**", "/layui/**", "/css/**"};
+        String[] path = {"/images/**","/fonts/**","/webfonts/**","/admLogin","/js/**","/","/login","/signUp", "/user/saveUser","/img/**","/uploaded/**", "/jquery/**", "/layui/**", "/css/**"};
         registry.addInterceptor(loginInterceptor).addPathPatterns("/**").excludePathPatterns(path);
     }
 

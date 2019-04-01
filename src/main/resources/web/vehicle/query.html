@@ -54,6 +54,10 @@
                     ,{field:'createTime', title:'加入时间', width:120, templet: function(res){
                         return '<em>'+ formatDate("yyyy-MM-dd hh:mm:ss",new Date(res.createTime)) +'</em>'
                     }}
+                    ,{field:'imgPath', title:'图片', width:120, templet: function(res){
+                        var src = [[@{/uploaded/}]]+res.imgPath;
+                        return '<img src="'+src+'" height="100" width="100" />';
+                    }}
                     ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:120}
                 ]
             ]

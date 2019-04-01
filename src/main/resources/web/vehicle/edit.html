@@ -51,7 +51,7 @@
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">首次上牌时间</label>
+                <label class="layui-form-label">上牌时间</label>
                 <div class="layui-input-inline">
                     <input type="text" name="firstLicense" th:value="${#dates.format(obj.firstLicense, 'yyyy-MM-dd')}"  id="date" lay-verify="date" placeholder="请选择首次上牌日期" autocomplete="off" class="layui-input test-item">
                 </div>
@@ -63,16 +63,24 @@
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">停用标志</label>
+                <label class="layui-form-label">类别</label>
                 <div class="layui-input-block">
-                    <input type="checkbox" name="isStop" checked lay-skin="switch" value="0" lay-text="启用|停用">
+                    <input type="radio" name="type" value="1" title="普通" th:field="*{obj.type}" checked>
+                    <input type="radio" name="type" value="2" title="豪华" th:field="*{obj.type}">
                 </div>
             </div>
-            <div class="layui-upload">
+            <div class="layui-form-item">
+                <label class="layui-form-label">类别</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="isStop" value="0" title="启用" th:field="*{obj.isStop}" checked>
+                    <input type="radio" name="isStop" value="1" title="停用" th:field="*{obj.isStop}">
+                </div>
+            </div>
+            <div class="layui-form-item">
                 <button type="button" class="layui-btn" id="uploadImg">上传图片</button>
                 <div class="layui-upload-list">
-                    <img class="layui-upload-img" id="demo1" th:src="@{/uploaded/1553699366682谢溢月.jpg}">
-                    <p id="demoText"></p>
+                    <img class="layui-upload-img" height="100" width="100" id="vehicleImg" >
+                    <input type="hidden" name="imgPath"  class="layui-input">
                 </div>
             </div>
 
@@ -81,7 +89,15 @@
     </div>
 <script type="text/javascript" th:inline="javascript">
     /*<![CDATA[*/
-
+    $(function(){
+        var imgPath = [[${obj.imgPath}]];
+        console.log(imgPath);
+        console.log([[@{/uploaded/}]]+imgPath);
+        if(imgPath){
+            $("#vehicleImg").attr("src",[[@{/uploaded/}]]+imgPath);
+            $(" input[ name='imgPath' ] ").val(imgPath);
+        }
+    })
     function onSubmit(){
         $("#onSubmit").click();
     }
@@ -95,6 +111,9 @@
             ,url: [[@{/upload/uploadImg}]] //上传接口
             ,done: function(res){
                 console.log("-------------img-------------"+res.msg);
+                $("#vehicleImg").attr("src",[[@{/uploaded/}]]+res.msg);
+                $(" input[ name='imgPath' ] ").val(res.msg);
+
             }
             ,error: function(){
                 //请求异常回调

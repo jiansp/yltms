@@ -31,9 +31,9 @@ public class UploadImgController {
             File destFile = new File(destFileName);
             destFile.getParentFile().mkdirs();
             //5.把浏览器上传的文件复制到希望的位置
+     result.setMsg(fileName);
             file.transferTo(destFile);
             //6.把文件名放在model里，以便后续显示用
-            result.setMsg(fileName);
             result.setSuccess(true);
         } catch (IOException e) {
             e.printStackTrace();
