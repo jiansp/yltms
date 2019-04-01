@@ -5,8 +5,6 @@
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta charset="utf-8">
-	<meta name="keywords" content="Taxi Cab Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, 
-	Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
 	<script type="application/x-javascript">
 		addEventListener("load", function () {
 			setTimeout(hideURLbar, 0);
@@ -29,7 +27,9 @@
 	<!-- web-fonts -->
 	<link href="//fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&amp;subset=latin-ext" rel="stylesheet">
 	<!-- //web-fonts -->
-	
+	<script type="text/javascript" th:src="@{/js/encode64.js}"></script>
+
+
 </head>
 
 <body>
@@ -39,7 +39,7 @@
 		<div class="row">
 			
 			<div class="col-md-4 col-sm-6 log-icons mt-2">
-				<p class="py-2"><i class="fas fa-phone"></i> Call Taxi : 12(00) 123 1234</p>
+				<p class="py-2"><i class="fas fa-phone"></i> 服务热线 : 12(00) 123 1234</p>
 			</div>
 			
 			<div class="col-md-4 col-sm-6 logo">
@@ -73,7 +73,7 @@
 				<div class="collapse navbar-collapse" id="navbarSupportedContent">
 					<ul class="navbar-nav mx-auto">
 						<li class="nav-item active">
-							<a class="nav-link ml-lg-0" href="index.html">Home
+							<a class="nav-link ml-lg-0" href="index.html">首页
 								<span class="sr-only">(current)</span>
 							</a>
 						</li>
@@ -84,7 +84,7 @@
 							<a class="nav-link" href="services.html">Services</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="booking.html">Booking</a>
+							<a class="nav-link" href="booking.html">立即选车</a>
 						</li>
 						<li class="nav-item dropdown">
 							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
@@ -119,7 +119,7 @@
 									<span class="fas fa-taxi"></span>
 									<h1>24/7 Taxi Service </h1>
 									<h2 class="mb-5"><i class="fas fa-phone"></i> 12(00) 123 1234</h2>
-									<a href="booking.html">Book Now </a>
+									<a href="booking.html">立即选车</a>
 								</div>
 							</div>
 						</div>
@@ -131,7 +131,7 @@
 									<span class="fas fa-taxi"></span>
 									<h4>Online Cab Booking</h4>
 									<h5 class="mb-5">No Extra Charges</h5>
-									<a href="booking.html">Book Now </a>
+									<a href="booking.html">立即选车</a>
 								</div>
 							</div>
 						</div>
@@ -143,7 +143,7 @@
 									<span class="fas fa-taxi"></span>
 									<h4>Reach Your Destination</h4>
 									<h5 class="mb-5">Within Exact Time </h5>
-									<a href="booking.html">Book Now </a>
+									<a href="booking.html">立即选车</a>
 								</div>
 							</div>
 						</div>
@@ -155,7 +155,7 @@
 									<span class="fas fa-taxi"></span>
 									<h4>Travel Safe & Secure</h4>
 									<h5 class="mb-5">Assured Cab Service</h5>
-									<a href="booking.html">Book Now </a>
+									<a href="booking.html">立即选车</a>
 								</div>
 							</div>
 						</div>
@@ -646,39 +646,28 @@
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel">Sign In to your account</h5>
+				<h5 class="modal-title" id="exampleModalLabel">登录你的账户</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
 			<div class="modal-body">
-				<form action="#" method="post">
-					<div class="form-group">
-						<label for="recipient-name" class="col-form-label">User Name</label>
-						<input type="text" class="form-control" placeholder="User Name" name="Name" id="recipient-name" required="">
-					</div>
-					<div class="form-group">
-						<label for="password" class="col-form-label">Password</label>
-						<input type="password" class="form-control" placeholder="Password" name="Password" id="password" required="">
-					</div>
-					<div class="row sub-w3l my-3">
-						<div class="col sub-agile">
-							<input type="checkbox" id="brand1" value="">
-							<label for="brand1" class="text-white">
-								<span></span>Remember me?</label>
-						</div>
-						<div class="col forgot-w3l text-right">
-							<a href="#" class="text-white">Forgot Password?</a>
-						</div>
-					</div>
-					<div class="right-w3l">
-						<input type="submit" class="form-control" value="Sign In">
-					</div>
-					<p class="text-center dont-do text-white mt-3">Don't have an account?
-						<a href="#" data-toggle="modal" data-target="#exampleModal1" class="text-white">
-							Register Now</a>
-					</p>
-				</form>
+				<div class="form-group">
+					<label for="username" class="col-form-label">用户名</label>
+					<input type="text" class="form-control" placeholder="用户名" id="username" required>
+				</div>
+				<div class="form-group">
+					<label for="password" class="col-form-label">密码</label>
+					<input type="password" class="form-control" placeholder="密码" id="password" required>
+				</div>
+
+				<div class="right-w3l">
+					<input type="submit" id="sub" class="form-control" value="登录">
+				</div>
+				<p class="text-center dont-do text-white mt-3">没有账户?
+					<a href="#" data-toggle="modal" data-target="#exampleModal1" class="text-white">
+						立即注册</a>
+				</p>
 			</div>
 		</div>
 	</div>
@@ -687,7 +676,7 @@
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel1">Register your account</h5>
+				<h5 class="modal-title" id="exampleModalLabel1">注册你的账户</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
@@ -695,30 +684,24 @@
 			<div class="modal-body">
 				<form action="#" method="post">
 					<div class="form-group">
-						<label for="recipient-name" class="col-form-label">User Name</label>
-						<input type="text" class="form-control" placeholder="User Name" name="Name" id="recipient-rname" required="">
+						<label for="recipient-name" class="col-form-label">用户名</label>
+						<input type="text" class="form-control" placeholder="用户名" name="Name" id="recipient-rname" required="">
 					</div>
 					<div class="form-group">
-						<label for="recipient-email" class="col-form-label">Email</label>
-						<input type="email" class="form-control" placeholder="Email" name="Email" id="recipient-email" required="">
+						<label for="recipient-email" class="col-form-label">邮箱</label>
+						<input type="email" class="form-control" placeholder="邮箱" name="Email" id="recipient-email" required="">
 					</div>
 					<div class="form-group">
-						<label for="password1" class="col-form-label">Password</label>
-						<input type="password" class="form-control" placeholder="Password" name="Password" id="password1" required="">
+						<label for="password1" class="col-form-label">密码</label>
+						<input type="password" class="form-control" placeholder="密码" name="Password" id="password1" required="">
 					</div>
 					<div class="form-group">
-						<label for="password2" class="col-form-label">Confirm Password</label>
-						<input type="password" class="form-control" placeholder="Confirm Password" name="Confirm Password" id="password2" required="">
+						<label for="password2" class="col-form-label">确认密码</label>
+						<input type="password" class="form-control" placeholder="确认密码" name="Confirm Password" id="password2" required="">
 					</div>
-					<div class="sub-w3l">
-						<div class="sub-agile">
-							<input type="checkbox" id="brand2" value="">
-							<label for="brand2" class="mb-3">
-								<span></span>I Accept to the Terms & Conditions</label>
-						</div>
-					</div>
+
 					<div class="right-w3l">
-						<input type="submit" class="form-control" value="Register">
+						<input type="submit" class="form-control" value="注册">
 					</div>
 				</form>
 			</div>
@@ -803,7 +786,7 @@
 				containerID: 'toTop', // fading element id
 				containerHoverID: 'toTopHover', // fading element hover id
 				scrollSpeed: 1200,
-				easingType: 'linear' 
+				easingType: 'linear'
 				};
 			*/
 								
@@ -811,10 +794,56 @@
 								
 			});
 	</script>
-	<!-- //here ends scrolling icon -->
-	<!-- start-smoth-scrolling -->
-	
-<!-- //js-scripts -->
+<script th:src="@{/layui/layui.js}"></script>
+<script type="text/javascript" th:inline="javascript">
+    /*<![CDATA[*/
+    layui.use('layer',function(){
+        var layer = layui.layer;
+        //登录的点击事件
+        $("#sub").on("click",function(){
+            login();
+        });
+        $("#admPage").on("click",function(){
+            window.location = [[@{/admLogin}]];
+            });
+
+        $("#signUp").on("click",function(){
+            window.location = [[@{/signUp}]];
+            });
+
+        $(document).ready(function(){
+            document.onkeydown = function (event){
+                if (event.keyCode===13) //回车键的键值为13
+                    $('#sub').click();
+            };
+        });
+        function login(){
+            var username = $("#username").val();
+            var password = $("#password").val();
+            var empPattern = /^\s*$/;
+            if (empPattern.test(username) || empPattern.test(password)){
+                layer.msg('用户名或密码不能为空');
+                return;
+            }
+            password = encode64(password);
+            $.ajax({
+                url:[[@{/login}]],
+                data:{"username":username,"password":password, "type":"2"},
+                type:"post",
+                    dataType:"json",
+                    success:function(result){
+                    if(result.success){
+                        window.location = [[@{/index}]];
+                        }else{
+                            layer.msg(result.msg);
+                        }
+                    }
+                })
+        }
+
+    })
+    /*]]>*/
+</script>
 
 </body>
 </html>
