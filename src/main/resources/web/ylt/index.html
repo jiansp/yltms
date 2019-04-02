@@ -23,7 +23,7 @@
 	<link rel="stylesheet" th:href="@{/css/style.css}" type="text/css" media="all" /> <!-- Style-CSS -->
 	<link rel="stylesheet" th:href="@{/css/fontawesome-all.css}"> <!-- Font-Awesome-Icons-CSS -->
 	<!-- //css files -->
-
+	<link th:href="@{/layui/css/layui.css}" rel="stylesheet"/>
 	<!-- web-fonts -->
 	<link href="//fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&amp;subset=latin-ext" rel="stylesheet">
 	<!-- //web-fonts -->
@@ -48,7 +48,7 @@
 			</div>
 			
 			
-			<div class="col-md-4 top-forms mt-md-3 mt-2 mb-md-0 mb-3">
+			<div id="noLogin" class="col-md-4 top-forms mt-md-3 mt-2 mb-md-0 mb-3">
 				<span class="mx-lg-4 mx-md-2  mx-1">
 					<a href="#" data-toggle="modal" aria-pressed="false" data-target="#exampleModal">
 						<i class="fas fa-lock"></i> 登录</a>
@@ -58,6 +58,14 @@
 						<i class="fas fa-user"></i> 注册</a>
 				</span>
 			</div>
+
+            <div id="yesLogin" class="col-md-4 top-forms mt-md-3 mt-2 mb-md-0 mb-3">
+                <a id="nameSpan" href="#"><i class="fas fa-user"></i> </a>
+                <a href="#" data-toggle="modal" aria-pressed="false" data-target="#changePass">
+                    <i class="fas fa-lock"></i> 修改密码</a>
+                <a th:href="@{/logout}">
+                    <i class="fas fa-outdent"></i> 退出</a>
+            </div>
 		</div>
 	</div>
 
@@ -682,26 +690,27 @@
 				</button>
 			</div>
 			<div class="modal-body">
-				<form action="#" method="post">
+				<form class="layui-form" action="">
 					<div class="form-group">
 						<label for="recipient-name" class="col-form-label">用户名</label>
-						<input type="text" class="form-control" placeholder="用户名" name="Name" id="recipient-rname" required="">
+						<input type="text" class="form-control" lay-verify="username" placeholder="用户名" name="username" id="recipient-name" required="">
 					</div>
 					<div class="form-group">
 						<label for="recipient-email" class="col-form-label">邮箱</label>
-						<input type="email" class="form-control" placeholder="邮箱" name="Email" id="recipient-email" required="">
+						<input type="email" class="form-control" lay-verify="mail" placeholder="邮箱" name="mail" id="recipient-email" required="">
 					</div>
 					<div class="form-group">
 						<label for="password1" class="col-form-label">密码</label>
-						<input type="password" class="form-control" placeholder="密码" name="Password" id="password1" required="">
+						<input type="password" class="form-control" lay-verify="pass" placeholder="密码" name="password" id="password1" required="">
 					</div>
 					<div class="form-group">
 						<label for="password2" class="col-form-label">确认密码</label>
-						<input type="password" class="form-control" placeholder="确认密码" name="Confirm Password" id="password2" required="">
+						<input type="password" class="form-control" lay-verify="pass" placeholder="确认密码" name="ConfirmPassword" id="password2" required="">
 					</div>
 
 					<div class="right-w3l">
-						<input type="submit" class="form-control" value="注册">
+						<input type="button" id="regsub" class="form-control" value="注册">
+						<button style="display: none" id="subForm" class="layui-btn" lay-submit lay-filter="subForm">提交</button>
 					</div>
 				</form>
 			</div>
@@ -778,45 +787,31 @@
 			});
 		});
 	</script>
-	<!-- here stars scrolling icon -->
-	<script type="text/javascript">
-		$(document).ready(function() {
-			/*
-				var defaults = {
-				containerID: 'toTop', // fading element id
-				containerHoverID: 'toTopHover', // fading element hover id
-				scrollSpeed: 1200,
-				easingType: 'linear'
-				};
-			*/
-								
-			$().UItoTop({ easingType: 'easeOutQuart' });
-								
-			});
-	</script>
 <script th:src="@{/layui/layui.js}"></script>
 <script type="text/javascript" th:inline="javascript">
     /*<![CDATA[*/
-    layui.use('layer',function(){
+	$(function(){
+		$().UItoTop({ easingType: 'easeOutQuart' });
+		var account = [[${account}]];
+		if(account){
+            $("#noLogin").hide();
+            $("#yesLogin").show();
+            $("#nameSpan").append(account.username);
+        }else{
+            $("#noLogin").show();
+            $("#yesLogin").hide();
+		}
+	});
+    layui.use(['layer','form'],function(){
         var layer = layui.layer;
+        var form = layui.form;
         //登录的点击事件
         $("#sub").on("click",function(){
             login();
         });
-        $("#admPage").on("click",function(){
-            window.location = [[@{/admLogin}]];
-            });
-
-        $("#signUp").on("click",function(){
-            window.location = [[@{/signUp}]];
-            });
-
-        $(document).ready(function(){
-            document.onkeydown = function (event){
-                if (event.keyCode===13) //回车键的键值为13
-                    $('#sub').click();
-            };
-        });
+		$("#regsub").on("click",function(){
+			$("#subForm").click();
+		});
         function login(){
             var username = $("#username").val();
             var password = $("#password").val();
@@ -833,7 +828,8 @@
                     dataType:"json",
                     success:function(result){
                     if(result.success){
-                        window.location = [[@{/index}]];
+                        layer.msg("登陆成功");
+                        window.location = [[@{/}]];
                         }else{
                             layer.msg(result.msg);
                         }
@@ -841,6 +837,46 @@
                 })
         }
 
+		form.verify({
+			pass: [
+				/^[\S]{6,12}$/
+				,'密码必须6到12位，且不能出现空格'
+			],
+			username: [
+				/^[a-zA-Z0-9_-]{4,16}$/
+				,'用户名必须4到16位（数字，字码，下划线，减号）'
+			],
+			mail: [
+				/^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/
+				,'邮箱格式错误'
+			]
+		});
+		//监听提交
+		form.on('submit(subForm)', function(data){
+			console.log(data);
+			if(data.field.password !== data.field.ConfirmPassword){
+				layer.msg("两次密码输入不一致");
+				return false;
+			}
+			data.field.ConfirmPassword = "";
+			data.field.password = encode64(data.field.password);
+			$.ajax({
+				url:[[@{user/saveUser}]],
+			data:data.field,
+					type:"post",
+					dataType:"json",
+					success:function(result){
+				if(result.success){
+					layer.msg("保存成功，请登录");
+					window.location=[[@{/}]]
+					}else{
+						layer.msg(result.msg);
+					}
+				},
+
+			});
+			return false;
+		});
     })
     /*]]>*/
 </script>

@@ -126,9 +126,8 @@
                 dataType:"json",
                 success:function(result){
                 if(result.success){
-                    //layer.msg("保存成功，请返回登录");
-                    //form.reset();
-                    //window.location=[[@{/}]]
+                    layer.msg("保存成功，请登录");
+                    window.location=[[@{/}]]
                 }else{
                         layer.msg(result.msg);
                     }

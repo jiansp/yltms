@@ -20,7 +20,9 @@ public class LoginController {
 
 
     @RequestMapping("/")
-    public String login() {
+    public String login(HttpSession session, Model model) {
+        User user = (User) session.getAttribute(LoginInterceptor.SESSION_KEY);
+        model.addAttribute("account",user);
         return "ylt/index";
     }
 
