@@ -29,6 +29,12 @@
 	<!-- //web-fonts -->
 	<script type="text/javascript" th:src="@{/js/encode64.js}"></script>
 
+	<style>
+		#yesLogin a{
+			margin-left: 20px;
+		}
+	</style>
+
 
 </head>
 
@@ -50,11 +56,11 @@
 			
 			<div id="noLogin" class="col-md-4 top-forms mt-md-3 mt-2 mb-md-0 mb-3">
 				<span class="mx-lg-4 mx-md-2  mx-1">
-					<a href="#" data-toggle="modal" aria-pressed="false" data-target="#exampleModal">
+					<a href="#" data-toggle="modal" aria-pressed="false" data-target="#loginPanel">
 						<i class="fas fa-lock"></i> 登录</a>
 				</span>
 				<span>
-					<a href="#" data-toggle="modal" data-target="#exampleModal1" >
+					<a href="#" data-toggle="modal" data-target="#registeredPanel" >
 						<i class="fas fa-user"></i> 注册</a>
 				</span>
 			</div>
@@ -650,11 +656,11 @@
 <!-- //footer -->
 			
 <!-- login and register modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="loginPanel" tabindex="-1" role="dialog" aria-labelledby="loginModel" aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel">登录你的账户</h5>
+				<h5 class="modal-title" id="loginModel">登录你的账户</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
@@ -673,18 +679,49 @@
 					<input type="submit" id="sub" class="form-control" value="登录">
 				</div>
 				<p class="text-center dont-do text-white mt-3">没有账户?
-					<a href="#" data-toggle="modal" data-target="#exampleModal1" class="text-white">
+					<a href="#" data-toggle="modal" data-target="#registeredPanel" class="text-white">
 						立即注册</a>
 				</p>
 			</div>
 		</div>
 	</div>
 </div>
-<div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+
+<div class="modal fade" id="changePass" tabindex="-1" role="dialog" aria-labelledby="changePassModel" aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel1">注册你的账户</h5>
+				<h5 class="modal-title" id="changePassModel">修改密码</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<label for="OldPassword" class="col-form-label">新密码</label>
+					<input type="password" class="form-control" lay-verify="pass" placeholder="旧密码" id="OldPassword" required="">
+				</div>
+				<div class="form-group">
+					<label for="newPassword" class="col-form-label">新密码</label>
+					<input type="password" class="form-control" lay-verify="pass" placeholder="新密码" id="newPassword" required="">
+				</div>
+				<div class="form-group">
+					<label for="conPassword" class="col-form-label">确认密码</label>
+					<input type="password" class="form-control" lay-verify="pass" placeholder="确认密码" id="conPassword" required="">
+				</div>
+
+				<div class="right-w3l">
+					<input type="submit" id="subPass" class="form-control" value="确认">
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="registeredPanel" tabindex="-1" role="dialog" aria-labelledby="regModel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="regModel">注册你的账户</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
@@ -717,16 +754,9 @@
 		</div>
 	</div>
 </div>
-<!-- //login and register modal -->
 
-<!-- js-scripts -->		
-
-	<!-- js -->
 	<script type="text/javascript" th:src="@{/js/jquery-2.1.4.min.js}"></script>
 	<script type="text/javascript" th:src="@{/js/bootstrap.js}"></script> <!-- Necessary-JavaScript-File-For-Bootstrap -->
-	<!-- //js -->
-	
-	<!-- carousel -->
 	<script th:src="@{/js/owl.carousel.js}"></script>
 	<script>
 		$(document).ready(function () {
@@ -757,25 +787,7 @@
 			})
 		})
 	</script>
-	<!-- //carousel -->
-
-	<!--slider-->
 	<script th:src="@{/js/responsiveslides.min.js}"></script>
-	<script>
-		$(function () {
-			// Slideshow 1
-			$("#slider1").responsiveSlides({
-				auto: true,
-				pager: true,
-				nav: true,
-				speed: 500,
-				namespace: "centered-btns"
-			});
-		});
-	</script>
-	<!--//slider-->
-
-	<!-- start-smoth-scrolling -->
 	<script th:src="@{/js/SmoothScroll.min.js}"></script>
 	<script type="text/javascript" th:src="@{/js/move-top.js}"></script>
 	<script type="text/javascript" th:src="@{/js/easing.js}"></script>
@@ -791,6 +803,13 @@
 <script type="text/javascript" th:inline="javascript">
     /*<![CDATA[*/
 	$(function(){
+        $("#slider1").responsiveSlides({
+            auto: true,
+            pager: true,
+            nav: true,
+            speed: 500,
+            namespace: "centered-btns"
+        });
 		$().UItoTop({ easingType: 'easeOutQuart' });
 		var account = [[${account}]];
 		if(account){
@@ -812,6 +831,37 @@
 		$("#regsub").on("click",function(){
 			$("#subForm").click();
 		});
+        $("#subPass").on("click",function(){
+            editPass();
+        });
+		function editPass(){
+			var passwordO = $("#oldPassword").val();
+			var password = $("#newPassword").val();
+			var conPassword = $("#conPassword").val();
+            var index_ = layer.load(1);
+            if(password !== conPassword){
+                layer.msg("两次密码输入不一致");
+                return false;
+            }
+            password = encode64(password);
+            passwordO = encode64(passwordO);
+            $.ajax({
+                url:[[@{user/update}]],
+            	data:{"password":password,"passwordO":passwordO},
+                type:"post",
+                dataType:"json",
+                success:function(result){
+                if(result.success){
+                    layer.msg("保存成功");
+                }else{
+                    layer.msg(result.msg);
+                }
+                layer.close(index_);
+            },
+        });
+
+		}
+
         function login(){
             var username = $("#username").val();
             var password = $("#password").val();
