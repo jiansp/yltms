@@ -1,19 +1,10 @@
-<!--
-	Author: W3layouts
-	Author URL: http://w3layouts.com
-	License: Creative Commons Attribution 3.0 Unported
-	License URL: http://creativecommons.org/licenses/by/3.0/
--->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>Taxi Cab Transportation Category Flat Bootstrap Responsive Website Template | Services :: W3layouts</title>
+<title>亿路通汽车</title>
 	
-	<!-- Meta tag Keywords -->
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta charset="utf-8">
-	<meta name="keywords" content="Taxi Cab Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, 
-	Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
 	<script type="application/x-javascript">
 		addEventListener("load", function () {
 			setTimeout(hideURLbar, 0);
@@ -23,13 +14,19 @@
 			window.scrollTo(0, 1);
 		}
 	</script>
-	<!--// Meta tag Keywords -->
-	
+
+	<link rel="stylesheet" th:href="@{/css/owl.carousel.css}" type="text/css" media="all">
+	<link rel="stylesheet" th:href="@{/css/owl.theme.css}" type="text/css" media="all">
 	<!-- css files -->
-	<link rel="stylesheet" href="css/bootstrap.css"> <!-- Bootstrap-Core-CSS -->
-	<link rel="stylesheet" href="css/style.css" type="text/css" media="all" /> <!-- Style-CSS --> 
-	<link rel="stylesheet" href="css/fontawesome-all.css"> <!-- Font-Awesome-Icons-CSS -->
+	<link rel="stylesheet" th:href="@{/css/bootstrap.css}"> <!-- Bootstrap-Core-CSS -->
+	<link rel="stylesheet" th:href="@{/css/style.css}" type="text/css" media="all" /> <!-- Style-CSS -->
+	<link rel="stylesheet" th:href="@{/css/fontawesome-all.css}"> <!-- Font-Awesome-Icons-CSS -->
 	<!-- //css files -->
+	<link th:href="@{/layui/css/layui.css}" rel="stylesheet"/>
+	<!-- web-fonts -->
+	<link href="//fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&amp;subset=latin-ext" rel="stylesheet">
+	<!-- //web-fonts -->
+	<script type="text/javascript" th:src="@{/js/encode64.js}"></script>
 
 	<!-- web-fonts -->
 	<link href="//fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&amp;subset=latin-ext" rel="stylesheet">
@@ -41,30 +38,39 @@
 
 <!--/banner-->
 <div class="top-bar_sub_w3layouts container-fluid">
-		<div class="row">
-			
-			<div class="col-md-4 col-sm-6 log-icons mt-2">
-				<p class="py-2"><i class="fas fa-phone"></i> Call Taxi : 12(00) 123 1234</p>
-			</div>
-			
-			<div class="col-md-4 col-sm-6 logo">
-				<a class="navbar-brand" href="index.html">
-					<i class="fas fa-taxi"></i> Taxi Cab</a>
-			</div>
-			
-			
-			<div class="col-md-4 top-forms mt-md-3 mt-2 mb-md-0 mb-3">
+	<div class="row">
+
+		<div class="col-md-4 col-sm-6 log-icons mt-2">
+			<p class="py-2"><i class="fas fa-phone"></i> 服务热线 : 12(00) 123 1234</p>
+		</div>
+
+		<div class="col-md-4 col-sm-6 logo">
+			<a class="navbar-brand" href="index.html">
+				<i class="fas fa-car"></i> 亿路通租车</a>
+		</div>
+
+
+		<div id="noLogin" class="col-md-4 top-forms mt-md-3 mt-2 mb-md-0 mb-3">
 				<span class="mx-lg-4 mx-md-2  mx-1">
-					<a href="#" data-toggle="modal" aria-pressed="false" data-target="#exampleModal">
-						<i class="fas fa-lock"></i> Sign In</a>
+					<a href="#" data-toggle="modal" aria-pressed="false" data-target="#loginPanel">
+						<i class="fas fa-lock"></i> 登录</a>
 				</span>
-				<span>
-					<a href="#" data-toggle="modal" data-target="#exampleModal1" >
-						<i class="fas fa-user"></i> Register</a>
+			<span>
+					<a href="#" data-toggle="modal" data-target="#registeredPanel" >
+						<i class="fas fa-user"></i> 注册</a>
 				</span>
-			</div>
+
+		</div>
+
+		<div id="yesLogin" class="col-md-4 top-forms mt-md-3 mt-2 mb-md-0 mb-3">
+			<a id="nameSpan" href="#"><i class="fas fa-user"></i> </a>
+			<a href="#" data-toggle="modal" aria-pressed="false" data-target="#changePass">
+				<i class="fas fa-lock"></i> 修改密码</a>
+			<a th:href="@{/logout}">
+				<i class="fas fa-outdent"></i> 退出</a>
 		</div>
 	</div>
+</div>
 	
 	<div class="banner" id="home">
 		<!-- header -->
@@ -125,14 +131,14 @@
 				<p class="mb-3">Vestibulum et augue eu nibh tincidunt pretium vitae eget purus. Pellentesque necist urna eleifend, semper eros sed, sollicitudin justo. Nam finibus sollicitudin enim, nec blan ditmi laoreet sed. Morbi auctor purus ac ligula aliquetis vestibulum. Quisque vitae sollicitu dinet augue eu pretium vitae.</p>
 			</div>
 			<div class="col-lg-2 col-6">
-				<img src="images/1.png" alt="" class="img-fluid" />
-				<img src="images/2.png" alt="" class="img-fluid" />
-				<img src="images/3.png" alt="" class="img-fluid" />
+				<img th:src="@{/images/1.png}" alt="" class="img-fluid" />
+				<img th:src="@{/images/2.png}" alt="" class="img-fluid" />
+				<img th:src="@{/images/3.png}" alt="" class="img-fluid" />
 			</div>
 			<div class="col-lg-2 col-6">
-				<img src="images/3.png" alt="" class="img-fluid" />
-				<img src="images/1.png" alt="" class="img-fluid" />
-				<img src="images/2.png" alt="" class="img-fluid" />
+				<img th:src="@{/images/3.png}" alt="" class="img-fluid" />
+				<img th:src="@{/images/1.png}" alt="" class="img-fluid" />
+				<img th:src="@{/images/2.png}" alt="" class="img-fluid" />
 			</div>
 			<div class="col-lg-4">
 				<h4 class="text-capitalize"><i class="fas fa-taxi clr1"></i>Luxury Cars</h4>
@@ -216,15 +222,15 @@
 				<div class="carousel-item active">
 					<div class="row">
 						<div class="col-md-4 col-sm-6 slidering">
-							<div class="thumbnail"><img src="images/1.png" alt="Image" style="max-width:100%;"></div>
+							<div class="thumbnail"><img th:src="@{/images/1.png}" alt="Image" style="max-width:100%;"></div>
 							<h5 class="my-2 text-center text-uppercase">Mini Taxi </h5>
 						</div>
 						<div class="col-md-4 col-sm-6 slidering">
-							<div class="thumbnail"><img src="images/2.png" alt="Image" style="max-width:100%;"></div>
+							<div class="thumbnail"><img th:src="@{/images/2.png}" alt="Image" style="max-width:100%;"></div>
 							<h5 class="my-2 text-center text-uppercase">Prime Taxi </h5>
 						</div>
 						<div class="col-md-4 col-sm-6 slidering">
-							<div class="thumbnail"><img src="images/3.png" alt="Image" style="max-width:100%;"></div>
+							<div class="thumbnail"><img th:src="@{/images/3.png}" alt="Image" style="max-width:100%;"></div>
 							<h5 class="my-2 text-center text-uppercase">Sedan Taxi </h5>
 						</div>
 					</div>
@@ -232,15 +238,15 @@
 				<div class="carousel-item">
 					<div class="row">
 						<div class="col-md-4 col-sm-6 slidering">
-							<div class="thumbnail"><img src="images/1.png" alt="Image" style="max-width:100%;"></div>
+							<div class="thumbnail"><img th:src="@{/images/1.png}" alt="Image" style="max-width:100%;"></div>
 							<h5 class="my-2 text-center text-uppercase">Mini Taxi </h5>
 						</div>
 						<div class="col-md-4 col-sm-6 slidering">
-							<div class="thumbnail"><img src="images/2.png" alt="Image" style="max-width:100%;"></div>
+							<div class="thumbnail"><img th:src="@{/images/2.png}" alt="Image" style="max-width:100%;"></div>
 							<h5 class="my-2 text-center text-uppercase">Prime Taxi </h5>
 						</div>
 						<div class="col-md-4 col-sm-6 slidering">
-							<div class="thumbnail"><img src="images/3.png" alt="Image" style="max-width:100%;"></div>
+							<div class="thumbnail"><img th:src="@{/images/3.png}" alt="Image" style="max-width:100%;"></div>
 							<h5 class="my-2 text-center text-uppercase">Sedan Taxi </h5>
 						</div>
 					</div>
@@ -248,15 +254,15 @@
 				<div class="carousel-item">
 					<div class="row">
 						<div class="col-md-4 col-sm-6 slidering">
-							<div class="thumbnail"><img src="images/1.png" alt="Image" style="max-width:100%;"></div>
+							<div class="thumbnail"><img th:src="@{/images/1.png}" alt="Image" style="max-width:100%;"></div>
 							<h5 class="my-2 text-center text-uppercase">Mini Taxi </h5>
 						</div>
 						<div class="col-md-4 col-sm-6 slidering">
-							<div class="thumbnail"><img src="images/2.png" alt="Image" style="max-width:100%;"></div>
+							<div class="thumbnail"><img th:src="@{/images/2.png}" alt="Image" style="max-width:100%;"></div>
 							<h5 class="my-2 text-center text-uppercase">Prime Taxi </h5>
 						</div>
 						<div class="col-md-4 col-sm-6 slidering">
-							<div class="thumbnail"><img src="images/3.png" alt="Image" style="max-width:100%;"></div>
+							<div class="thumbnail"><img th:src="@{/images/3.png}" alt="Image" style="max-width:100%;"></div>
 							<h5 class="my-2 text-center text-uppercase">Sedan Taxi </h5>
 						</div>
 					</div>
@@ -301,7 +307,7 @@
 					<div class="blog-grids row mb-3">
 						<div class="col-4 pr-0 blog-grid-left">
 							<a href="#">
-								<img src="images/blog1.jpg" class="img-fluid" alt="">
+								<img th:src="@{/images/blog1.jpg}" class="img-fluid" alt="">
 							</a>
 						</div>
 						<div class="col-8 blog-grid-right">
@@ -319,7 +325,7 @@
 					<div class="blog-grids row mb-3">
 						<div class="col-4 pr-0 blog-grid-left">
 							<a href="#">
-								<img src="images/blog2.jpg" class="img-fluid" alt="">
+								<img th:src="@{/images/blog2.jpg}" class="img-fluid" alt="">
 							</a>
 						</div>
 						<div class="col-8 blog-grid-right">
@@ -337,7 +343,7 @@
 					<div class="blog-grids row">
 						<div class="col-4 pr-0 blog-grid-left">
 							<a href="#">
-								<img src="images/blog3.jpg" class="img-fluid" alt="">
+								<img th:src="@{/images/blog3.jpg}" class="img-fluid" alt="">
 							</a>
 						</div>
 						<div class="col-8 blog-grid-right">
@@ -504,20 +510,20 @@
 <!-- js-scripts -->		
 
 	<!-- js -->
-	<script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
-	<script type="text/javascript" src="js/bootstrap.js"></script> <!-- Necessary-JavaScript-File-For-Bootstrap --> 
+	<script type="text/javascript" th:src="@{/js/jquery-2.1.4.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/bootstrap.js}"></script> <!-- Necessary-JavaScript-File-For-Bootstrap --> 
 	<!-- //js -->
 	
 	<!-- stats -->
-	<script src="js/jquery.waypoints.min.js"></script>
-	<script src="js/jquery.countup.js"></script>
+	<script th:src="@{/js/jquery.waypoints.min.js}"></script>
+	<script th:src="@{/js/jquery.countup.js}"></script>
 	<script>
 		$('.counter').countUp();
 	</script>
 	<!-- //stats -->
 
 	<!-- carousel -->
-	<script src="js/owl.carousel.js"></script>
+	<script th:src="@{/js/owl.carousel.js}"></script>
 	<script>
 		$(document).ready(function () {
 			$('.owl-carousel').owlCarousel({
@@ -550,7 +556,7 @@
 	<!-- //carousel -->
 
 	<!--slider-->
-	<script src="js/responsiveslides.min.js"></script>
+	<script th:src="@{/js/responsiveslides.min.js}"></script>
 	<script>
 		$(function () {
 			// Slideshow 1
@@ -566,9 +572,9 @@
 	<!--//slider-->
 
 	<!-- start-smoth-scrolling -->
-	<script src="js/SmoothScroll.min.js"></script>
-	<script type="text/javascript" src="js/move-top.js"></script>
-	<script type="text/javascript" src="js/easing.js"></script>
+	<script th:src="@{/js/SmoothScroll.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/move-top.js}"></script>
+	<script type="text/javascript" th:src="@{/js/easing.js}"></script>
 	<script type="text/javascript">
 		jQuery(document).ready(function($) {
 			$(".scroll").click(function(event){		

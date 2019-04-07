@@ -11,4 +11,5 @@ public class RouteController {
     public String browseVehicle(){
         return "ylt/booking";
     }
+
 }
