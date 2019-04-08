@@ -51,6 +51,18 @@
                 </div>
             </div>
             <div class="layui-form-item">
+                <label class="layui-form-label">排量</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="cubicles" th:value="${obj.cubicles}" required lay-verify="required" placeholder="请输入排量" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">厢数</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="exhaust" th:value="${obj.exhaust}" required lay-verify="required" placeholder="请输入厢数" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
                 <label class="layui-form-label">上牌时间</label>
                 <div class="layui-input-inline">
                     <input type="text" name="firstLicense" th:value="${#dates.format(obj.firstLicense, 'yyyy-MM-dd')}"  id="date" lay-verify="date" placeholder="请选择首次上牌日期" autocomplete="off" class="layui-input test-item">
@@ -69,13 +81,13 @@
                     <input type="radio" name="type" value="2" title="豪华" th:field="*{obj.type}">
                 </div>
             </div>
-            <div class="layui-form-item">
+            <!--<div class="layui-form-item">
                 <label class="layui-form-label">类别</label>
                 <div class="layui-input-block">
                     <input type="radio" name="isStop" value="0" title="启用" th:field="*{obj.isStop}" checked>
                     <input type="radio" name="isStop" value="1" title="停用" th:field="*{obj.isStop}">
                 </div>
-            </div>
+            </div>-->
             <div class="layui-form-item">
                 <button type="button" class="layui-btn" id="uploadImg">上传图片</button>
                 <div class="layui-upload-list">

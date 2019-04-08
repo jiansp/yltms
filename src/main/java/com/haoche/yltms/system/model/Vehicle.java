@@ -30,7 +30,8 @@ public class Vehicle extends BaseModel {
     private String isStop;
     private String imgPath;
     private String type;
-
+    private String cubicles;
+    private String exhaust;
 
     @Basic
     @Column(name = "IMG_PATH")
@@ -151,4 +152,25 @@ public class Vehicle extends BaseModel {
     public void setType(String type) {
         this.type = type;
     }
+
+    @Basic
+    @Column(name = "CUBICLES")
+    public String getCubicles() {
+        return cubicles;
+    }
+
+    public void setCubicles(String cubicles) {
+        this.cubicles = cubicles;
+    }
+
+    @Basic
+    @Column(name = "EXHAUST")
+    public String getExhaust() {
+        return exhaust;
+    }
+
+    public void setExhaust(String exhaust) {
+        this.exhaust = exhaust;
+    }
+
 }

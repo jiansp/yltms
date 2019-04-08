@@ -39,13 +39,13 @@
                 ,cols: [
                     [
                     {field:'id', title:'id',width:50 }
-                    ,{field:'license', title:'车牌号', width:120,fixed: 'left', templet: function(res){
-                            return res.isStop == '0'?res.license+'  <span class="layui-badge-dot layui-bg-green"></span>':res.license+'  <span class="layui-badge-dot"></span>';
-                        }}
+                    ,{field:'license', title:'车牌号', width:120,fixed: 'left'}
                     ,{field:'brand', title:'品牌', width:120, edit: 'text'}
                     ,{field:'model', title:'车型', width:80, edit: 'text'}
                     ,{field:'seatNum', title:'座位数', width:100}
                     ,{field:'colour', title:'颜色'}
+                    ,{field:'exhaust', title:'排量'}
+                    ,{field:'cubicles', title:'厢数'}
                     ,{field:'vin', title:'VIN码', edit: 'text', width:100}
                     ,{field:'rent', title:'租金'}
                     ,{field:'firstLicense', title:'首次上牌时间', width:120, templet: function(res){
