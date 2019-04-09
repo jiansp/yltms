@@ -9,6 +9,6 @@ public class OrderController {
 
     @RequestMapping("/browseVehicle")
     public String browseVehicle(){
-        return "ylt/booking";
+        return "lease";
     }
 }

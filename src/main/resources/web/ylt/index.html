@@ -24,12 +24,18 @@
 	<link rel="stylesheet" th:href="@{/css/fontawesome-all.css}"> <!-- Font-Awesome-Icons-CSS -->
 	<!-- //css files -->
 	<link th:href="@{/layui/css/layui.css}" rel="stylesheet"/>
+	<link th:href="@{/css/ladda-theme.css}" rel="stylesheet"/>
 	<!-- web-fonts -->
 	<link href="//fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&amp;subset=latin-ext" rel="stylesheet">
-	<!-- //web-fonts -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+    <!-- //web-fonts -->
+    <script type="text/javascript" th:src="@{/js/jquery-2.1.4.min.js}"></script>
 	<script type="text/javascript" th:src="@{/js/encode64.js}"></script>
+	<script type="text/javascript" th:src="@{/js/ladda.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/spin.min.js}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
-	<style>
+    <style>
 		#yesLogin a{
 			margin-left: 20px;
 		}
@@ -601,7 +607,6 @@
 	</div>
 </div>
 
-	<script type="text/javascript" th:src="@{/js/jquery-2.1.4.min.js}"></script>
 	<script type="text/javascript" th:src="@{/js/bootstrap.js}"></script> <!-- Necessary-JavaScript-File-For-Bootstrap -->
 	<script th:src="@{/js/owl.carousel.js}"></script>
 	<script>
@@ -688,7 +693,7 @@
 			var id = $("#accountId").val();
             var index_ = layer.load(1);
             if(password !== conPassword){
-                layer.msg("两次密码输入不一致");
+                toastr.warning("两次密码输入不一致");
                 layer.close(index_);
                 return false;
             }
@@ -701,10 +706,11 @@
                 dataType:"json",
                 success:function(result){
                 if(result.success){
-                    layer.msg("保存成功");
+                    toastr.success("保存成功");
                     window.location = [[@{/}]];
                 }else{
-                    layer.msg(result.msg);
+                        toastr.warning(result.msg);
+
                 }
                 layer.close(index_);
             },
@@ -717,7 +723,7 @@
             var password = $("#password").val();
             var empPattern = /^\s*$/;
             if (empPattern.test(username) || empPattern.test(password)){
-                layer.msg('用户名或密码不能为空');
+                toastr.warning("用户名或密码不能为空");
                 return;
             }
             password = encode64(password);
@@ -728,10 +734,9 @@
                     dataType:"json",
                     success:function(result){
                     if(result.success){
-                        layer.msg("登陆成功");
-                        window.location = [[@{/}]];
+                        window.location.reload();
                         }else{
-                            layer.msg(result.msg);
+                            toastr.warning(result.msg);
                         }
                     }
                 })
@@ -751,32 +756,32 @@
 				,'邮箱格式错误'
 			]
 		});
-		//监听提交
-		form.on('submit(subForm)', function(data){
-			console.log(data);
-			if(data.field.password !== data.field.ConfirmPassword){
-				layer.msg("两次密码输入不一致");
-				return false;
-			}
-			data.field.ConfirmPassword = "";
-			data.field.password = encode64(data.field.password);
-			$.ajax({
-				url:[[@{user/saveUser}]],
-			data:data.field,
-					type:"post",
-					dataType:"json",
-					success:function(result){
-				if(result.success){
-					layer.msg("保存成功，请登录");
-					window.location=[[@{/}]]
-					}else{
-						layer.msg(result.msg);
-					}
-				},
+        //监听提交
+        form.on('submit(subForm)', function(data){
+            console.log(data);
+            if(data.field.password !== data.field.ConfirmPassword){
+                layer.msg("两次密码输入不一致");
+                return false;
+            }
+            data.field.ConfirmPassword = "";
+            data.field.password = encode64(data.field.password);
+            $.ajax({
+                url:[[@{user/saveUser}]],
+            	data:data.field,
+                type:"post",
+                dataType:"json",
+                success:function(result){
+                if(result.success){
+                    layer.msg("保存成功，请登录");
+                    window.location=[[@{/}]]
+                    }else{
+                        layer.msg(result.msg);
+                    }
+                },
 
-			});
-			return false;
-		});
+            });
+            return false;
+        });
     })
     /*]]>*/
 </script>
