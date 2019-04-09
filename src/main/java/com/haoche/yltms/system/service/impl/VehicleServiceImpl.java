@@ -17,6 +17,7 @@ import org.springframework.util.StringUtils;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -27,6 +28,7 @@ public class VehicleServiceImpl implements VehicleService {
     @Override
     public Page<Vehicle> findVehicles(Integer pageNo, Integer limit, Map<String, String> params) {
         String license = params.get("license");
+        String type = params.get("type");
         Specification<Vehicle> specification = (Specification<Vehicle>) (root, criteriaQuery, criteriaBuilder) -> {
             Path<String> isDelete = root.get("isDelete");
             Predicate p1 = criteriaBuilder.isNull(isDelete);
@@ -35,6 +37,11 @@ public class VehicleServiceImpl implements VehicleService {
             if (!StringUtils.isEmpty(license)) {
                 Path<String> licensePath = root.get("license");
                 Predicate p2 = criteriaBuilder.like(licensePath, "%" + license + "%");
+                return criteriaBuilder.and(p, p2);
+            }
+            if (!StringUtils.isEmpty(type)) {
+                Path<String> typePath = root.get("type");
+                Predicate p2 = criteriaBuilder.equal(typePath, typePath);
                 return criteriaBuilder.and(p, p2);
             }
             return p;
@@ -76,5 +83,22 @@ public class VehicleServiceImpl implements VehicleService {
         vehicle.setDeleter(userId);
         vehicle.setDeleteTime(now);
         this.vehicleRepository.save(vehicle);
+    }
+
+    @Override
+    public List<Vehicle> findVehicles(Map<String, String> params) {
+        String type = params.get("type");
+        Specification<Vehicle> specification = (Specification<Vehicle>) (root, criteriaQuery, criteriaBuilder) -> {
+            Path<String> isDelete = root.get("isDelete");
+            Predicate p1 = criteriaBuilder.isNull(isDelete);
+            Predicate p2 = criteriaBuilder.notEqual(isDelete,"1");
+            Predicate p = criteriaBuilder.or(p1,p2);
+            if(!StringUtils.isEmpty(type)){
+                Path<String> typePath = root.get("type");
+                return criteriaBuilder.and(criteriaBuilder.equal(typePath,type),p);
+            }
+            return p;
+        };
+        return this.vehicleRepository.findAll(specification);
     }
 }

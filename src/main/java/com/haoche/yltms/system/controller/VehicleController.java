@@ -48,10 +48,10 @@ public class VehicleController {
         Map<String,String> params = new HashMap<>();
         params.put("license",license);
         try {
-            Page<Vehicle> userPage = this.vehicleService.findVehicles(page,limit,params);
+            Page<Vehicle> vehiclePage = this.vehicleService.findVehicles(page,limit,params);
             tableData.setCode(TableData.SUCCESS);
-            tableData.setCount(userPage.getTotalElements());
-            tableData.setData(userPage.getContent());
+            tableData.setCount(vehiclePage.getTotalElements());
+            tableData.setData(vehiclePage.getContent());
         } catch (Exception e){
             e.printStackTrace();
             tableData.setMsg(e.getMessage());

@@ -28,8 +28,11 @@
     <script type="text/javascript" th:src="@{/js/encode64.js}"></script>
 
     <style>
-        .tech-btm img{
+        .carItem img{
             border: 0;
+        }
+        .carItem div div{
+            border-bottom: 2px solid #bbb;
         }
     </style>
 
@@ -121,137 +124,25 @@
     </header>
 </div>
 
-<section class="bookingform py-5">
+<!--<section class="bookingform py-5">
     <div class="container py-md-5 py-3">
         <h1 class="heading text-capitalize text-center">Booking form</h1>
         <h5 class="heading mb-5 text-center">Taxi Cab</h5>
-        <div class="row">
-            <div class="col-lg-6 book-appointment p-sm-5 py-5 px-4">
-                <h2>Personal Details</h2>
-                <div class="book-agileinfo-form">
-                    <form action="#" method="post">
-                        <div class="row main-agile-sectns">
-                            <div class="col-md-6 agileits-btm-spc form-text1">
-                                <input type="text" name="Name" placeholder="Full Name" required="">
-                            </div>
-                            <div class="col-md-6 agileits-btm-spc form-text2">
-                                <input type="text" name="Phone no" placeholder="Phone number" required="">
-                            </div>
-                        </div>
-                        <div class="row ">
-                            <div class="col-md-6 agileits-btm-spc form-text1">
-                                <input type="email" name="email" placeholder="Email" required="">
-                            </div>
-                            <div class="col-md-6">
-                                <div class="agileits-btm-spc">
-                                    <select id="cab" onchange="change_country(this.value)"
-                                            class="frm-field required sect">
-                                        <option value="">Select Cab</option>
-                                        <option value="">Mini</option>
-                                        <option value="">Sedan</option>
-                                        <option value="">Elite</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="clear"></div>
-                        <h2 class="sub-head-w3ls">Booking Details</h2>
-                        <div class="row main-agile-sectns">
-                            <div class="col-md-6 agileits-btm-spc form-text1">
-                                <input id="datepicker" name="Text" type="text" placeholder="Pick-up Date" value=""
-                                       onfocus="this.value = '';"
-                                       onblur="if (this.value == '') {this.value = 'mm/dd/yyyy';}"
-                                       required="">
-                            </div>
-                            <div class="col-md-6 agileits-btm-spc form-text2">
-                                <input type="text" id="timepicker" name="Time" class="timepicker form-control"
-                                       placeholder="Pick-up Time" value="">
-                            </div>
-                        </div>
-                        <div class="row main-agile-sectns">
-                            <div class="col-md-6 agileits-btm-spc form-text1">
-                                <input type="text" name="Pick-up Location" placeholder="Pick-up Location" required="">
-                            </div>
-                            <div class="col-md-6 agileits-btm-spc form-text2">
-                                <input type="text" name="Drop-off Location" placeholder="Drop-off Location" required="">
-                            </div>
-                        </div>
 
-                        <div class="main-agile-sectns">
-                            <div class="agileits-btm-spc">
-                                <select id="passengers" onchange="change_country(this.value)"
-                                        class="frm-field required sect">
-                                    <option value="">No.of Passengers</option>
-                                    <option value="">1</option>
-                                    <option value="">2</option>
-                                    <option value="">3</option>
-                                    <option value="">4</option>
-                                    <option value="">5</option>
-                                </select>
-                            </div>
-                            <div class="agileits-btm-spc form-text2">
-                                <select id="direction" onchange="change_country(this.value)" class="frm-field required">
-                                    <option value="">Direction</option>
-                                    <option value="">One Way</option>
-                                    <option value="">Return</option>
-                                </select>
-                            </div>
-                        </div>
-                        <input type="submit" value="Book Now">
-                        <input type="reset" value="Reset">
-                    </form>
-                </div>
-            </div>
-            <div class="col-lg-6 mt-md-5">
-                <img th:src="@{/images/car1.png}" alt="" class="img-fluid"/>
-                <img th:src="@{/images/car2.png}" alt="" class="img-fluid"/>
-            </div>
-        </div>
     </div>
-</section>
+</section>-->
 
 <section class="bookingform py-5">
     <div class="container-fluid pt-lg-5">
         <div class="col-lg-3 col-sm-6 mb-sm-0 mb-5 footer-grid-agileits-w3ls text-left" style="max-width: 100%">
-            <div class="tech-btm" id="carModelItem">
+            <div class="tech-btm">
                 <h3 class="mb-sm-5 mb-4">选择车型</h3>
-
-                <div class="blog-grids row mb-3">
-                    <div class="col-4 pr-0 blog-grid-left">
-                        <a href="#">
-                            <img th:src="@{/images/blog2.jpg}" class="img-fluid" alt="">
-                        </a>
-                    </div>
-                    <div class="col-8 blog-grid-right">
-
-                        <h5>
-                            <a href="#">Pellentesque dui, non felis. Maecenas male non felis </a>
-                        </h5>
-                        <div class="sub-meta">
-								<span>
-									<i class="far fa-clock"></i> 20 Apr, 2018</span>
-                        </div>
-                    </div>
-
+                <div class="btn-group" role="group" aria-label="Basic example">
+                    <button type="button" class="btn btn-secondary" onclick="loadCarItem('轿车')">轿车</button>
+                    <button type="button" class="btn btn-secondary" onclick="loadCarItem('SUV')">SUV</button>
+                    <button type="button" class="btn btn-secondary" onclick="loadCarItem('MPV')">MPV</button>
                 </div>
-                <div class="blog-grids row">
-                    <div class="col-4 pr-0 blog-grid-left">
-                        <a href="#">
-                            <img th:src="@{/images/blog3.jpg}" class="img-fluid" alt="">
-                        </a>
-                    </div>
-                    <div class="col-8 blog-grid-right">
-
-                        <h5>
-                            <a href="#">Pellentesque dui, non felis. Maecenas male non felis </a>
-                        </h5>
-                        <div class="sub-meta">
-								<span>
-									<i class="far fa-clock"></i> 21 Apr, 2018</span>
-                        </div>
-                    </div>
-
-                </div>
+                <div id="carModelItem"></div>
             </div>
         </div>
     </div>
@@ -465,6 +356,90 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="leasePanel" tabindex="-1" role="dialog" aria-labelledby="leaseModel" aria-hidden="true">
+    <div class="row">
+        <div class="col-lg-6 book-appointment p-sm-5 py-5 px-4">
+            <h2>Personal Details</h2>
+            <div class="book-agileinfo-form">
+                <form action="#" method="post">
+                    <div class="row main-agile-sectns">
+                        <div class="col-md-6 agileits-btm-spc form-text1">
+                            <input type="text" name="Name" placeholder="Full Name" required="">
+                        </div>
+                        <div class="col-md-6 agileits-btm-spc form-text2">
+                            <input type="text" name="Phone no" placeholder="Phone number" required="">
+                        </div>
+                    </div>
+                    <div class="row ">
+                        <div class="col-md-6 agileits-btm-spc form-text1">
+                            <input type="email" name="email" placeholder="Email" required="">
+                        </div>
+                        <div class="col-md-6">
+                            <div class="agileits-btm-spc">
+                                <select id="cab" onchange="change_country(this.value)"
+                                        class="frm-field required sect">
+                                    <option value="">Select Cab</option>
+                                    <option value="">Mini</option>
+                                    <option value="">Sedan</option>
+                                    <option value="">Elite</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                    <h2 class="sub-head-w3ls">Booking Details</h2>
+                    <div class="row main-agile-sectns">
+                        <div class="col-md-6 agileits-btm-spc form-text1">
+                            <input id="datepicker" name="Text" type="text" placeholder="Pick-up Date" value=""
+                                   onfocus="this.value = '';"
+                                   onblur="if (this.value == '') {this.value = 'mm/dd/yyyy';}"
+                                   required="">
+                        </div>
+                        <div class="col-md-6 agileits-btm-spc form-text2">
+                            <input type="text" id="timepicker" name="Time" class="timepicker form-control"
+                                   placeholder="Pick-up Time" value="">
+                        </div>
+                    </div>
+                    <div class="row main-agile-sectns">
+                        <div class="col-md-6 agileits-btm-spc form-text1">
+                            <input type="text" name="Pick-up Location" placeholder="Pick-up Location" required="">
+                        </div>
+                        <div class="col-md-6 agileits-btm-spc form-text2">
+                            <input type="text" name="Drop-off Location" placeholder="Drop-off Location" required="">
+                        </div>
+                    </div>
+
+                    <div class="main-agile-sectns">
+                        <div class="agileits-btm-spc">
+                            <select id="passengers" onchange="change_country(this.value)"
+                                    class="frm-field required sect">
+                                <option value="">No.of Passengers</option>
+                                <option value="">1</option>
+                                <option value="">2</option>
+                                <option value="">3</option>
+                                <option value="">4</option>
+                                <option value="">5</option>
+                            </select>
+                        </div>
+                        <div class="agileits-btm-spc form-text2">
+                            <select id="direction" onchange="change_country(this.value)" class="frm-field required">
+                                <option value="">Direction</option>
+                                <option value="">One Way</option>
+                                <option value="">Return</option>
+                            </select>
+                        </div>
+                    </div>
+                    <input type="submit" value="Book Now">
+                    <input type="reset" value="Reset">
+                </form>
+            </div>
+        </div>
+        <div class="col-lg-6 mt-md-5">
+            <img th:src="@{/images/car1.png}" alt="" class="img-fluid"/>
+            <img th:src="@{/images/car2.png}" alt="" class="img-fluid"/>
+        </div>
+    </div>
+</div>
 <div class="modal fade" id="registeredPanel" tabindex="-1" role="dialog" aria-labelledby="regModel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -511,9 +486,6 @@
 
 <script type="text/javascript" th:src="@{/js/jquery-2.1.4.min.js}"></script>
 <script type="text/javascript" th:src="@{/js/bootstrap.js}"></script> <!-- Necessary-JavaScript-File-For-Bootstrap -->
-<!-- //js -->
-
-<!-- Time -->
 <script type="text/javascript" th:src="@{/js/wickedpicker.js}"></script>
 <script type="text/javascript">
     $('.timepicker').wickedpicker({
@@ -596,26 +568,21 @@
         }
         loadCarItem();
     });
-    function loadCarItem(){
-        var param = {
-            "page":"1",
-            "limit":"10"
-        };
+    function loadCarItem(type){
         $.ajax({
-            url:[[@{/vehicle/getVehicleTable}]],
-            data:param,
+            url:[[@{/unverify/getVehicleInfo}]],
+            data:{"type":type},
             type:"post",
             dataType:"json",
             success:function(result) {
-                if (result.code == "0") {
-                    console.log("0000000000000000");
-                    console.log(result);
-                    for(var i =0;i<result.data.length;i++){
-                        var item = result.data[i];
+                if (result.success) {
+                    $("#carModelItem").empty();
+                    for(var i =0;i<result.obj.length;i++){
+                        var item = result.obj[i];
                         var imgSrc = [[@{/uploaded/}]]+item.imgPath;
-                        var carModelItem = '<div class="blog-grids row mb-3"><div class="col-1"></div><div class="col-3 pr-0 blog-grid-left"><img src="'+imgSrc+'" alt="" class="img-fluid"></div><div class="col-3 blog-grid-right" style="margin-top:3%"><h2><span>'+
+                        var carModelItem = '<div class="blog-grids row mb-3 carItem"><div class="col-1"></div><div class="col-3 pr-0 blog-grid-left"><img src="'+imgSrc+'" alt="" class="img-fluid"></div><div class="col-3 blog-grid-right" style="margin-top:3%"><h2><span>'+
                             item.brand+item.model+'</span></h2><div class="sub-meta"><h3><span><i class="far fa-id-card"></i>'+
-                            item.exhaust+'厢|'+item.cubicles+'|乘坐'+item.seatNum+'人</span></h3></div></div><div class="col-1 blog-grid-right" style="margin-top:3%"><h2><span style="color:#fabe00">￥'+
+                            item.exhaust+'厢|'+item.type+'|'+item.cubicles+'|乘坐'+item.seatNum+'人</span></h3></div></div><div class="col-1 blog-grid-right" style="margin-top:3%"><h2><span style="color:#fabe00">￥'+
                             item.rent+'</span></h2><h4><span>/日均</span></h4></div><div class="col-4" style="margin-top:4%"><button type="button" class="btn btn-warning" style="width:20%;height:50px"><span style="color:#fff;font-weight:700">租车</span></button></div></div>';
                         $("#carModelItem").append(carModelItem);
                     }
