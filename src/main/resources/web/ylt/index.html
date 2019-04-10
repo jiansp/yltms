@@ -766,7 +766,7 @@
             data.field.ConfirmPassword = "";
             data.field.password = encode64(data.field.password);
             $.ajax({
-                url:[[@{user/saveUser}]],
+                url:[[@{/user/saveUser}]],
             	data:data.field,
                 type:"post",
                 dataType:"json",

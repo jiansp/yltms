@@ -24,12 +24,17 @@
     <!-- web-fonts -->
     <link href="//fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&amp;subset=latin-ext"
           rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+    <link th:href="@{/css/toastr.min.css}" rel="stylesheet" />
+    <link th:href="@{/css/ladda-theme.css}" rel="stylesheet"/>
+    <link th:href="@{/css/bootstrapValidator.min.css}" rel="stylesheet"/>
     <!-- //web-fonts -->
     <script type="text/javascript" th:src="@{/js/jquery-2.1.4.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/encode64.js}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    <!--<script th:src="@{/js/toastr.min.js}"></script>-->
+    <script th:src="@{/js/toastr.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/ladda.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/spin.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/bootstrapValidator.js}"></script>
+    <script type="text/javascript" th:src="@{/js/zh_CN.min.js}"></script>
 
     <style>
         .carItem img{
@@ -127,14 +132,6 @@
         </nav>
     </header>
 </div>
-
-<!--<section class="bookingform py-5">
-    <div class="container py-md-5 py-3">
-        <h1 class="heading text-capitalize text-center">Booking form</h1>
-        <h5 class="heading mb-5 text-center">Taxi Cab</h5>
-
-    </div>
-</section>-->
 
 <section class="bookingform py-5">
     <div class="container-fluid pt-lg-5">
@@ -455,35 +452,27 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form class="layui-form" action="">
+                <form id="registeredForm" class="layui-form" action="">
                     <div class="form-group">
-                        <label for="recipient-name" class="col-form-label">用户名</label>
-                        <input type="text" class="form-control" lay-verify="username" placeholder="用户名" name="username"
-                               id="recipient-name" required="">
+                        <label class="col-form-label">用户名</label>
+                        <input type="text" class="form-control" placeholder="用户名" name="username" />
                     </div>
                     <div class="form-group">
-                        <label for="recipient-email" class="col-form-label">邮箱</label>
-                        <input type="email" class="form-control" lay-verify="mail" placeholder="邮箱" name="mail"
-                               id="recipient-email" required="">
+                        <label class="col-form-label">邮箱</label>
+                        <input type="email" class="form-control" placeholder="邮箱" name="mail" />
                     </div>
                     <div class="form-group">
-                        <label for="password1" class="col-form-label">密码</label>
-                        <input type="password" class="form-control" lay-verify="pass" placeholder="密码" name="password"
-                               id="password1" required="">
+                        <label class="col-form-label">密码</label>
+                        <input type="password" class="form-control" placeholder="密码" name="password"/>
                     </div>
                     <div class="form-group">
-                        <label for="password2" class="col-form-label">确认密码</label>
-                        <input type="password" class="form-control" lay-verify="pass" placeholder="确认密码"
-                               name="ConfirmPassword" id="password2" required="">
-                    </div>
-
-                    <div class="right-w3l">
-                        <input type="button" id="regsub" class="form-control" value="注册">
-                        <button style="display: none" id="subForm" class="layui-btn" lay-submit lay-filter="subForm">
-                            提交
-                        </button>
+                        <label class="col-form-label">确认密码</label>
+                        <input type="password" class="form-control" placeholder="确认密码" name="ConfirmPassword" />
                     </div>
                 </form>
+                <div class="right-w3l">
+                    <input type="submit" class="form-control" id="regSub" value="注册">
+                </div>
             </div>
         </div>
     </div>
@@ -496,17 +485,7 @@
         twentyFour: false
     });
 </script>
-<!--// Time -->
-<!-- Calendar -->
 <script th:src="@{/js/jquery-ui.js}"></script>
-<script>
-    $(function () {
-        $("#datepicker,#datepicker1,#datepicker2,#datepicker3").datepicker();
-    });
-</script>
-<!-- //Calendar -->
-
-<!-- carousel -->
 <script th:src="@{/js/owl.carousel.js}"></script>
 <script>
     $(document).ready(function () {
@@ -552,6 +531,7 @@
 <script type="text/javascript" th:inline="javascript">
     /*<![CDATA[*/
     $(function () {
+        $("#datepicker,#datepicker1,#datepicker2,#datepicker3").datepicker();
         $("#slider1").responsiveSlides({
             auto: true,
             pager: true,
@@ -571,10 +551,104 @@
             $("#yesLogin").hide();
         }
         loadCarItem();
+
+        $('#registeredForm').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                password: {
+                    message: '密码验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '密码不能为空'
+                        },
+                        regexp: {
+                            regexp: /^[\S]{6,12}$/,
+                            message: '密码必须6到12位，且不能出现空格'
+                        }
+                    }
+                },
+                ConfirmPassword: {
+                    message: '密码验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '密码不能为空'
+                        },
+                        regexp: {
+                            regexp: /^[\S]{6,12}$/,
+                            message: '密码必须6到12位，且不能出现空格'
+                        }
+                    }
+                },
+                mail: {
+                    validators: {
+                        notEmpty: {
+                            message: '邮箱地址不能为空'
+                        },
+                        regexp: {
+                            regexp: /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/,
+                            message: '邮箱格式错误'
+                        }
+                    }
+                },
+                username: {
+                    validators: {
+                        notEmpty: {
+                            message: '用户名不能为空'
+                        },
+                        regexp: {
+                            regexp: /^[a-zA-Z0-9_-]{4,16}$/,
+                            message: '用户名必须4到16位（数字，字码，下划线，减号）'
+                        }
+                    }
+                }
+            }
+        });
     });
     $("#sub").on("click",function(){
         login();
     });
+    $("#regSub").on("click",function(){
+        registered();
+    });
+
+    function registered(){
+        var bootstrapValidator = $("#registeredForm").data('bootstrapValidator').isValid();
+        if(bootstrapValidator){
+            var data = $("#registeredForm").serializeObject();
+            if(data.password !== data.ConfirmPassword){
+                toastr.error("两次密码输入不一致");
+                return false;
+            }
+            data.ConfirmPassword = "";
+            data.password = encode64(data.password);
+            console.log($("#registeredForm").serialize());
+            $.ajax({
+                url:[[@{/user/saveUser}]],
+                data:data,
+                type:"post",
+                dataType:"json",
+                success:function(result){
+                    if(result.success){
+                        toastr.success("保存成功，请登录");
+                        $("#registeredPanel").modal("hide");
+                    }else{
+                        toastr.error(result.msg);
+                    }
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    alert(XMLHttpRequest.status);
+                    alert(XMLHttpRequest.readyState);
+                    alert(textStatus);
+                }
+            });
+        }
+    }
+
     function loadCarItem(type){
         $.ajax({
             url:[[@{/unverify/getVehicleInfo}]],
