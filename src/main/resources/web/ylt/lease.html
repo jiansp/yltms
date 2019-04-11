@@ -52,9 +52,19 @@
         }
         .city-picker-span {
             border: 1px solid #646464;
-            background-color: #2A2A2A;
+            background-color: #252525;
             border-radius: 0.25rem;
-            width:100%;
+            width:100% !important;
+        }
+
+        .city-picker-span > .title > span {
+            color: #a0a0a0;
+        }
+        .city-picker-span.focus, .city-picker-span.open {
+            border-bottom-color: #646464;
+        }
+        .city-select-wrap {
+            width: 400px;
         }
     </style>
 
@@ -372,77 +382,42 @@
     </div>
 </div>
 <div class="modal fade" id="leasePanel" tabindex="-1" role="dialog" aria-labelledby="leaseModel" aria-hidden="true">
+    <div class="modal-dialog" style="max-width: 100% !important;">
     <div class="row">
-        <div class="col-lg-6 book-appointment p-sm-5 py-5 px-4">
+        <div class="col-lg-4 book-appointment p-sm-5 py-5 px-4">
             <h2>取车</h2>
             <div class="book-agileinfo-form">
                 <form action="#" method="post">
                     <div class="row main-agile-sectns">
-                        <div class="col-md-6 agileits-btm-spc form-text1">
-                            <input type="text" name="Name" placeholder="Full Name" required="">
-                        </div>
-                        <div class="col-md-6 agileits-btm-spc form-text2">
-                            <input type="text" name="Phone no" placeholder="Phone number" required="">
+                        <div class="col-md-12 agileits-btm-spc form-text1">
+                            <input type="text" value="2012-05-15 21:05" id="obtainTime" data-date-format="yyyy-mm-dd hh:ii">
                         </div>
                     </div>
                     <div class="row ">
-                        <div class="col-md-6 agileits-btm-spc form-text1">
-                            <input type="email" name="email" placeholder="Email" required="">
-                        </div>
-                        <div class="col-md-6 agileits-btm-spc form-text1">
+                        <div class="col-md-12 agileits-btm-spc form-text1">
                             <input id="city-picker0" class="form-control" readonly type="text" data-toggle="city-picker">
-                            <!--<div class="form-group">
-                                <button class="btn btn-warning" id="reset" type="button">重置</button>
-                                <button class="btn btn-danger" id="destroy" type="button">确定</button>
-                            </div>-->
                         </div>
                     </div>
-                    <div class="clear"></div>
                     <h2 class="sub-head-w3ls">还车</h2>
                     <div class="row main-agile-sectns">
-                        <div class="col-md-6 agileits-btm-spc form-text1">
-                            <input type="text" value="2012-05-15 21:05" id="datetimepicker" data-date-format="yyyy-mm-dd hh:ii">
-                        </div>
-                        <div class="col-md-6 agileits-btm-spc form-text2">
-                            <input type="text" id="timepicker" name="Time" class="timepicker form-control"
-                                   placeholder="Pick-up Time" value="">
+                        <div class="col-md-12 agileits-btm-spc form-text1">
+                            <input type="text" value="2012-05-15 21:05" id="returnTime" data-date-format="yyyy-mm-dd hh:ii">
                         </div>
                     </div>
-                    <div class="row main-agile-sectns">
-                        <div class="col-md-6 agileits-btm-spc form-text1">
-                            <input type="text" name="Pick-up Location" placeholder="Pick-up Location" required="">
-                        </div>
-                        <div class="col-md-6 agileits-btm-spc form-text2">
-                            <input type="text" name="Drop-off Location" placeholder="Drop-off Location" required="">
+                    <div class="row ">
+                        <div class="col-md-12 agileits-btm-spc form-text1">
+                            <input id="city-picker" class="form-control" readonly type="text" data-toggle="city-picker">
                         </div>
                     </div>
-
-                    <div class="main-agile-sectns">
-                        <div class="agileits-btm-spc">
-                            <select id="passengers" onchange="change_country(this.value)"
-                                    class="frm-field required sect">
-                                <option value="">No.of Passengers</option>
-                                <option value="">1</option>
-                                <option value="">2</option>
-                                <option value="">3</option>
-                                <option value="">4</option>
-                                <option value="">5</option>
-                            </select>
-                        </div>
-                        <div class="agileits-btm-spc form-text2">
-                            <select id="direction" onchange="change_country(this.value)" class="frm-field required">
-                                <option value="">Direction</option>
-                                <option value="">One Way</option>
-                                <option value="">Return</option>
-                            </select>
-                        </div>
-                    </div>
-                    <input type="submit" value="Book Now">
-                    <input type="reset" value="Reset">
                 </form>
+                <input id="leaseSubmit" type="submit" value="确认">
+                <input id="leaseClose" type="reset" value="关闭">
             </div>
         </div>
+        <div class="col-lg-1 mt-md-5"></div>
         <div id="imgDesc" class="col-lg-6 mt-md-5"></div>
+        <div class="col-lg-1 mt-md-5"></div>
+    </div>
     </div>
 </div>
 <div class="modal fade" id="registeredPanel" tabindex="-1" role="dialog" aria-labelledby="regModel" aria-hidden="true">
@@ -618,12 +593,15 @@
     $("#regSub").on("click",function(){
         registered();
     });
-    $('#datetimepicker').datetimepicker(
+    $('#obtainTime,#returnTime').datetimepicker(
         {
             language: 'zh-CN',
             autoclose: true
         }
     );
+    $("#leaseClose").on("click",function(){
+        $("#leasePanel").modal('hide');
+    });
 
     function registered(){
         var bootstrapValidator = $("#registeredForm").data('bootstrapValidator').isValid();
