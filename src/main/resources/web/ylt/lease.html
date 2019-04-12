@@ -66,6 +66,21 @@
         .city-select-wrap {
             width: 400px;
         }
+        .lease-modal-content {
+            position: relative;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-orient: vertical;
+            -webkit-box-direction: normal;
+            -ms-flex-direction: column;
+            flex-direction: column;
+            width: 100%;
+            height: 100%;
+            pointer-events: auto;
+            background-size: cover;
+            outline: 0;
+        }
     </style>
 
 </head>
@@ -383,30 +398,31 @@
 </div>
 <div class="modal fade" id="leasePanel" tabindex="-1" role="dialog" aria-labelledby="leaseModel" aria-hidden="true">
     <div class="modal-dialog" style="max-width: 100% !important;">
-    <div class="row">
+        <div class="lease-modal-content">
+            <div class="row">
         <div class="col-lg-4 book-appointment p-sm-5 py-5 px-4">
             <h2>取车</h2>
             <div class="book-agileinfo-form">
-                <form action="#" method="post">
+                <form id="orderForm" action="#" method="post">
                     <div class="row main-agile-sectns">
                         <div class="col-md-12 agileits-btm-spc form-text1">
-                            <input type="text" value="2012-05-15 21:05" id="obtainTime" data-date-format="yyyy-mm-dd hh:ii">
+                            <input type="text" value="2012-05-15 21:05" id="obtainTime" name="obtainTime" data-date-format="yyyy-mm-dd hh:ii">
                         </div>
                     </div>
                     <div class="row ">
                         <div class="col-md-12 agileits-btm-spc form-text1">
-                            <input id="city-picker0" class="form-control" readonly type="text" data-toggle="city-picker">
+                            <input id="obtainCity" name="obtainCity" class="form-control" readonly type="text" data-toggle="city-picker">
                         </div>
                     </div>
                     <h2 class="sub-head-w3ls">还车</h2>
                     <div class="row main-agile-sectns">
                         <div class="col-md-12 agileits-btm-spc form-text1">
-                            <input type="text" value="2012-05-15 21:05" id="returnTime" data-date-format="yyyy-mm-dd hh:ii">
+                            <input type="text" value="2012-05-15 21:05" id="returnTime" name="returnTime" data-date-format="yyyy-mm-dd hh:ii">
                         </div>
                     </div>
                     <div class="row ">
                         <div class="col-md-12 agileits-btm-spc form-text1">
-                            <input id="city-picker" class="form-control" readonly type="text" data-toggle="city-picker">
+                            <input id="returnCity" name="returnCity" class="form-control" readonly type="text" data-toggle="city-picker">
                         </div>
                     </div>
                 </form>
@@ -418,6 +434,7 @@
         <div id="imgDesc" class="col-lg-6 mt-md-5"></div>
         <div class="col-lg-1 mt-md-5"></div>
     </div>
+        </div>
     </div>
 </div>
 <div class="modal fade" id="registeredPanel" tabindex="-1" role="dialog" aria-labelledby="regModel" aria-hidden="true">
@@ -596,11 +613,18 @@
     $('#obtainTime,#returnTime').datetimepicker(
         {
             language: 'zh-CN',
-            autoclose: true
+            autoclose: true,
+            todayBtn : true
         }
     );
     $("#leaseClose").on("click",function(){
         $("#leasePanel").modal('hide');
+    });
+
+    $("#leaseSubmit").on("click",function(){
+        console.log($("#orderForm").serializeObject());
+        console.log($(".title").find('span[data-count="district"]').eq(0).data("code"));
+        console.log($(".title").find('span[data-count="district"]').eq(1).data("code"));
     });
 
     function registered(){
@@ -626,11 +650,6 @@
                     }else{
                         toastr.error(result.msg);
                     }
-                },
-                error: function(XMLHttpRequest, textStatus, errorThrown) {
-                    alert(XMLHttpRequest.status);
-                    alert(XMLHttpRequest.readyState);
-                    alert(textStatus);
                 }
             });
         }
