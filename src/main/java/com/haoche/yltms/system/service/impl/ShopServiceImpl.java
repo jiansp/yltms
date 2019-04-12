@@ -17,6 +17,7 @@ import org.springframework.util.StringUtils;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -77,5 +78,14 @@ public class ShopServiceImpl implements ShopService {
         shop.setDeleter(userId);
         shop.setDeleteTime(now);
         this.shopRepository.save(shop);
+    }
+
+    @Override
+    public List<String> findShops(Map<String, String> params) {
+        String prov = params.get("prov");
+        if(StringUtils.isEmpty(prov)){
+            return this.shopRepository.findProv();
+        }
+        return null;
     }
 }

@@ -4,6 +4,7 @@ import com.haoche.yltms.system.model.Shop;
 import com.haoche.yltms.system.model.User;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
 import java.util.Map;
 
 public interface ShopService {
@@ -14,4 +15,6 @@ public interface ShopService {
     void saveAndUpdate(Shop shop, User user);
 
     void del(String id, String id1);
+
+    List<String> findShops(Map<String, String> params);
 }

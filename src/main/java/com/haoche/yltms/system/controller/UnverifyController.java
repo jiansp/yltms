@@ -1,11 +1,10 @@
 package com.haoche.yltms.system.controller;
 
 import com.haoche.yltms.system.model.Vehicle;
+import com.haoche.yltms.system.service.ShopService;
 import com.haoche.yltms.system.service.VehicleService;
 import com.haoche.yltms.system.vo.Result;
-import com.haoche.yltms.system.vo.TableData;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -19,6 +18,8 @@ import java.util.Map;
 public class UnverifyController {
     @Autowired
     private VehicleService vehicleService;
+    @Autowired
+    private ShopService shopService;
 
     @ResponseBody
     @RequestMapping("/getVehicleInfo")
@@ -34,6 +35,25 @@ public class UnverifyController {
             e.printStackTrace();
             result.setSuccess(false);
             result.setMsg(e.getMessage());
+        }
+        return result;
+    }
+
+    @ResponseBody
+    @RequestMapping("/getAddress")
+    public Result getAddress(String type, String prov, String city, String area){
+        Result result = new Result();
+        Map<String,String> params = new HashMap<>();
+        params.put("type",type);
+        params.put("prov",prov);
+        try {
+            List<String> shops = this.shopService.findShops(params);
+            result.setSuccess(true);
+            result.setObj(shops);
+        } catch (Exception e){
+            e.printStackTrace();
+            result.setMsg(e.getMessage());
+            result.setSuccess(false);
         }
         return result;
     }

@@ -39,8 +39,10 @@
                 ,cols: [
                     [
                     {field:'id', title:'id',width:50 }
-                    ,{field:'address', title:'门店地址', fixed: 'left'}
-                    ,{field:'shopName', title:'门店名称', edit: 'text'}
+                    ,{field:'address', title:'门店地址', fixed: 'left', templet: function(res){
+                            return '<em>'+ res.prov+'/' +res.city+'/' + res.area +'</em>'
+                        }}
+                    ,{field:'shopName', title:'门店名称'}
                     ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:120}
                 ]
             ]
@@ -58,7 +60,7 @@
                             id: 'insert-form',
                             type: 2,
                             title:"编辑",
-                            area: ['450px', '520px'],
+                            area: ['400px', '420px'],
                             btn: ['确定'],
                             yes: function(index, layero){
                                 insertSubmit();
@@ -108,7 +110,7 @@
                         id: 'insert-form',
                         type: 2,
                         title:"修改",
-                        area: ['450px', '520px'],
+                        area: ['400px', '420px'],
                         btn: ['确定'],
                         yes: function(index, layero){
                             insertSubmit();

@@ -48,9 +48,9 @@
 <script type="text/javascript" th:inline="javascript">
     /*<![CDATA[*/
     $(function(){
-        defaults.v1 = "北京";
-        defaults.v2 = "北京";
-        defaults.v3 = "东城区";
+        defaults.v1 = [[${obj.prov}]];
+        defaults.v2 = [[${obj.city}]];
+        defaults.v3 = [[${obj.area}]];
     });
     function onSubmit(){
         $("#onSubmit").click();

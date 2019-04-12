@@ -56,6 +56,12 @@
             border-radius: 0.25rem;
             width:100% !important;
         }
+        .form-control{
+            border: 1px solid #646464;
+            background-color: #252525;
+            border-radius: 0.25rem;
+            color: #a0a0a0;
+        }
 
         .city-picker-span > .title > span {
             color: #a0a0a0;
@@ -410,8 +416,43 @@
                         </div>
                     </div>
                     <div class="row ">
+                        <div class="col-md-4 agileits-btm-spc form-text1">
+                            <!--<input id="obtainCity" name="obtainCity" class="form-control" readonly type="text" data-toggle="city-picker">-->
+                            <select id="obtainProv" class="form-control">
+                                <option value="">请选择</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 agileits-btm-spc form-text1">
+                            <!--<input id="obtainCity" name="obtainCity" class="form-control" readonly type="text" data-toggle="city-picker">-->
+                            <select class="form-control">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 agileits-btm-spc form-text1">
+                            <!--<input id="obtainCity" name="obtainCity" class="form-control" readonly type="text" data-toggle="city-picker">-->
+                            <select class="form-control">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row ">
                         <div class="col-md-12 agileits-btm-spc form-text1">
-                            <input id="obtainCity" name="obtainCity" class="form-control" readonly type="text" data-toggle="city-picker">
+                            <!--<input id="obtainCity" name="obtainCity" class="form-control" readonly type="text" data-toggle="city-picker">-->
+                            <select class="form-control">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                            </select>
                         </div>
                     </div>
                     <h2 class="sub-head-w3ls">还车</h2>
@@ -546,6 +587,7 @@
             $("#yesLogin").hide();
         }
         loadCarItem();
+        loadAddress();
 
         $('#registeredForm').bootstrapValidator({
             message: 'This value is not valid',
@@ -709,6 +751,33 @@
                     toastr.warning(result.msg);
                 }
             }
+        })
+    }
+
+    function loadAddress() {
+        $.ajax({
+            url:[[@{/unverify/getAddress}]],
+            type:"post",
+                dataType:"json",
+                success:function(result){
+                if(result.success){
+                    console.log(result);
+                    for(var i =0;i<result.obj.length;i++){
+                        $("#obtainProv").append('<option value="'+result.obj[i]+'">'+result.obj[i]+'</option>')
+                    }
+
+                }else{
+                    toastr.warning(result.msg);
+                }
+            },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            // 状态码
+            console.log(XMLHttpRequest.status);
+            // 状态
+            console.log(XMLHttpRequest.readyState);
+            // 错误信息
+            console.log(textStatus);
+        }
         })
     }
     /*]]>*/
