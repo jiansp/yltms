@@ -418,40 +418,28 @@
                     <div class="row ">
                         <div class="col-md-4 agileits-btm-spc form-text1">
                             <!--<input id="obtainCity" name="obtainCity" class="form-control" readonly type="text" data-toggle="city-picker">-->
-                            <select id="obtainProv" class="form-control">
+                            <select id="obtainProv" class="form-control" onchange="changeProv('obtain')">
                                 <option value="">请选择</option>
                             </select>
                         </div>
                         <div class="col-md-4 agileits-btm-spc form-text1">
                             <!--<input id="obtainCity" name="obtainCity" class="form-control" readonly type="text" data-toggle="city-picker">-->
-                            <select class="form-control">
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
+                            <select id="obtainCity" class="form-control" onchange="changeCity('obtain')">
+                                <option value="">请选择</option>
                             </select>
                         </div>
                         <div class="col-md-4 agileits-btm-spc form-text1">
                             <!--<input id="obtainCity" name="obtainCity" class="form-control" readonly type="text" data-toggle="city-picker">-->
-                            <select class="form-control">
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
+                            <select id="obtainArea" class="form-control" onchange="changeArea('obtain')">
+                                <option value="">请选择</option>
                             </select>
                         </div>
                     </div>
                     <div class="row ">
                         <div class="col-md-12 agileits-btm-spc form-text1">
                             <!--<input id="obtainCity" name="obtainCity" class="form-control" readonly type="text" data-toggle="city-picker">-->
-                            <select class="form-control">
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
+                            <select id="obtainShop" class="form-control">
+                                <option value="">请选择</option>
                             </select>
                         </div>
                     </div>
@@ -462,8 +450,31 @@
                         </div>
                     </div>
                     <div class="row ">
+                        <div class="col-md-4 agileits-btm-spc form-text1">
+                            <!--<input id="returnCity" name="returnCity" class="form-control" readonly type="text" data-toggle="city-picker">-->
+                            <select id="returnProv" class="form-control" onchange="changeProv('return')">
+                                <option value="">请选择</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 agileits-btm-spc form-text1">
+                            <!--<input id="returnCity" name="returnCity" class="form-control" readonly type="text" data-toggle="city-picker">-->
+                            <select id="returnCity" class="form-control" onchange="changeCity('return')">
+                                <option value="">请选择</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 agileits-btm-spc form-text1">
+                            <!--<input id="returnCity" name="returnCity" class="form-control" readonly type="text" data-toggle="city-picker">-->
+                            <select id="returnArea" class="form-control" onchange="changeArea('return')">
+                                <option value="">请选择</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row ">
                         <div class="col-md-12 agileits-btm-spc form-text1">
-                            <input id="returnCity" name="returnCity" class="form-control" readonly type="text" data-toggle="city-picker">
+                            <!--<input id="returnCity" name="returnCity" class="form-control" readonly type="text" data-toggle="city-picker">-->
+                            <select id="returnShop" class="form-control">
+                                <option value="">请选择</option>
+                            </select>
                         </div>
                     </div>
                 </form>
@@ -587,7 +598,8 @@
             $("#yesLogin").hide();
         }
         loadCarItem();
-        loadAddress();
+        loadAddress("return");
+        loadAddress("obtain");
 
         $('#registeredForm').bootstrapValidator({
             message: 'This value is not valid',
@@ -754,31 +766,113 @@
         })
     }
 
-    function loadAddress() {
+    function loadAddress(id) {
         $.ajax({
             url:[[@{/unverify/getAddress}]],
             type:"post",
                 dataType:"json",
                 success:function(result){
                 if(result.success){
-                    console.log(result);
                     for(var i =0;i<result.obj.length;i++){
-                        $("#obtainProv").append('<option value="'+result.obj[i]+'">'+result.obj[i]+'</option>')
+                        $("#"+id+"Prov").append('<option value="'+result.obj[i]+'">'+result.obj[i]+'</option>')
                     }
 
                 }else{
                     toastr.warning(result.msg);
                 }
-            },
-        error: function (XMLHttpRequest, textStatus, errorThrown) {
-            // 状态码
-            console.log(XMLHttpRequest.status);
-            // 状态
-            console.log(XMLHttpRequest.readyState);
-            // 错误信息
-            console.log(textStatus);
-        }
+            }
         })
+    }
+    function changeProv(id){
+        var prov = $("#"+id+"Prov").val();
+        if(prov){
+            $.ajax({
+                url:[[@{/unverify/getAddress}]],
+                type:"post",
+                data:{"prov":prov},
+                dataType:"json",
+                success:function(result){
+                    if(result.success){
+                        resetObCity(id);
+                        for(var i =0;i<result.obj.length;i++){
+                            $("#"+id+"City").append('<option value="'+result.obj[i]+'">'+result.obj[i]+'</option>');
+                        }
+                        resetObArea(id);
+                        resetObShop(id);
+                    }else{
+                        toastr.warning(result.msg);
+                    }
+            }
+        })
+        }else{
+            resetObCity(id);
+            resetObArea(id);
+            resetObShop(id);
+        }
+    }
+    function changeCity(id){
+        var prov = $("#"+id+"Prov").val();
+        var city = $("#"+id+"City").val();
+        if(city){
+            $.ajax({
+                url:[[@{/unverify/getAddress}]],
+                type:"post",
+                data:{"prov":prov, "city":city},
+                dataType:"json",
+                success:function(result){
+                if(result.success){
+
+                    resetObArea(id);
+                    for(var i =0;i<result.obj.length;i++){
+                        $("#"+id+"Area").append('<option value="'+result.obj[i]+'">'+result.obj[i]+'</option>');
+                    }
+                    resetObShop(id);
+                }else{
+                    toastr.warning(result.msg);
+                }
+            }
+        })
+        }else{
+            resetObArea(id);
+            resetObShop(id);
+        }
+    }
+    function changeArea(id){
+        var prov = $("#"+id+"Prov").val();
+        var city = $("#"+id+"City").val();
+        var area = $("#"+id+"Area").val();
+        if(area){
+            $.ajax({
+                url:[[@{/unverify/getAddress}]],
+            type:"post",
+                data:{"prov":prov, "city":city, "area": area},
+            dataType:"json",
+                success:function(result){
+                if(result.success){
+                    resetObShop(id);
+                    for(var i =0;i<result.obj.length;i++){
+                        $("#"+id+"Shop").append('<option value="'+result.obj[i]+'">'+result.obj[i]+'</option>');
+                    }
+                }else{
+                    toastr.warning(result.msg);
+                }
+            }
+        })
+        }else{
+            resetObShop(id);
+        }
+    }
+    function resetObCity(id){
+        $("#"+id+"City").empty();
+        $("#"+id+"City").append('<option value="">请选择</option>');
+    }
+    function resetObArea(id){
+        $("#"+id+"Area").empty();
+        $("#"+id+"Area").append('<option value="">请选择</option>');
+    }
+    function resetObShop(id){
+        $("#"+id+"Shop").empty();
+        $("#"+id+"Shop").append('<option value="">请选择</option>');
     }
     /*]]>*/
 </script>

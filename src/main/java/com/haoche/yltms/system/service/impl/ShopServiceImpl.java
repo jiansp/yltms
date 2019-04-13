@@ -83,8 +83,19 @@ public class ShopServiceImpl implements ShopService {
     @Override
     public List<String> findShops(Map<String, String> params) {
         String prov = params.get("prov");
+        String city = params.get("city");
+        String area = params.get("area");
+        if(!StringUtils.isEmpty(area)){
+            return this.shopRepository.findAddress(prov, city, area);
+        }
+        if(!StringUtils.isEmpty(city)){
+            return this.shopRepository.findAddress(prov, city);
+        }
+        if(!StringUtils.isEmpty(prov)){
+            return this.shopRepository.findAddress(prov);
+        }
         if(StringUtils.isEmpty(prov)){
-            return this.shopRepository.findProv();
+            return this.shopRepository.findAddress();
         }
         return null;
     }

@@ -46,6 +46,8 @@ public class UnverifyController {
         Map<String,String> params = new HashMap<>();
         params.put("type",type);
         params.put("prov",prov);
+        params.put("city",city);
+        params.put("area",area);
         try {
             List<String> shops = this.shopService.findShops(params);
             result.setSuccess(true);
