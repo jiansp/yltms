@@ -25,7 +25,12 @@ public class OrderController {
 
     @RequestMapping("/browseVehicle")
     public String browseVehicle(){
-        return "lease";
+        return "ylt/lease";
+    }
+
+    @RequestMapping("/order")
+    public String order(){
+        return "ylt/order";
     }
 
     @RequestMapping("/query")

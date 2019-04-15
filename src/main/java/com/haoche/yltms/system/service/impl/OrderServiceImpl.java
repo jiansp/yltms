@@ -54,8 +54,8 @@ public class OrderServiceImpl implements OrderService {
         order.setDuration(String.valueOf(duration));
         order.setCostRent(costRent);
         if (StringUtils.isEmpty(order.getId())) {
-            String orderNo = String.format("%04",this.serialNumberService.getOrderNo());
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            String orderNo = String.format("%04d",Integer.valueOf(this.serialNumberService.getOrderNo()));
+            SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
             String date = format.format(now);
             order.setId(UUIDGenerator.getUUID());
             order.setCreateTime(now);
