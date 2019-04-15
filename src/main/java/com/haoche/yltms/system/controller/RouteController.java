@@ -19,4 +19,10 @@ public class RouteController {
         return "ylt/lease";
     }
 
+    @RequestMapping("/logout")
+    public String logout(HttpSession session){
+        session.removeAttribute(LoginInterceptor.SESSION_KEY);
+        return "redirect:/";
+    }
+
 }

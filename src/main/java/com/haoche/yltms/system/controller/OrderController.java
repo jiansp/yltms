@@ -9,6 +9,7 @@ import com.haoche.yltms.system.vo.TableData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
@@ -28,12 +29,13 @@ public class OrderController {
     }
 
     @RequestMapping("/query")
-    public String query(){
+    public String query(@SessionAttribute(LoginInterceptor.SESSION_KEY) User user, Model model){
+        model.addAttribute("account",user);
         return "order/query";
     }
 
     @ResponseBody
-    @RequestMapping("/getRentOrderTable")
+    @RequestMapping("/getOrderTable")
     public TableData getUserTable(Integer page, Integer limit, String orderNo){
         TableData tableData = new TableData();
         Map<String,String> params = new HashMap<>();

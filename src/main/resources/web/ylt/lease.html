@@ -123,7 +123,7 @@
             <a id="nameSpan" href="#"><i class="fas fa-user"></i> </a>
             <a href="#" data-toggle="modal" aria-pressed="false" data-target="#changePass">
                 <i class="fas fa-lock"></i> 修改密码</a>
-            <a th:href="@{/logout}">
+            <a th:href="@{/route/logout}">
                 <i class="fas fa-outdent"></i> 退出</a>
         </div>
     </div>
@@ -679,8 +679,9 @@
     });
 
     $("#leaseSubmit").on("click",function(){
-        console.log();
         var data = $("#orderForm").serializeObject();
+        data.obtainTime = new Date(data.obtainTime + ':00');
+        data.returnTime = new Date(data.returnTime + ':00');
         if(data.userId){
             $.ajax({
                 url:[[@{/order/save}]],
@@ -759,17 +760,16 @@
     }
     function lease(id,imgSrc,rent){
         var account = [[${account}]];
+        if(!account){
+            toastr.warning("请先登录");
+            return;
+        }
         $("#imgDesc").empty();
         $("#imgDesc").append('<img src="'+imgSrc+'" alt="" class="img-fluid">');
         $("#vehicleId").val(id);
         $("#rent").val(rent);
         $("#userId").val(account.id);
         $("#leasePanel").modal('show');
-        if(!account){
-            toastr.warning("请先登录");
-            return;
-        }
-        toastr.warning(id);
     }
     function login(){
         var username = $("#username").val();

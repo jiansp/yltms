@@ -1,24 +1,23 @@
 package com.haoche.yltms.system.model;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import java.util.Objects;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
+
+import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "rent_order", schema = "ylt", catalog = "")
-public class RentOrder extends BaseModel{
-    public static  final String UN_PAY = "未支付";
-    public static  final String PAY = "已支付";
-    public static  final String OBTAIN_CAR = "已取车";
-    public static  final String RETURN_CAR = "已还车";
-    public static  final String CANCEL = "已取消";
-    public static  final String INVALID = "已作废";
+public class RentOrder extends BaseModel {
+    public static final String UN_PAY = "未支付";
+    public static final String PAY = "已支付";
+    public static final String OBTAIN_CAR = "已取车";
+    public static final String RETURN_CAR = "已还车";
+    public static final String CANCEL = "已取消";
+    public static final String INVALID = "已作废";
 
-    private String shopName;
-    private String userId;
-    private String vehicleId;
+    private User user;
+    private Vehicle vehicle;
     private String rent;
     private String costRent;
     private String obtainProv;
@@ -29,19 +28,19 @@ public class RentOrder extends BaseModel{
     private String returnArea;
     private String orderStatus;
     private String orderNo;
+    //@DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
+    private Date obtainTime;
+    //@DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
+    private Date returnTime;
+    private String obtainShop;
+    private String returnShop;
 
-    @Basic
-    @Column(name = "SHOP_NAME")
-    public String getShopName() {
-        return shopName;
-    }
+    private String userId;
+    private String vehicleId;
+    private Date finishTime;
+    private String duration;
 
-    public void setShopName(String shopName) {
-        this.shopName = shopName;
-    }
-
-    @Basic
-    @Column(name = "USER_ID")
+    @Transient
     public String getUserId() {
         return userId;
     }
@@ -50,14 +49,35 @@ public class RentOrder extends BaseModel{
         this.userId = userId;
     }
 
-    @Basic
-    @Column(name = "VEHICLE_ID")
+    @Transient
     public String getVehicleId() {
         return vehicleId;
     }
 
     public void setVehicleId(String vehicleId) {
         this.vehicleId = vehicleId;
+    }
+
+    @ManyToOne
+    @NotFound(action = NotFoundAction.IGNORE)
+    @JoinColumn(name = "USER_ID", nullable = true)
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    @ManyToOne
+    @NotFound(action = NotFoundAction.IGNORE)
+    @JoinColumn(name = "VEHICLE_ID", nullable = true)
+    public Vehicle getVehicle() {
+        return vehicle;
+    }
+
+    public void setVehicle(Vehicle vehicle) {
+        this.vehicle = vehicle;
     }
 
     @Basic
@@ -160,16 +180,63 @@ public class RentOrder extends BaseModel{
         this.orderNo = orderNo;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        RentOrder rentOrder = (RentOrder) o;
-        return Objects.equals(orderNo, rentOrder.orderNo);
+    @Basic
+    @Column(name = "OBTAIN_TIME")
+    public Date getObtainTime() {
+        return obtainTime;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(orderNo);
+    public void setObtainTime(Date obtainTime) {
+        this.obtainTime = obtainTime;
+    }
+
+    @Basic
+    @Column(name = "RETURN_TIME")
+    public Date getReturnTime() {
+        return returnTime;
+    }
+
+    public void setReturnTime(Date returnTime) {
+        this.returnTime = returnTime;
+    }
+
+    @Basic
+    @Column(name = "OBTAIN_SHOP")
+    public String getObtainShop() {
+        return obtainShop;
+    }
+
+    public void setObtainShop(String obtainShop) {
+        this.obtainShop = obtainShop;
+    }
+
+    @Basic
+    @Column(name = "RETURN_SHOP")
+    public String getReturnShop() {
+        return returnShop;
+    }
+
+    public void setReturnShop(String returnShop) {
+        this.returnShop = returnShop;
+    }
+
+    @Basic
+    @Column(name = "FINISH_TIME")
+    public Date getFinishTime() {
+        return finishTime;
+    }
+
+    public void setFinishTime(Date finishTime) {
+        this.finishTime = finishTime;
+    }
+
+    @Basic
+    @Column(name = "DURATION")
+    public String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
     }
 }
