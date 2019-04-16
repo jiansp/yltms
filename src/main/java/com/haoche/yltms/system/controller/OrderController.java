@@ -3,6 +3,7 @@ package com.haoche.yltms.system.controller;
 import com.haoche.yltms.config.LoginInterceptor;
 import com.haoche.yltms.system.model.RentOrder;
 import com.haoche.yltms.system.model.User;
+import com.haoche.yltms.system.model.Vehicle;
 import com.haoche.yltms.system.service.OrderService;
 import com.haoche.yltms.system.vo.Result;
 import com.haoche.yltms.system.vo.TableData;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -63,6 +65,24 @@ public class OrderController {
             e.printStackTrace();
             result.setMsg(e.getMessage());
             result.setSuccess(false);
+        }
+        return result;
+    }
+
+    @ResponseBody
+    @RequestMapping("/getOrderInfo")
+    public Result getUserTable(@SessionAttribute(LoginInterceptor.SESSION_KEY) User user){
+        Result result = new Result();
+        Map<String,String> params = new HashMap<>();
+        params.put("userId",user.getId());
+        try {
+            List<RentOrder> vehicles = this.orderService.findOrders(params);
+            result.setSuccess(true);
+            result.setObj(vehicles);
+        } catch (Exception e){
+            e.printStackTrace();
+            result.setSuccess(false);
+            result.setMsg(e.getMessage());
         }
         return result;
     }

@@ -24,6 +24,7 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -93,4 +94,11 @@ public class OrderServiceImpl implements OrderService {
         Page<RentOrder> page = this.orderRepository.findAll(specification, pageable);
         return page;
     }
+
+    @Override
+    public List<RentOrder> findOrders(Map<String, String> params) {
+            String userId = params.get("userId");
+            return this.orderRepository.findOrders(userId);
+        }
+
 }
