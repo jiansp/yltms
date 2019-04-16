@@ -3,7 +3,6 @@ package com.haoche.yltms.system.controller;
 import com.haoche.yltms.config.LoginInterceptor;
 import com.haoche.yltms.system.model.RentOrder;
 import com.haoche.yltms.system.model.User;
-import com.haoche.yltms.system.model.Vehicle;
 import com.haoche.yltms.system.service.OrderService;
 import com.haoche.yltms.system.vo.Result;
 import com.haoche.yltms.system.vo.TableData;
@@ -31,7 +30,8 @@ public class OrderController {
     }
 
     @RequestMapping("/order")
-    public String order(){
+    public String order(@SessionAttribute(LoginInterceptor.SESSION_KEY) User user, Model model){
+        model.addAttribute("account",user);
         return "ylt/order";
     }
 
@@ -81,9 +81,9 @@ public class OrderController {
         Map<String,String> params = new HashMap<>();
         params.put("userId",user.getId());
         try {
-            List<RentOrder> vehicles = this.orderService.findOrders(params);
+            List<RentOrder> orders = this.orderService.findOrders(params);
             result.setSuccess(true);
-            result.setObj(vehicles);
+            result.setObj(orders);
         } catch (Exception e){
             e.printStackTrace();
             result.setSuccess(false);

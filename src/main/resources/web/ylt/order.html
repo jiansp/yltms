@@ -28,6 +28,7 @@
     <link th:href="@{/css/ladda-theme.scss}" rel="stylesheet"/>
     <link th:href="@{/css/bootstrapValidator.min.css}" rel="stylesheet"/>
     <link th:href="@{/css/bootstrap-datetimepicker.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/bootstrap-table.min.css}" rel="stylesheet"/>
     <link th:href="@{/css/city-picker.css}" rel="stylesheet" type="text/css" />
 
     <script type="text/javascript" th:src="@{/js/jquery-2.1.4.min.js}"></script>
@@ -38,6 +39,8 @@
     <script type="text/javascript" th:src="@{/js/bootstrapValidator.js}"></script>
     <script type="text/javascript" th:src="@{/js/zh_CN.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/bootstrap-datetimepicker.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/bootstrap-table.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/bootstrap-table-zh-CN.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/bootstrap-datetimepicker.zh-CN.js}"></script>
     <script type="text/javascript" th:src="@{/js/city-picker.data.js}"></script>
     <script type="text/javascript" th:src="@{/js/city-picker.js}"></script>
@@ -186,25 +189,30 @@
                 <h3 class="text-capitalize mb-3">We have a range of vehicles</h3>
                 <p class="mb-3">Vestibulum et augue eu nibh tincidunt pretium vitae eget purus. Pellentesque necist urna eleifend, semper eros sed, sollicitudin justo. Nam finibus sollicitudin enim, nec blan ditmi laoreet sed. Morbi auctor purus ac ligula aliquetis vestibulum. Quisque vitae sollicitu dinet augue eu pretium vitae.</p>
             </div>
-            <div class="col-lg-2 col-6">
-                <img th:src="@{/images/1.png}" alt="" class="img-fluid" />
-                <img th:src="@{/images/2.png}" alt="" class="img-fluid" />
-                <img th:src="@{/images/3.png}" alt="" class="img-fluid" />
+            <div class="col-lg-1"></div>
+            <div class="col-lg-7" id="orderDesc">
+                <div class="tech-btm">
+                    <div class="blog-grids row mb-3">
+                        <div class="col-4 pr-0 blog-grid-left">
+                            <a href="#">
+                                <img th:src="@{/images/blog1.jpg}" class="img-fluid" alt="">
+                            </a>
+                        </div>
+                        <div class="col-8 blog-grid-right">
+
+                            <h5>
+                                <a href="#">Pellentesque dui, non felis. Maecenas male non felis </a>
+                            </h5>
+                            <div class="sub-meta">
+								<span>
+									<i class="far fa-clock"></i> 19 Apr, 2018</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
             </div>
 
-            <div class="col-lg-4">
-                <h4 class="text-capitalize"><i class="fas fa-taxi clr1"></i>Luxury Cars</h4>
-                <p class="mb-4"> Vestibulum et augue eunibh metus diam.</p>
-                <h4 class="text-capitalize"><i class="fas fa-bus clr2"></i>Luxury Vans</h4>
-                <p class="mb-4"> Vestibulum et augue eunibh metus diam.</p>
-                <h4 class="text-capitalize"><i class="fas fa-car clr3"></i>Luxury Elite</h4>
-                <p class="mb-4"> Vestibulum et augue eunibh metus diam laoreet.</p>
-            </div>
-            <div class="col-lg-2 col-6">
-                <img th:src="@{/images/3.png}" alt="" class="img-fluid" />
-                <img th:src="@{/images/1.png}" alt="" class="img-fluid" />
-                <img th:src="@{/images/2.png}" alt="" class="img-fluid" />
-            </div>
         </div>
     </div>
 </section>
@@ -417,96 +425,6 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="leasePanel" tabindex="-1" role="dialog" aria-labelledby="leaseModel" aria-hidden="true">
-    <div class="modal-dialog" style="max-width: 100% !important;">
-        <div class="lease-modal-content">
-            <div class="row">
-        <div class="col-lg-4 book-appointment p-sm-5 py-5 px-4">
-            <h2>取车</h2>
-            <div class="book-agileinfo-form">
-                <form id="orderForm" action="#" method="post">
-                    <input type="hidden" id="vehicleId" name="vehicleId">
-                    <input type="hidden" id="rent" name="rent">
-                    <input type="hidden" id="userId" name="userId">
-                    <div class="row main-agile-sectns">
-                        <div class="col-md-12 agileits-btm-spc form-text1">
-                            <input type="text" value="2012-05-15 21:05" id="obtainTime" name="obtainTime" data-date-format="yyyy-mm-dd hh:ii">
-                        </div>
-                    </div>
-                    <div class="row ">
-                        <div class="col-md-4 agileits-btm-spc form-text1">
-                            <!--<input id="obtainCity" name="obtainCity" class="form-control" readonly type="text" data-toggle="city-picker">-->
-                            <select id="obtainProv" name="obtainProv" class="form-control" onchange="changeProv('obtain')">
-                                <option value="">请选择</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4 agileits-btm-spc form-text1">
-                            <!--<input id="obtainCity" name="obtainCity" class="form-control" readonly type="text" data-toggle="city-picker">-->
-                            <select id="obtainCity" name="obtainCity" class="form-control" onchange="changeCity('obtain')">
-                                <option value="">请选择</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4 agileits-btm-spc form-text1">
-                            <!--<input id="obtainCity" name="obtainCity" class="form-control" readonly type="text" data-toggle="city-picker">-->
-                            <select id="obtainArea" name="obtainArea" class="form-control" onchange="changeArea('obtain')">
-                                <option value="">请选择</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row ">
-                        <div class="col-md-12 agileits-btm-spc form-text1">
-                            <!--<input id="obtainCity" name="obtainCity" class="form-control" readonly type="text" data-toggle="city-picker">-->
-                            <select id="obtainShop" name="obtainShop" class="form-control">
-                                <option value="">请选择</option>
-                            </select>
-                        </div>
-                    </div>
-                    <h2 class="sub-head-w3ls">还车</h2>
-                    <div class="row main-agile-sectns">
-                        <div class="col-md-12 agileits-btm-spc form-text1">
-                            <input type="text" value="2012-05-15 21:05" id="returnTime" name="returnTime" data-date-format="yyyy-mm-dd hh:ii">
-                        </div>
-                    </div>
-                    <div class="row ">
-                        <div class="col-md-4 agileits-btm-spc form-text1">
-                            <!--<input id="returnCity" name="returnCity" class="form-control" readonly type="text" data-toggle="city-picker">-->
-                            <select id="returnProv" name="returnProv" class="form-control" onchange="changeProv('return')">
-                                <option value="">请选择</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4 agileits-btm-spc form-text1">
-                            <!--<input id="returnCity" name="returnCity" class="form-control" readonly type="text" data-toggle="city-picker">-->
-                            <select id="returnCity" name="returnCity" class="form-control" onchange="changeCity('return')">
-                                <option value="">请选择</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4 agileits-btm-spc form-text1">
-                            <!--<input id="returnCity" name="returnCity" class="form-control" readonly type="text" data-toggle="city-picker">-->
-                            <select id="returnArea" name="returnArea" class="form-control" onchange="changeArea('return')">
-                                <option value="">请选择</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row ">
-                        <div class="col-md-12 agileits-btm-spc form-text1">
-                            <!--<input id="returnCity" name="returnCity" class="form-control" readonly type="text" data-toggle="city-picker">-->
-                            <select id="returnShop" name="returnShop" class="form-control">
-                                <option value="">请选择</option>
-                            </select>
-                        </div>
-                    </div>
-                </form>
-                <input id="leaseSubmit" type="submit" value="确认">
-                <input id="leaseClose" type="reset" value="关闭">
-            </div>
-        </div>
-        <div class="col-lg-1 mt-md-5"></div>
-        <div id="imgDesc" class="col-lg-6 mt-md-5"></div>
-        <div class="col-lg-1 mt-md-5"></div>
-    </div>
-        </div>
-    </div>
-</div>
 <div class="modal fade" id="registeredPanel" tabindex="-1" role="dialog" aria-labelledby="regModel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -596,14 +514,6 @@
 <script type="text/javascript" th:inline="javascript">
     /*<![CDATA[*/
     $(function () {
-        $("#datepicker,#datepicker1,#datepicker2,#datepicker3").datepicker();
-        $("#slider1").responsiveSlides({
-            auto: true,
-            pager: true,
-            nav: true,
-            speed: 500,
-            namespace: "centered-btns"
-        });
         $().UItoTop({easingType: 'easeOutQuart'});
         var account = [[${account}]];
         if (account) {
@@ -615,9 +525,7 @@
             $("#noLogin").show();
             $("#yesLogin").hide();
         }
-        loadCarItem();
-        loadAddress("return");
-        loadAddress("obtain");
+        loadOrders();
 
         $('#registeredForm').bootstrapValidator({
             message: 'This value is not valid',
@@ -682,45 +590,6 @@
     $("#regSub").on("click",function(){
         registered();
     });
-    $('#obtainTime,#returnTime').datetimepicker(
-        {
-            language: 'zh-CN',
-            autoclose: true,
-            todayBtn : true
-        }
-    );
-    $("#leaseClose").on("click",function(){
-        $("#leasePanel").modal('hide');
-    });
-
-    $("#leaseSubmit").on("click",function(){
-        var data = $("#orderForm").serializeObject();
-        data.obtainTime = new Date(data.obtainTime + ':00');
-        data.returnTime = new Date(data.returnTime + ':00');
-        if(data.userId){
-            $.ajax({
-                url:[[@{/order/save}]],
-                data:data,
-                type:"post",
-                dataType:"json",
-                success:function(result){
-                if(result.success){
-                    toastr.success("订单提交成功，请支付");
-                    $("#leasePanel").modal("hide");
-                }else{
-                    toastr.error(result.msg);
-                }
-            }
-        });
-        }else{
-            toastr.warning("请先登录");
-            return;
-        }
-
-
-        /*console.log($(".title").find('span[data-count="district"]').eq(0).data("code"));
-        console.log($(".title").find('span[data-count="district"]').eq(1).data("code"));*/
-    });
 
     function registered(){
         var bootstrapValidator = $("#registeredForm").data('bootstrapValidator').isValid();
@@ -750,41 +619,25 @@
         }
     }
 
-    function loadCarItem(type){
+    function loadOrders(){
         $.ajax({
-            url:[[@{/unverify/getVehicleInfo}]],
-            data:{"type":type},
+            url:[[@{/order/getOrderInfo}]],
             type:"post",
             dataType:"json",
             success:function(result) {
                 if (result.success) {
-                    $("#carModelItem").empty();
-                    for(var i =0;i<result.obj.length;i++){
+                    /*for(var i =0;i<result.obj.length;i++){
                         var item = result.obj[i];
-                        var imgSrc = [[@{/uploaded/}]]+item.imgPath;
-                        var carModelItem = '<div class="blog-grids row mb-3 carItem"><div class="col-1"></div><div class="col-3 pr-0 blog-grid-left"><img src="'+imgSrc+'" alt="" class="img-fluid"></div><div class="col-3 blog-grid-right" style="margin-top:3%"><h2><span>'+
-                            item.brand+item.model+'</span></h2><div class="sub-meta"><h3><span><i class="far fa-id-card"></i>'+
-                            item.exhaust+'厢|'+item.type+'|'+item.cubicles+'|乘坐'+item.seatNum+'人</span></h3></div></div><div class="col-1 blog-grid-right" style="margin-top:3%"><h2><span style="color:#fabe00">￥'+
-                            item.rent+'</span></h2><h4><span>/日均</span></h4></div><div class="col-4" style="margin-top:4%"><button onclick="lease(\''+item.id+'\',\''+imgSrc+'\',\''+item.rent+'\')" type="button" class="btn btn-warning" style="width:20%;height:50px"><span style="color:#fff;font-weight:700">租车</span></button></div></div>';
-                        $("#carModelItem").append(carModelItem);
+                        var imgSrc = [[@{/uploaded/}]]+item.vehicle.imgPath;
+                        var orderDesc = '<h4 class="text-capitalize"><i class="fas fa-car clr1"></i>Luxury Cars</h4><p class="mb-4"> Vestibulum et augue eunibh metus diam.</p>';
+                        var orderImg = '<img src="'+imgSrc+'" alt="" class="img-fluid" />';
+                        $("#orderDesc").append(orderDesc);
+                        $("#orderImg").append(orderImg);
 
-                    }
+                    }*/
                 }
             }
         });
-    }
-    function lease(id,imgSrc,rent){
-        var account = [[${account}]];
-        if(!account){
-            toastr.warning("请先登录");
-            return;
-        }
-        $("#imgDesc").empty();
-        $("#imgDesc").append('<img src="'+imgSrc+'" alt="" class="img-fluid">');
-        $("#vehicleId").val(id);
-        $("#rent").val(rent);
-        $("#userId").val(account.id);
-        $("#leasePanel").modal('show');
     }
     function login(){
         var username = $("#username").val();
@@ -810,114 +663,6 @@
         })
     }
 
-    function loadAddress(id) {
-        $.ajax({
-            url:[[@{/unverify/getAddress}]],
-            type:"post",
-                dataType:"json",
-                success:function(result){
-                if(result.success){
-                    for(var i =0;i<result.obj.length;i++){
-                        $("#"+id+"Prov").append('<option value="'+result.obj[i]+'">'+result.obj[i]+'</option>')
-                    }
-
-                }else{
-                    toastr.warning(result.msg);
-                }
-            }
-        })
-    }
-    function changeProv(id){
-        var prov = $("#"+id+"Prov").val();
-        if(prov){
-            $.ajax({
-                url:[[@{/unverify/getAddress}]],
-                type:"post",
-                data:{"prov":prov},
-                dataType:"json",
-                success:function(result){
-                    if(result.success){
-                        resetObCity(id);
-                        for(var i =0;i<result.obj.length;i++){
-                            $("#"+id+"City").append('<option value="'+result.obj[i]+'">'+result.obj[i]+'</option>');
-                        }
-                        resetObArea(id);
-                        resetObShop(id);
-                    }else{
-                        toastr.warning(result.msg);
-                    }
-            }
-        })
-        }else{
-            resetObCity(id);
-            resetObArea(id);
-            resetObShop(id);
-        }
-    }
-    function changeCity(id){
-        var prov = $("#"+id+"Prov").val();
-        var city = $("#"+id+"City").val();
-        if(city){
-            $.ajax({
-                url:[[@{/unverify/getAddress}]],
-                type:"post",
-                data:{"prov":prov, "city":city},
-                dataType:"json",
-                success:function(result){
-                if(result.success){
-
-                    resetObArea(id);
-                    for(var i =0;i<result.obj.length;i++){
-                        $("#"+id+"Area").append('<option value="'+result.obj[i]+'">'+result.obj[i]+'</option>');
-                    }
-                    resetObShop(id);
-                }else{
-                    toastr.warning(result.msg);
-                }
-            }
-        })
-        }else{
-            resetObArea(id);
-            resetObShop(id);
-        }
-    }
-    function changeArea(id){
-        var prov = $("#"+id+"Prov").val();
-        var city = $("#"+id+"City").val();
-        var area = $("#"+id+"Area").val();
-        if(area){
-            $.ajax({
-                url:[[@{/unverify/getAddress}]],
-                type:"post",
-                data:{"prov":prov, "city":city, "area": area},
-                dataType:"json",
-                success:function(result){
-                if(result.success){
-                    resetObShop(id);
-                    for(var i =0;i<result.obj.length;i++){
-                        $("#"+id+"Shop").append('<option value="'+result.obj[i]+'">'+result.obj[i]+'</option>');
-                    }
-                }else{
-                    toastr.warning(result.msg);
-                }
-            }
-        })
-        }else{
-            resetObShop(id);
-        }
-    }
-    function resetObCity(id){
-        $("#"+id+"City").empty();
-        $("#"+id+"City").append('<option value="">请选择</option>');
-    }
-    function resetObArea(id){
-        $("#"+id+"Area").empty();
-        $("#"+id+"Area").append('<option value="">请选择</option>');
-    }
-    function resetObShop(id){
-        $("#"+id+"Shop").empty();
-        $("#"+id+"Shop").append('<option value="">请选择</option>');
-    }
     /*]]>*/
 </script>
 </body>
