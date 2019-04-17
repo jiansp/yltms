@@ -185,34 +185,7 @@
         <h1 class="heading text-capitalize text-center">Our Services</h1>
         <h5 class="heading mb-5 text-center">Taxi Cab</h5>
         <div class="row service-grids">
-            <div class="col-lg-4">
-                <h3 class="text-capitalize mb-3">We have a range of vehicles</h3>
-                <p class="mb-3">Vestibulum et augue eu nibh tincidunt pretium vitae eget purus. Pellentesque necist urna eleifend, semper eros sed, sollicitudin justo. Nam finibus sollicitudin enim, nec blan ditmi laoreet sed. Morbi auctor purus ac ligula aliquetis vestibulum. Quisque vitae sollicitu dinet augue eu pretium vitae.</p>
-            </div>
-            <div class="col-lg-1"></div>
-            <div class="col-lg-7" id="orderDesc">
-                <div class="tech-btm">
-                    <div class="blog-grids row mb-3">
-                        <div class="col-4 pr-0 blog-grid-left">
-                            <a href="#">
-                                <img th:src="@{/images/blog1.jpg}" class="img-fluid" alt="">
-                            </a>
-                        </div>
-                        <div class="col-8 blog-grid-right">
-
-                            <h5>
-                                <a href="#">Pellentesque dui, non felis. Maecenas male non felis </a>
-                            </h5>
-                            <div class="sub-meta">
-								<span>
-									<i class="far fa-clock"></i> 19 Apr, 2018</span>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
+            <table id="orderTable"></table>
         </div>
     </div>
 </section>
@@ -463,42 +436,9 @@
 
 <script type="text/javascript" th:src="@{/js/bootstrap.js}"></script> <!-- Necessary-JavaScript-File-For-Bootstrap -->
 <script type="text/javascript" th:src="@{/js/wickedpicker.js}"></script>
-<script type="text/javascript">
-    $('.timepicker').wickedpicker({
-        twentyFour: false
-    });
-</script>
+
 <script th:src="@{/js/jquery-ui.js}"></script>
 <script th:src="@{/js/owl.carousel.js}"></script>
-<script>
-    $(document).ready(function () {
-        $('.owl-carousel').owlCarousel({
-            loop: true,
-            margin: 10,
-            responsiveClass: true,
-            responsive: {
-                0: {
-                    items: 1,
-                    nav: true
-                },
-                600: {
-                    items: 1,
-                    nav: false
-                },
-                900: {
-                    items: 2,
-                    nav: false
-                },
-                1000: {
-                    items: 3,
-                    nav: true,
-                    loop: false,
-                    margin: 20
-                }
-            }
-        })
-    })
-</script>
 <script th:src="@{/js/responsiveslides.min.js}"></script>
 <script th:src="@{/js/SmoothScroll.min.js}"></script>
 <script type="text/javascript" th:src="@{/js/move-top.js}"></script>
@@ -510,6 +450,70 @@
             $('html,body').animate({scrollTop: $(this.hash).offset().top}, 1000);
         });
     });
+</script>
+<script type="text/javascript" th:inline="javascript">
+/*<![CDATA[*/
+    $('#orderTable').bootstrapTable({
+        url: [[@{/order/getOrderInfo}]],         //请求后台的URL（*）
+        method: 'get',                      //请求方式（*）
+        cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+        pagination: true,                   //是否显示分页（*）
+        sortable: false,                     //是否启用排序
+        locale: "zh-CN",
+        sidePagination: "client",           //分页方式：client客户端分页，server服务端分页（*
+        pageSize: 10,                       //每页的记录行数（*）
+        pageList: [10, 25, 50],        //可供选择的每页的行数（*）
+        search: false,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
+        strictSearch: true,                //按钮-翻转显示
+        showColumns: false,                  //是否显示所有的列
+        showRefresh: false,                  //是否显示刷新按钮
+        minimumCountColumns: 2,             //最少允许的列数
+        clickToSelect: false,                //是否启用点击选中行
+        uniqueId: "id",                     //每一行的唯一标识，一般为主键列
+        showToggle:false,                    //是否显示详细视图和列表视图的切换按钮
+        cardView: false,                    //是否显示详细视图
+        detailView: false,                   //是否显示父子表
+        columns: [{
+            field: 'orderNo',
+            title: '订单信息',
+            formatter: formatOrderInfo
+            }, {
+                field: 'orderStatus',
+                title: '取/换车信息'
+            }, {
+                field: 'obtainTime',
+                title: '总计'
+            }, {
+                field: 'returnTime',
+                title: '订单状态'
+            }]
+    });
+function formatOrderInfo(value, row, index) {
+    console.log(row);
+    var vehicle = row.vehicle;
+    var imgSrc =[[@{/uploaded/}]]+vehicle.imgPath;
+    var html =
+        '<div class="row">' +
+            '<div class="col-6">' +
+                '<img src="'+imgSrc+'" alt="" class="img-fluid">' +
+            '</div>' +
+            '<div class="col-6">' +
+                '<h4><span>'+vehicle.brand+vehicle.model+'</span></h4>' +
+                '<span style="display: block;color:#999">'+vehicle.exhaust+'厢|'+vehicle.type+'|'+vehicle.cubicles+'|乘坐'+vehicle.seatNum+'人</span>' +
+                '<span style="display: block;color:#999">订单号：'+value+'</span>' +
+            '</div>' +
+        '</div>';
+    return html;
+}
+function formatTimeInfo(value, row, index){
+    var html =
+        '<div class="col-6">' +
+        '<h4><span>'+vehicle.brand+vehicle.model+'</span></h4>' +
+        '<span style="display: block;color:#999">'+vehicle.exhaust+'厢|'+vehicle.type+'|'+vehicle.cubicles+'|乘坐'+vehicle.seatNum+'人</span>' +
+        '<span style="display: block;color:#999">订单号：'+value+'</span>' +
+        '</div>';
+}
+/*]]>*/
 </script>
 <script type="text/javascript" th:inline="javascript">
     /*<![CDATA[*/

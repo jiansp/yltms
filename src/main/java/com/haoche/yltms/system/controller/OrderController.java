@@ -4,6 +4,7 @@ import com.haoche.yltms.config.LoginInterceptor;
 import com.haoche.yltms.system.model.RentOrder;
 import com.haoche.yltms.system.model.User;
 import com.haoche.yltms.system.service.OrderService;
+import com.haoche.yltms.system.vo.Grid;
 import com.haoche.yltms.system.vo.Result;
 import com.haoche.yltms.system.vo.TableData;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,24 +44,6 @@ public class OrderController {
     }
 
     @ResponseBody
-    @RequestMapping("/getOrderTable")
-    public TableData getUserTable(Integer page, Integer limit, String orderNo){
-        TableData tableData = new TableData();
-        Map<String,String> params = new HashMap<>();
-        params.put("orderNo",orderNo);
-        try {
-            Page<RentOrder> orderPage = this.orderService.findRentOrders(page,limit,params);
-            tableData.setCode(TableData.SUCCESS);
-            tableData.setCount(orderPage.getTotalElements());
-            tableData.setData(orderPage.getContent());
-        } catch (Exception e){
-            e.printStackTrace();
-            tableData.setMsg(e.getMessage());
-        }
-        return tableData;
-    }
-
-    @ResponseBody
     @RequestMapping("/save")
     public Result save(@SessionAttribute(LoginInterceptor.SESSION_KEY) User user, RentOrder order){
         Result result = new Result();
@@ -76,19 +60,33 @@ public class OrderController {
 
     @ResponseBody
     @RequestMapping("/getOrderInfo")
-    public Result getUserTable(@SessionAttribute(LoginInterceptor.SESSION_KEY) User user){
-        Result result = new Result();
+    public List<RentOrder> getUserTable(@SessionAttribute(LoginInterceptor.SESSION_KEY) User user){
         Map<String,String> params = new HashMap<>();
         params.put("userId",user.getId());
+        List<RentOrder> orders = new ArrayList<>();
         try {
-            List<RentOrder> orders = this.orderService.findOrders(params);
-            result.setSuccess(true);
-            result.setObj(orders);
+            orders = this.orderService.findOrders(params);
         } catch (Exception e){
             e.printStackTrace();
-            result.setSuccess(false);
-            result.setMsg(e.getMessage());
         }
-        return result;
+        return orders;
+    }
+
+    @ResponseBody
+    @RequestMapping("/getOrderTable")
+    public TableData getOrderTable(Integer page, Integer limit, String orderNo){
+        TableData tableData = new TableData();
+        Map<String,String> params = new HashMap<>();
+        params.put("orderNo",orderNo);
+        try {
+            Page<RentOrder> orderPage = this.orderService.findRentOrders(page,limit,params);
+            tableData.setCode(TableData.SUCCESS);
+            tableData.setCount(orderPage.getTotalElements());
+            tableData.setData(orderPage.getContent());
+        } catch (Exception e){
+            e.printStackTrace();
+            tableData.setMsg(e.getMessage());
+        }
+        return tableData;
     }
 }
