@@ -45,6 +45,7 @@
     <script type="text/javascript" th:src="@{/js/city-picker.data.js}"></script>
     <script type="text/javascript" th:src="@{/js/city-picker.js}"></script>
     <script type="text/javascript" th:src="@{/js/main.js}"></script>
+    <script th:src="@{/js/utils.js}"></script>
 
     <style>
         .carItem img{
@@ -479,13 +480,18 @@
             formatter: formatOrderInfo
             }, {
                 field: 'orderStatus',
-                title: '取/换车信息'
+                title: '取/换车信息',
+                width:240,
+                formatter: formatTimeInfo
             }, {
-                field: 'obtainTime',
-                title: '总计'
+                field: 'costRent',
+                title: '总计',
+                width:180,
+                formatter: formatRentInfo
             }, {
-                field: 'returnTime',
-                title: '订单状态'
+                field: 'orderStatus',
+                title: '订单状态',
+                width:180
             }]
     });
 function formatOrderInfo(value, row, index) {
@@ -507,11 +513,23 @@ function formatOrderInfo(value, row, index) {
 }
 function formatTimeInfo(value, row, index){
     var html =
-        '<div class="col-6">' +
-        '<h4><span>'+vehicle.brand+vehicle.model+'</span></h4>' +
-        '<span style="display: block;color:#999">'+vehicle.exhaust+'厢|'+vehicle.type+'|'+vehicle.cubicles+'|乘坐'+vehicle.seatNum+'人</span>' +
-        '<span style="display: block;color:#999">订单号：'+value+'</span>' +
+        '<div>' +
+        '<h5><span>'+row.obtainProv+row.obtainCity+row.obtainArea+'</span></h5>' +
+        '<span style="display: block;color:#999">'+formatDate("yyyy-MM-dd hh:mm",new Date(row.obtainTime))+'</span>' +
+        '</div>'+
+        '<div style="margin-top:10px">' +
+        '<h5><span>'+row.returnProv+row.returnCity+row.returnArea+'</span></h5>' +
+        '<span style="display: block;color:#999">'+formatDate("yyyy-MM-dd hh:mm",new Date(row.returnTime))+'</span>' +
         '</div>';
+    return html;
+}
+function formatRentInfo(value, row, index) {
+    var html =
+        '<div>' +
+        '<i class="fas fa-yen-sign fa-2x"></i>' +
+        '<span style="font-size: 26px;margin-left: 10px">'+value+'</span>' +
+        '</div>';
+    return html;
 }
 /*]]>*/
 </script>
