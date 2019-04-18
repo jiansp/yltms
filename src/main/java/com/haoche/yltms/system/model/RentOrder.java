@@ -9,12 +9,12 @@ import java.util.Date;
 @Entity
 @Table(name = "rent_order", schema = "ylt", catalog = "")
 public class RentOrder extends BaseModel {
-    public static final String UN_PAY = "未支付";
-    public static final String PAY = "已支付";
-    public static final String OBTAIN_CAR = "已取车";
-    public static final String RETURN_CAR = "已还车";
-    public static final String CANCEL = "已取消";
-    public static final String INVALID = "已作废";
+    public static final String UN_PAY = "0"; //"未支付";
+    public static final String PAY = "1"; //"已支付";
+    public static final String OBTAIN_CAR = "2";//"已取车";
+    public static final String RETURN_CAR = "3";//"已还车";
+    public static final String CANCEL = "4";//"已取消";
+    public static final String INVALID = "5";//"已作废";
 
     private User user;
     private Vehicle vehicle;

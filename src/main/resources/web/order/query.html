@@ -54,7 +54,9 @@
                     ,{field:'returnTime', title:'还车时间', templet: function(res){
                         return '<em>'+ formatDate("yyyy-MM-dd hh:mm",new Date(res.returnTime)) +'</em>'
                     }}
-                    ,{field:'orderStatus', title:'订单状态'}
+                    ,{field:'orderStatus', title:'订单状态', templet: function(res){
+                        return orderStatus[res.orderStatus]
+                        }}
                     ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:120}
                 ]
             ]

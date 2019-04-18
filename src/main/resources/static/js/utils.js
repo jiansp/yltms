@@ -21,3 +21,16 @@ function formatDate(fmt,date)
             fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
     return fmt;
 }
+
+var orderStatus = {
+    "0": "未支付",
+    "1": "已支付",
+    "2": "已取车",
+    "3": "已还车",
+    "4": "已取消",
+    "5": "已作废"
+};
+
+function formatOrderStatus(param){
+    
+}

@@ -186,7 +186,7 @@
         <h1 class="heading text-capitalize text-center">Our Services</h1>
         <h5 class="heading mb-5 text-center">Taxi Cab</h5>
         <div class="row service-grids">
-            <table id="orderTable"></table>
+            <table id="orderTable" class="table"></table>
         </div>
     </div>
 </section>
@@ -491,7 +491,8 @@
             }, {
                 field: 'orderStatus',
                 title: '订单状态',
-                width:180
+                width:180,
+                formatter: formatButton
             }]
     });
 function formatOrderInfo(value, row, index) {
@@ -531,12 +532,30 @@ function formatRentInfo(value, row, index) {
         '</div>';
     return html;
 }
+function formatButton(value, row, index) {
+    var pay = '<button type="button" class="btn btn-success">立即支付</button>';
+    var cancel = '<button type="button" class="btn btn-warning">取消订单</button>';
+    var button = '';
+    if(value === "0"){
+        button = pay;
+    }
+    if(value === "1"){
+        button = cancel;
+    }
+    var html =
+        '<div>' +
+        '<span style="font-size: 16px;margin-left: 10px;margin-bottom: 10px;display: block;color: #999;">'+orderStatus[value]+'</span>' +
+        button+
+        '</div>';
+    return html;
+}
 /*]]>*/
 </script>
 <script type="text/javascript" th:inline="javascript">
     /*<![CDATA[*/
     $(function () {
         $().UItoTop({easingType: 'easeOutQuart'});
+        $("#orderTable")[0].find("tr th").css("background","#999");
         var account = [[${account}]];
         if (account) {
             $("#noLogin").hide();

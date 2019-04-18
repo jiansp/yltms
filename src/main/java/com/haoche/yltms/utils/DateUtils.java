@@ -16,8 +16,8 @@ public class DateUtils {
 
     public static void main(String[] args)
     {
-        String dateStr = "2010-1-1 1:21:28";
-        String dateStr2 = "2010-1-2 1:21:28";
+        String dateStr = "2019-04-18 22:28:00";
+        String dateStr2 = "2019-04-19 22:25:00";
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try
         {
