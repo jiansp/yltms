@@ -3,10 +3,11 @@ package com.haoche.yltms.system.model;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
-@Table(name = "user", schema = "ylt", catalog = "")
+@Table(name = "user", schema = "ylt")
 public class User extends BaseModel {
     public static final String ADMIN_USER = "1";
     public static final String GENERAL_USER = "2";
@@ -22,6 +23,7 @@ public class User extends BaseModel {
     private String sex;
     private String username;
     private String type;
+    private BigDecimal balance;
 
     private String passwordO;
 
@@ -117,13 +119,23 @@ public class User extends BaseModel {
     }
 
     @Basic
-    @Column(name = "type")
+    @Column(name = "TYPE")
     public String getType() {
         return type;
     }
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    @Basic
+    @Column(name = "BALANCE")
+    public BigDecimal getBalance() {
+        return balance;
+    }
+
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
     }
 
     @Transient

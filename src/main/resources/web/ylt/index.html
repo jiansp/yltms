@@ -92,7 +92,7 @@
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<ul class="navbar-nav mx-auto">
 					<li class="nav-item active">
-						<a class="nav-link ml-lg-0" href="index.html">首页
+						<a class="nav-link ml-lg-0" th:href="@{/}">首页
 							<span class="sr-only">(current)</span>
 						</a>
 					</li>
@@ -175,8 +175,8 @@
 </div>
 <section class="food-Slider py-5">
 	<div class="container py-lg-5">
-		<h3 class="heading text-capitalize text-center">Our Taxi Cars</h3>
-		<h5 class="heading mb-5 text-center">Taxi Cab</h5>
+		<h3 class="heading text-capitalize text-center">优惠信息</h3>
+		<h5 class="heading mb-5 text-center">车型优惠</h5>
 		<div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
 			<div class="carousel-inner">
 				<div class="carousel-item active">
@@ -184,17 +184,17 @@
 						<div class="col-md-4 col-sm-6 slidering">
 							<div class="thumbnail"><img th:src="@{/images/1.png}" alt="Image" style="max-width:100%;">
 							</div>
-							<h5 class="my-2 text-center text-uppercase">Mini Taxi </h5>
+							<h5 class="my-2 text-center text-uppercase">Mini  </h5>
 						</div>
 						<div class="col-md-4 col-sm-6 slidering">
 							<div class="thumbnail"><img th:src="@{/images/2.png}" alt="Image" style="max-width:100%;">
 							</div>
-							<h5 class="my-2 text-center text-uppercase">Prime Taxi </h5>
+							<h5 class="my-2 text-center text-uppercase">Prime  </h5>
 						</div>
 						<div class="col-md-4 col-sm-6 slidering">
 							<div class="thumbnail"><img th:src="@{/images/3.png}" alt="Image" style="max-width:100%;">
 							</div>
-							<h5 class="my-2 text-center text-uppercase">Sedan Taxi </h5>
+							<h5 class="my-2 text-center text-uppercase">Sedan  </h5>
 						</div>
 					</div>
 				</div>
@@ -203,17 +203,17 @@
 						<div class="col-md-4 col-sm-6 slidering">
 							<div class="thumbnail"><img th:src="@{/images/1.png}" alt="Image" style="max-width:100%;">
 							</div>
-							<h5 class="my-2 text-center text-uppercase">Mini Taxi </h5>
+							<h5 class="my-2 text-center text-uppercase">Mini  </h5>
 						</div>
 						<div class="col-md-4 col-sm-6 slidering">
 							<div class="thumbnail"><img th:src="@{/images/2.png}" alt="Image" style="max-width:100%;">
 							</div>
-							<h5 class="my-2 text-center text-uppercase">Prime Taxi </h5>
+							<h5 class="my-2 text-center text-uppercase">Prime  </h5>
 						</div>
 						<div class="col-md-4 col-sm-6 slidering">
 							<div class="thumbnail"><img th:src="@{/images/1.png}" alt="Image" style="max-width:100%;">
 							</div>
-							<h5 class="my-2 text-center text-uppercase">Sedan Taxi </h5>
+							<h5 class="my-2 text-center text-uppercase">Sedan  </h5>
 						</div>
 					</div>
 				</div>
@@ -222,17 +222,17 @@
 						<div class="col-md-4 col-sm-6 slidering">
 							<div class="thumbnail"><img th:src="@{/images/2.png}" alt="Image" style="max-width:100%;">
 							</div>
-							<h5 class="my-2 text-center text-uppercase">Mini Taxi </h5>
+							<h5 class="my-2 text-center text-uppercase">Mini  </h5>
 						</div>
 						<div class="col-md-4 col-sm-6 slidering">
 							<div class="thumbnail"><img th:src="@{/images/1.png}" alt="Image" style="max-width:100%;">
 							</div>
-							<h5 class="my-2 text-center text-uppercase">Prime Taxi </h5>
+							<h5 class="my-2 text-center text-uppercase">Prime  </h5>
 						</div>
 						<div class="col-md-4 col-sm-6 slidering">
 							<div class="thumbnail"><img th:src="@{/images/3.png}" alt="Image" style="max-width:100%;">
 							</div>
-							<h5 class="my-2 text-center text-uppercase">Sedan Taxi </h5>
+							<h5 class="my-2 text-center text-uppercase">Sedan  </h5>
 						</div>
 					</div>
 				</div>
@@ -245,37 +245,6 @@
 				<span class="fa fa-chevron-right" aria-hidden="true"></span>
 				<span class="sr-only">Next</span>
 			</a>
-		</div>
-	</div>
-</section>
-<section class="services py-5">
-	<div class="container py-lg-5">
-		<h1 class="heading text-capitalize text-center">Our Services</h1>
-		<h5 class="heading mb-5 text-center">Taxi Cab</h5>
-		<div class="row service-grids">
-			<div class="col-lg-4">
-				<h3 class="text-capitalize mb-3">We have a range of vehicles</h3>
-				<p class="mb-3">Vestibulum et augue eu nibh tincidunt pretium vitae eget purus. Pellentesque necist urna eleifend, semper eros sed, sollicitudin justo. Nam finibus sollicitudin enim, nec blan ditmi laoreet sed. Morbi auctor purus ac ligula aliquetis vestibulum. Quisque vitae sollicitu dinet augue eu pretium vitae.</p>
-			</div>
-			<div class="col-lg-2 col-6">
-				<img src="images/1.png" alt="" class="img-fluid" />
-				<img src="images/2.png" alt="" class="img-fluid" />
-				<img src="images/3.png" alt="" class="img-fluid" />
-			</div>
-
-			<div class="col-lg-4">
-				<h4 class="text-capitalize"><i class="fas fa-taxi clr1"></i>Luxury Cars</h4>
-				<p class="mb-4"> Vestibulum et augue eunibh metus diam.</p>
-				<h4 class="text-capitalize"><i class="fas fa-bus clr2"></i>Luxury Vans</h4>
-				<p class="mb-4"> Vestibulum et augue eunibh metus diam.</p>
-				<h4 class="text-capitalize"><i class="fas fa-car clr3"></i>Luxury Elite</h4>
-				<p class="mb-4"> Vestibulum et augue eunibh metus diam laoreet.</p>
-			</div>
-			<div class="col-lg-2 col-6">
-				<img src="images/3.png" alt="" class="img-fluid" />
-				<img src="images/1.png" alt="" class="img-fluid" />
-				<img src="images/2.png" alt="" class="img-fluid" />
-			</div>
 		</div>
 	</div>
 </section>

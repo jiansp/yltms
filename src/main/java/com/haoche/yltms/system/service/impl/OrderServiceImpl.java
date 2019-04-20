@@ -22,6 +22,7 @@ import org.springframework.util.StringUtils;
 
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -50,8 +51,8 @@ public class OrderServiceImpl implements OrderService {
             Vehicle vehicle = this.vehicleRepository.getOne(order.getVehicleId());
             order.setVehicle(vehicle);
         }
-        int duration = DateUtils.differentDaysByMillisecond(order.getReturnTime(), order.getObtainTime());
-        String costRent = String.valueOf(Integer.valueOf(order.getRent()) * duration);
+        int duration = DateUtils.differentDaysByMillisecond(order.getObtainTime(), order.getReturnTime());
+        BigDecimal costRent = order.getRent().multiply(new BigDecimal(duration));
         order.setDuration(String.valueOf(duration));
         order.setCostRent(costRent);
         if (StringUtils.isEmpty(order.getId())) {
@@ -100,5 +101,33 @@ public class OrderServiceImpl implements OrderService {
             String userId = params.get("userId");
             return this.orderRepository.findOrders(userId);
         }
+
+    @Override
+    @Transient
+    public void payOrder(String orderId, String userId) {
+        RentOrder order = this.orderRepository.getOne(orderId);
+        User user = this.userRepository.getOne(userId);
+        BigDecimal balance = user.getBalance();
+        BigDecimal rent = order.getCostRent();
+        if(user.getBalance() == null || balance.compareTo(rent) < 0){
+            throw new RuntimeException("余额不足");
+        }
+        order.setOrderStatus(RentOrder.PAY);
+        user.setBalance(user.getBalance().subtract(order.getCostRent()));
+        this.userRepository.save(user);
+        this.orderRepository.save(order);
+    }
+
+    @Override
+    public void cancelOrder(String orderId, String userId) {
+        RentOrder order = this.orderRepository.getOne(orderId);
+        User user = this.userRepository.getOne(userId);
+        BigDecimal balance = user.getBalance();
+        BigDecimal rent = order.getCostRent();
+        order.setOrderStatus(RentOrder.CANCEL);
+        user.setBalance(balance.add(rent));
+        this.userRepository.save(user);
+        this.orderRepository.save(order);
+    }
 
 }

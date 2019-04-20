@@ -10,6 +10,6 @@ import java.util.List;
 
 public interface OrderRepository extends JpaRepository<RentOrder,String>, JpaSpecificationExecutor<RentOrder> {
 
-    @Query(value = "from RentOrder where user.id =:userId order by orderStatus")
+    @Query(value = "from RentOrder where user.id =:userId order by createTime desc ")
     List<RentOrder> findOrders(@Param("userId") String userId);
 }

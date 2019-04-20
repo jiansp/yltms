@@ -4,10 +4,11 @@ import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
-@Table(name = "rent_order", schema = "ylt", catalog = "")
+@Table(name = "rent_order", schema = "ylt")
 public class RentOrder extends BaseModel {
     public static final String UN_PAY = "0"; //"未支付";
     public static final String PAY = "1"; //"已支付";
@@ -18,8 +19,8 @@ public class RentOrder extends BaseModel {
 
     private User user;
     private Vehicle vehicle;
-    private String rent;
-    private String costRent;
+    private BigDecimal rent;
+    private BigDecimal costRent;
     private String obtainProv;
     private String obtainCity;
     private String obtainArea;
@@ -82,21 +83,21 @@ public class RentOrder extends BaseModel {
 
     @Basic
     @Column(name = "RENT")
-    public String getRent() {
+    public BigDecimal getRent() {
         return rent;
     }
 
-    public void setRent(String rent) {
+    public void setRent(BigDecimal rent) {
         this.rent = rent;
     }
 
     @Basic
     @Column(name = "COST_RENT")
-    public String getCostRent() {
+    public BigDecimal getCostRent() {
         return costRent;
     }
 
-    public void setCostRent(String costRent) {
+    public void setCostRent(BigDecimal costRent) {
         this.costRent = costRent;
     }
 

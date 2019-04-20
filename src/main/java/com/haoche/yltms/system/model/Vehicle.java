@@ -6,6 +6,7 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
@@ -26,7 +27,7 @@ public class Vehicle extends BaseModel {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date firstLicense;
     private String isDelete;
-    private String rent;
+    private BigDecimal rent;
     private String isStop;
     private String imgPath;
     private String type;
@@ -125,11 +126,11 @@ public class Vehicle extends BaseModel {
 
     @Basic
     @Column(name = "RENT")
-    public String getRent() {
+    public BigDecimal getRent() {
         return rent;
     }
 
-    public void setRent(String rent) {
+    public void setRent(BigDecimal rent) {
         this.rent = rent;
     }
 

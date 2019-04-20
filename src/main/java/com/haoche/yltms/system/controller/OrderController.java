@@ -4,7 +4,6 @@ import com.haoche.yltms.config.LoginInterceptor;
 import com.haoche.yltms.system.model.RentOrder;
 import com.haoche.yltms.system.model.User;
 import com.haoche.yltms.system.service.OrderService;
-import com.haoche.yltms.system.vo.Grid;
 import com.haoche.yltms.system.vo.Result;
 import com.haoche.yltms.system.vo.TableData;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,5 +87,35 @@ public class OrderController {
             tableData.setMsg(e.getMessage());
         }
         return tableData;
+    }
+
+    @ResponseBody
+    @RequestMapping("/payOrder")
+    public Result payOrder(String orderId, String userId){
+        Result result = new Result();
+        try {
+            this.orderService.payOrder(orderId,userId);
+            result.setSuccess(true);
+        }catch (Exception e){
+            e.printStackTrace();
+            result.setMsg(e.getMessage());
+            result.setSuccess(false);
+        }
+        return result;
+    }
+
+    @ResponseBody
+    @RequestMapping("/cancelOrder")
+    public Result cancelOrder(String orderId, String userId){
+        Result result = new Result();
+        try {
+            this.orderService.cancelOrder(orderId,userId);
+            result.setSuccess(true);
+        }catch (Exception e){
+            e.printStackTrace();
+            result.setMsg(e.getMessage());
+            result.setSuccess(false);
+        }
+        return result;
     }
 }

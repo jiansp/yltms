@@ -32,6 +32,7 @@
     <link th:href="@{/css/city-picker.css}" rel="stylesheet" type="text/css" />
 
     <script type="text/javascript" th:src="@{/js/jquery-2.1.4.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/bootstrap.js}"></script> <!-- Necessary-JavaScript-File-For-Bootstrap -->
     <script type="text/javascript" th:src="@{/js/encode64.js}"></script>
     <script type="text/javascript" th:src="@{/js/toastr.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/ladda.min.js}"></script>
@@ -90,6 +91,14 @@
             pointer-events: auto;
             background-size: cover;
             outline: 0;
+        }
+        .table th{
+            border-style: hidden !important;
+            background-color: #bcbcbc;
+        }
+        .table td{
+            border-left-style: hidden !important;
+            border-right-style: hidden !important;
         }
     </style>
 
@@ -151,28 +160,16 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="about.html">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="services.html">Services</a>
+                        <a class="nav-link" th:href="@{/route/browseVehicle}">立即选车</a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" href="lease.html">Booking</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                           data-toggle="dropdown" aria-haspopup="true"
-                           aria-expanded="false">
-                            Dropdown
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item text-center" href="about.html">About</a>
-                            <a class="dropdown-item text-center" href="services.html">Services</a>
-
-                        </div>
+                        <a class="nav-link" th:href="@{/order/order}">我的订单</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="contact.html">Contact</a>
+                        <a class="nav-link" th:href="@{/order/order}">帮助信息</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/order/order}">关于我们</a>
                     </li>
                 </ul>
 
@@ -183,8 +180,8 @@
 
 <section class="services py-5">
     <div class="container py-lg-5">
-        <h1 class="heading text-capitalize text-center">Our Services</h1>
-        <h5 class="heading mb-5 text-center">Taxi Cab</h5>
+        <h1 class="heading text-capitalize text-center">订单查询</h1>
+        <h5 class="heading mb-5 text-center">请尽快支付</h5>
         <div class="row service-grids">
             <table id="orderTable" class="table"></table>
         </div>
@@ -434,8 +431,42 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="payConfirm">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">请注意</h4>
+            </div>
+            <div class="modal-body">
+                <input id="orderId" type="hidden">
+                <p>即将从余额中扣除相应租金</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="onPay()">确定</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div class="modal fade" id="payCancel">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">请注意</h4>
+            </div>
+            <div class="modal-body">
+                <p>是否取消订单</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="onCancel()">确定</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
-<script type="text/javascript" th:src="@{/js/bootstrap.js}"></script> <!-- Necessary-JavaScript-File-For-Bootstrap -->
 <script type="text/javascript" th:src="@{/js/wickedpicker.js}"></script>
 
 <script th:src="@{/js/jquery-ui.js}"></script>
@@ -533,8 +564,9 @@ function formatRentInfo(value, row, index) {
     return html;
 }
 function formatButton(value, row, index) {
-    var pay = '<button type="button" class="btn btn-success">立即支付</button>';
-    var cancel = '<button type="button" class="btn btn-warning">取消订单</button>';
+
+    var pay = '<button type="button" data-toggle="modal" class="btn btn-success" data-target="#payConfirm" onclick="bindValue(\''+row.id+'\')">立即支付</button>';
+    var cancel = '<button type="button" data-toggle="modal" data-target="#payCancel" class="btn btn-warning" onclick="bindValue(\''+row.id+'\')">取消订单</button>';
     var button = '';
     if(value === "0"){
         button = pay;
@@ -549,13 +581,64 @@ function formatButton(value, row, index) {
         '</div>';
     return html;
 }
+function bindValue(id){
+    $("#orderId").val(id);
+}
+function onPay(){
+    var orderId = $("#orderId").val();
+    if(orderId){
+        var data = {
+            "orderId":orderId,
+            "userId":$("#accountId").val()
+        };
+        $.ajax({
+            url:[[@{/order/payOrder}]],
+            data:data,
+            type:"post",
+            dataType:"json",
+            success:function(result){
+            if(result.success){
+                toastr.success("支付成功");
+                $("#payConfirm").modal("hide");
+                $('#orderTable').bootstrapTable("refresh");
+            }else{
+                toastr.error(result.msg);
+            }
+        }
+    });
+    }
+}
+
+function onCancel(){
+    var orderId = $("#orderId").val();
+    if(orderId){
+        var data = {
+            "orderId":orderId,
+            "userId":$("#accountId").val()
+    };
+        $.ajax({
+            url:[[@{/order/cancelOrder}]],
+        data:data,
+            type:"post",
+            dataType:"json",
+            success:function(result){
+            if(result.success){
+                toastr.success("取消成功");
+                $("#payCancel").modal("hide");
+                $('#orderTable').bootstrapTable("refresh");
+            }else{
+                toastr.error(result.msg);
+            }
+        }
+    });
+    }
+}
 /*]]>*/
 </script>
 <script type="text/javascript" th:inline="javascript">
     /*<![CDATA[*/
     $(function () {
         $().UItoTop({easingType: 'easeOutQuart'});
-        $("#orderTable")[0].find("tr th").css("background","#999");
         var account = [[${account}]];
         if (account) {
             $("#noLogin").hide();
@@ -642,7 +725,6 @@ function formatButton(value, row, index) {
             }
             data.ConfirmPassword = "";
             data.password = encode64(data.password);
-            console.log($("#registeredForm").serialize());
             $.ajax({
                 url:[[@{/user/saveUser}]],
                 data:data,

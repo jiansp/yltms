@@ -13,4 +13,8 @@ public interface OrderService {
     Page<RentOrder> findRentOrders(Integer page, Integer limit, Map<String, String> params);
 
     List<RentOrder> findOrders(Map<String, String> params);
+
+    void payOrder(String orderId, String userId);
+
+    void cancelOrder(String orderId, String userId);
 }
