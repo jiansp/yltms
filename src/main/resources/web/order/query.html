@@ -14,16 +14,23 @@
             <div class="layui-input-inline">
                 <button class="layui-btn" lay-event="search">搜索</button>
             </div>
-            <div class="layui-input-inline">
-                <button class="layui-btn" lay-event="add">
-                    <i class="layui-icon">&#xe654;</i>
-                </button>
-            </div>
         </div>
     </script>
     <script type="text/html" id="barDemo">
-        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+        {{#  if(d.orderStatus == 1){ }}
+        <a class="layui-btn layui-btn-xs" lay-event="obtain">发车</a>
+        {{#  } }}
+        {{#  if(d.orderStatus == 2){ }}
+        <a class="layui-btn layui-btn-xs" lay-event="return">还车</a>
+        {{#  } }}
+        {{#  if(d.orderStatus != 5){ }}
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="invalid">废除</a>
+        {{#  } }}
+        {{#  if(d.orderStatus == 5){ }}
+        <span class="layui-badge-dot"></span>
+        <span class="layui-badge-dot layui-bg-orange"></span>
+        <span class="layui-badge-dot layui-bg-green"></span>
+        {{#  } }}
     </script>
     <script th:src="@{/js/utils.js}"></script>
     <script type="text/javascript" th:inline="javascript">
@@ -69,19 +76,6 @@
             table.on('toolbar(test)', function(obj){
                 var checkStatus = table.checkStatus(obj.config.id);
                 switch(obj.event){
-                    case 'add':
-                        layer.open({
-                            id: 'insert-form',
-                            type: 2,
-                            title:"编辑",
-                            area: ['400px', '420px'],
-                            btn: ['确定'],
-                            yes: function(index, layero){
-                                insertSubmit();
-                            },
-                            content: [[@{/order/edit}]]
-                        });
-                        break;
                     case 'search':
                         orderTable.reload({
                             where: { //设定异步数据接口的额外参数，任意设
@@ -99,17 +93,17 @@
             table.on('tool(test)', function(obj){
                 var data = obj.data;
                 //console.log(obj)
-                if(obj.event === 'del'){
-                    layer.confirm('真的删除行么', function(index){
+                if(obj.event === 'obtain'){
+                    layer.confirm('请确定是否发车', function(index){
                         var index_ = layer.load(1);
                         $.ajax({
-                            url:[[@{/order/del}]],
-                            data:{"id":data.id},
+                            url:[[@{/order/save}]],
+                            data:{"id":data.id,"orderStatus":"2"},
                             type:"post",
                             dataType:"json",
                             success:function(result){
                             if(result.success){
-                                layer.msg("删除成功");
+                                layer.msg("发车成功");
                                 orderTable.reload();
                                 layer.close(index);
                             }else{
@@ -119,25 +113,49 @@
                         },
                     });
                     });
-                } else if(obj.event === 'edit'){
-                    layer.open({
-                        id: 'insert-form',
-                        type: 2,
-                        title:"修改",
-                        area: ['400px', '420px'],
-                        btn: ['确定'],
-                        yes: function(index, layero){
-                            insertSubmit();
+                } else if(obj.event === 'return'){
+                    layer.confirm('请确定是否还车', function(index){
+                        var index_ = layer.load(1);
+                        $.ajax({
+                            url:[[@{/order/save}]],
+                        data:{"id":data.id,"orderStatus":"3"},
+                        type:"post",
+                            dataType:"json",
+                            success:function(result){
+                            if(result.success){
+                                layer.msg("还车成功");
+                                orderTable.reload();
+                                layer.close(index);
+                            }else{
+                                layer.msg(result.msg);
+                            }
+                            layer.close(index_);
                         },
-                        content: [[@{/order/edit?id=}]]+data.id
+                    });
+                    });
+                }else if(obj.event === 'invalid'){
+                    layer.confirm('请确定是否作废此订单', function(index){
+                        var index_ = layer.load(1);
+                        $.ajax({
+                            url:[[@{/order/save}]],
+                        data:{"id":data.id,"orderStatus":"5"},
+                        type:"post",
+                            dataType:"json",
+                            success:function(result){
+                            if(result.success){
+                                layer.msg("作废成功");
+                                orderTable.reload();
+                                layer.close(index);
+                            }else{
+                                layer.msg(result.msg);
+                            }
+                            layer.close(index_);
+                        },
+                    });
                     });
                 }
             });
 
-            function insertSubmit(){
-                var frameId=document.getElementById('insert-form').getElementsByTagName("iframe")[0].id;
-                $('#'+frameId)[0].contentWindow.onSubmit();
-            }
         });
     </script>
 </footer>

@@ -43,19 +43,19 @@ public class OrderServiceImpl implements OrderService {
     @Transient
     public void saveAndUpdate(RentOrder order, User user) {
         Date now = new Date();
-        if(!StringUtils.isEmpty(order.getUserId())){
-            User user1 = this.userRepository.getOne(order.getUserId());
-            order.setUser(user1);
-        }
-        if(!StringUtils.isEmpty(order.getVehicleId())){
-            Vehicle vehicle = this.vehicleRepository.getOne(order.getVehicleId());
-            order.setVehicle(vehicle);
-        }
-        int duration = DateUtils.differentDaysByMillisecond(order.getObtainTime(), order.getReturnTime());
-        BigDecimal costRent = order.getRent().multiply(new BigDecimal(duration));
-        order.setDuration(String.valueOf(duration));
-        order.setCostRent(costRent);
         if (StringUtils.isEmpty(order.getId())) {
+            if(!StringUtils.isEmpty(order.getUserId())){
+                User user1 = this.userRepository.getOne(order.getUserId());
+                order.setUser(user1);
+            }
+            if(!StringUtils.isEmpty(order.getVehicleId())){
+                Vehicle vehicle = this.vehicleRepository.getOne(order.getVehicleId());
+                order.setVehicle(vehicle);
+            }
+            int duration = DateUtils.differentDaysByMillisecond(order.getObtainTime(), order.getReturnTime());
+            BigDecimal costRent = order.getRent().multiply(new BigDecimal(duration));
+            order.setDuration(String.valueOf(duration));
+            order.setCostRent(costRent);
             String orderNo = String.format("%04d",Integer.valueOf(this.serialNumberService.getOrderNo()));
             SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
             String date = format.format(now);
@@ -90,7 +90,7 @@ public class OrderServiceImpl implements OrderService {
             }
             return p;
         };
-        Sort sort = new Sort(Sort.DEFAULT_DIRECTION, "orderNo");
+        Sort sort = new Sort(Sort.DEFAULT_DIRECTION, "createTime");
         PageRequest pageable = PageRequest.of(pageNo - 1, limit, sort);
         Page<RentOrder> page = this.orderRepository.findAll(specification, pageable);
         return page;
