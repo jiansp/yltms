@@ -82,7 +82,7 @@
                             <addClasspath>true</addClasspath>
                             <useUniqueVersions>false</useUniqueVersions>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>spark.WordCount</mainClass>
+                            <mainClass>com.haoche.yltms.YltmsApplication</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

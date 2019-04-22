@@ -24,6 +24,7 @@ public class User extends BaseModel {
     private String username;
     private String type;
     private BigDecimal balance;
+    private String isVip;
 
     private String passwordO;
 
@@ -136,6 +137,16 @@ public class User extends BaseModel {
 
     public void setBalance(BigDecimal balance) {
         this.balance = balance;
+    }
+
+    @Basic
+    @Column(name = "IS_VIP")
+    public String getIsVip() {
+        return isVip;
+    }
+
+    public void setIsVip(String isVip) {
+        this.isVip = isVip;
     }
 
     @Transient

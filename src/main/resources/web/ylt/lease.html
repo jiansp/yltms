@@ -29,6 +29,7 @@
     <link th:href="@{/css/bootstrapValidator.min.css}" rel="stylesheet"/>
     <link th:href="@{/css/bootstrap-datetimepicker.min.css}" rel="stylesheet"/>
     <link th:href="@{/css/city-picker.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/css/main.css}" rel="stylesheet" type="text/css" />
 
     <script type="text/javascript" th:src="@{/js/jquery-2.1.4.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/encode64.js}"></script>
@@ -42,6 +43,7 @@
     <script type="text/javascript" th:src="@{/js/city-picker.data.js}"></script>
     <script type="text/javascript" th:src="@{/js/city-picker.js}"></script>
     <script type="text/javascript" th:src="@{/js/main.js}"></script>
+    <script type="text/javascript" th:src="@{/js/utils.js}"></script>
 
     <style>
         .carItem img{
@@ -71,21 +73,6 @@
         }
         .city-select-wrap {
             width: 400px;
-        }
-        .lease-modal-content {
-            position: relative;
-            display: -webkit-box;
-            display: -ms-flexbox;
-            display: flex;
-            -webkit-box-orient: vertical;
-            -webkit-box-direction: normal;
-            -ms-flex-direction: column;
-            flex-direction: column;
-            width: 100%;
-            height: 100%;
-            pointer-events: auto;
-            background-size: cover;
-            outline: 0;
         }
     </style>
 
@@ -590,6 +577,8 @@
             $("#noLogin").show();
             $("#yesLogin").hide();
         }
+        $("#obtainTime").val(formatDate("yyyy-MM-dd hh:mm", new Date()));
+        $("#returnTime").val(formatDate("yyyy-MM-dd hh:mm", new Date(new Date().getTime() + 24*60*60*1000)));
         loadCarItem();
         loadAddress("return");
         loadAddress("obtain");
@@ -737,9 +726,16 @@
                     for(var i =0;i<result.obj.length;i++){
                         var item = result.obj[i];
                         var imgSrc = [[@{/uploaded/}]]+item.imgPath;
-                        var carModelItem = '<div class="blog-grids row mb-3 carItem"><div class="col-1"></div><div class="col-3 pr-0 blog-grid-left"><img src="'+imgSrc+'" alt="" class="img-fluid"></div><div class="col-3 blog-grid-right" style="margin-top:3%"><h2><span>'+
-                            item.brand+item.model+'</span></h2><div class="sub-meta"><h3><span><i class="far fa-id-card"></i>'+
-                            item.exhaust+'厢|'+item.type+'|'+item.cubicles+'|乘坐'+item.seatNum+'人</span></h3></div></div><div class="col-1 blog-grid-right" style="margin-top:3%"><h2><span style="color:#fabe00">￥'+
+                        var carModelItem = '<div class="blog-grids row mb-3 carItem">' +
+                            '<div class="col-1"></div>' +
+                            '<div class="col-3 pr-0 blog-grid-left">' +
+                            '<img src="'+imgSrc+'" alt="" class="img-fluid"></div>' +
+                            '<div class="col-3 blog-grid-right" style="margin-top:3%">' +
+                            '<h2><span>'+ item.brand+item.model+'</span></h2>' +
+                            '<div class="sub-meta">' +
+                            '<h3><span><i class="far fa-id-card"></i>'+
+                            item.exhaust+'厢|'+item.type+'|'+item.cubicles+'|乘坐'+item.seatNum+'人</span></h3></div></div>' +
+                            '<div class="col-1 blog-grid-right" style="margin-top:3%"><h2><span style="color:#fabe00">￥'+
                             item.rent+'</span></h2><h4><span>/日均</span></h4></div><div class="col-4" style="margin-top:4%"><button onclick="lease(\''+item.id+'\',\''+imgSrc+'\',\''+item.rent+'\')" type="button" class="btn btn-warning" style="width:20%;height:50px"><span style="color:#fff;font-weight:700">租车</span></button></div></div>';
                         $("#carModelItem").append(carModelItem);
 
