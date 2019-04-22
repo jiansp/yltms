@@ -40,7 +40,9 @@
                     [
                     {field:'id', title:'id',width:50 }
                     ,{field:'vehicle', title:'车型', templet: '<div>{{d.vehicle.brand+d.vehicle.model}}</div>'}
-                    ,{field:'discount', title:'折扣'}
+                    ,{field:'discount', title:'折扣', templet: function(res){
+                            return res.discount * 10 +"折"
+                        }}
                     ,{field:'isVip', title:'是否VIP专享', templet: function(res){
                             return bool[res.isVip]
                         }}

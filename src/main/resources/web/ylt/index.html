@@ -25,6 +25,7 @@
 	<!-- //css files -->
 	<link th:href="@{/layui/css/layui.css}" rel="stylesheet"/>
 	<link th:href="@{/css/ladda-theme.css}" rel="stylesheet"/>
+	<link th:href="@{/css/main.css}" rel="stylesheet"/>
 	<!-- web-fonts -->
 	<link href="//fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&amp;subset=latin-ext" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
@@ -38,6 +39,30 @@
     <style>
 		#yesLogin a{
 			margin-left: 20px;
+		}
+		.vip-mark{
+			 width: 60px;
+			 height: 60px;
+			 background-position: -140px -455px;
+			 display: -webkit-inline-box;
+			margin-left: 12%;
+		 }
+		.fav-mark{
+			 width: 50px;
+			 height: 60px;
+			 background-position: -105px -230px;
+			 display: -webkit-inline-box;
+			margin-left: 15%;
+		 }
+		.fav-text{
+			position: absolute;
+			top: 22%;
+			left: 38%;
+		}
+		.vip-text{
+			position: absolute;
+			top: 53%;
+			left: 38%;
 		}
 	</style>
 
@@ -178,45 +203,15 @@
 		<h3 class="heading text-capitalize text-center">优惠信息</h3>
 		<h5 class="heading mb-5 text-center">车型优惠</h5>
 		<div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
-			<div class="carousel-inner">
+			<div class="carousel-inner" id="favorableInfo">
 				<div class="carousel-item active">
 					<div class="row">
-						<div class="col-md-4 col-sm-6 slidering">
-							<div class="thumbnail"><img th:src="@{/images/1.png}" alt="Image" style="max-width:100%;">
-							</div>
-							<h5 class="my-2 text-center text-uppercase">Mini  </h5>
-						</div>
-						<div class="col-md-4 col-sm-6 slidering">
-							<div class="thumbnail"><img th:src="@{/images/2.png}" alt="Image" style="max-width:100%;">
-							</div>
-							<h5 class="my-2 text-center text-uppercase">Prime  </h5>
-						</div>
-						<div class="col-md-4 col-sm-6 slidering">
-							<div class="thumbnail"><img th:src="@{/images/3.png}" alt="Image" style="max-width:100%;">
-							</div>
-							<h5 class="my-2 text-center text-uppercase">Sedan  </h5>
+						<div class="col-12 slidering">
+							<h2><span>暂无优惠信息，敬请期待</span></h2>
 						</div>
 					</div>
 				</div>
-				<div class="carousel-item">
-					<div class="row">
-						<div class="col-md-4 col-sm-6 slidering">
-							<div class="thumbnail"><img th:src="@{/images/1.png}" alt="Image" style="max-width:100%;">
-							</div>
-							<h5 class="my-2 text-center text-uppercase">Mini  </h5>
-						</div>
-						<div class="col-md-4 col-sm-6 slidering">
-							<div class="thumbnail"><img th:src="@{/images/2.png}" alt="Image" style="max-width:100%;">
-							</div>
-							<h5 class="my-2 text-center text-uppercase">Prime  </h5>
-						</div>
-						<div class="col-md-4 col-sm-6 slidering">
-							<div class="thumbnail"><img th:src="@{/images/1.png}" alt="Image" style="max-width:100%;">
-							</div>
-							<h5 class="my-2 text-center text-uppercase">Sedan  </h5>
-						</div>
-					</div>
-				</div>
+				<!--
 				<div class="carousel-item">
 					<div class="row">
 						<div class="col-md-4 col-sm-6 slidering">
@@ -235,7 +230,7 @@
 							<h5 class="my-2 text-center text-uppercase">Sedan  </h5>
 						</div>
 					</div>
-				</div>
+				</div>-->
 			</div>
 			<a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
 				<span class="fa fa-chevron-left" aria-hidden="true"></span>
@@ -553,7 +548,47 @@
             $("#noLogin").show();
             $("#yesLogin").hide();
 		}
+		loadFavorable();
 	});
+	function loadFavorable() {
+		$.ajax({
+			url:[[@{/unverify/getFavorableInfo}]],
+				type:"post",
+				dataType:"json",
+				success:function(result){
+			if(result.success){
+				if(result.obj.length <1){
+					return;
+				}
+				$("#favorableInfo").empty();
+				for(var i =0;i<result.obj.length;i++){
+					var active = i === 0 ? '<div class="carousel-item active">':'<div class="carousel-item">';
+					var item = result.obj[i];
+					var imgSrc = [[@{/uploaded/}]]+item.vehicle.imgPath;
+					var applicable = item.isVip === '0'? '适用于所有用户':'VIP用户专享';
+					var favorable = 1-item.discount * 100;
+					var html =
+							active+'<div class="row">'+
+									'<div class="col-md-4 col-sm-6 slidering">'+
+										'<h3 style="margin-top: 10%"><i class="base-icon fav-mark"></i><span class="fav-text">优惠高达'+favorable+'%</span></h3>'+
+										'<h3><i class="base-icon vip-mark"></i><span class="vip-text">'+applicable+'</span></h3>'+
+									'</div>'+
+									'<div class="col-md-4 col-sm-6 slidering">'+
+										'<div class="thumbnail"><img src="'+imgSrc+'" alt="Image" style="max-width:100%;">'+
+										'</div>'+
+									'</div>'+
+									'<div class="col-md-4 col-sm-6 slidering">'+
+									'</div>'+
+								'</div>'+
+							'</div>';
+					$("#favorableInfo").append(html);
+				}
+			}else{
+				toastr.warning(result.msg);
+			}
+		}
+	})
+	}
     layui.use(['layer','form'],function(){
         var layer = layui.layer;
         var form = layui.form;

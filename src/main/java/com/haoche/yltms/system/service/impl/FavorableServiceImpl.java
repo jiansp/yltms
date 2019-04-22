@@ -19,6 +19,7 @@ import org.springframework.util.StringUtils;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -85,5 +86,18 @@ public class FavorableServiceImpl implements FavorableService {
         favorable.setDeleter(userId);
         favorable.setDeleteTime(now);
         this.favorableRepository.save(favorable);
+    }
+
+    @Override
+    public List<Favorable> findFavorables(Map<String, String> params) {
+        Specification<Favorable> specification = (Specification<Favorable>) (root, criteriaQuery, criteriaBuilder) -> {
+            Path<String> isDelete = root.get("isDelete");
+            Predicate p1 = criteriaBuilder.isNull(isDelete);
+            Predicate p3 = criteriaBuilder.notEqual(isDelete,"1");
+            Predicate p = criteriaBuilder.or(p1,p3);
+            return p;
+        };
+        List<Favorable> list = this.favorableRepository.findAll(specification);
+        return list;
     }
 }

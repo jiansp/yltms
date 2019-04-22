@@ -30,6 +30,7 @@
     <link th:href="@{/css/bootstrap-datetimepicker.min.css}" rel="stylesheet"/>
     <link th:href="@{/css/bootstrap-table.min.css}" rel="stylesheet"/>
     <link th:href="@{/css/city-picker.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/css/main.css}" rel="stylesheet" type="text/css" />
 
     <script type="text/javascript" th:src="@{/js/jquery-2.1.4.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/bootstrap.js}"></script> <!-- Necessary-JavaScript-File-For-Bootstrap -->
@@ -99,6 +100,18 @@
         .table td{
             border-left-style: hidden !important;
             border-right-style: hidden !important;
+        }
+        .zc_fetch_i {
+            width: 16px;
+            height: 16px;
+            background-position: -170px -235px;
+            display: -webkit-inline-box;
+        }
+        .zc_giveback_i {
+            width: 16px;
+            height: 16px;
+            background-position: -170px -262px;
+            display: -webkit-inline-box;
         }
     </style>
 
@@ -546,11 +559,11 @@ function formatOrderInfo(value, row, index) {
 function formatTimeInfo(value, row, index){
     var html =
         '<div>' +
-        '<h5><span>'+row.obtainProv+row.obtainCity+row.obtainArea+'</span></h5>' +
+        '<h5><i class="base-icon zc_fetch_i"></i><span>'+row.obtainProv+row.obtainCity+row.obtainArea+'</span></h5>' +
         '<span style="display: block;color:#999">'+formatDate("yyyy-MM-dd hh:mm",new Date(row.obtainTime))+'</span>' +
         '</div>'+
         '<div style="margin-top:10px">' +
-        '<h5><span>'+row.returnProv+row.returnCity+row.returnArea+'</span></h5>' +
+        '<h5><i class="base-icon zc_giveback_i"></i><span>'+row.returnProv+row.returnCity+row.returnArea+'</span></h5>' +
         '<span style="display: block;color:#999">'+formatDate("yyyy-MM-dd hh:mm",new Date(row.returnTime))+'</span>' +
         '</div>';
     return html;
