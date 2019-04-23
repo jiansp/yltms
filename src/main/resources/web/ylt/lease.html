@@ -19,11 +19,8 @@
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}"> <!-- Bootstrap-Core-CSS -->
     <link rel="stylesheet" th:href="@{/css/style.css}" type="text/css" media="all"/> <!-- Style-CSS -->
     <link rel="stylesheet" th:href="@{/css/fontawesome-all.css}"> <!-- Font-Awesome-Icons-CSS -->
-    <!-- //css files -->
     <link th:href="@{/layui/css/layui.css}" rel="stylesheet"/>
-    <!-- web-fonts -->
-    <link href="//fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&amp;subset=latin-ext"
-          rel="stylesheet">
+    <link href="//fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&amp;subset=latin-ext" rel="stylesheet">
     <link th:href="@{/css/toastr.min.css}" rel="stylesheet" />
     <link th:href="@{/css/ladda-theme.scss}" rel="stylesheet"/>
     <link th:href="@{/css/bootstrapValidator.min.css}" rel="stylesheet"/>
@@ -31,7 +28,8 @@
     <link th:href="@{/css/city-picker.css}" rel="stylesheet" type="text/css" />
     <link th:href="@{/css/main.css}" rel="stylesheet" type="text/css" />
 
-    <script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/jquery-2.1.4.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/popper.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/encode64.js}"></script>
     <script type="text/javascript" th:src="@{/js/toastr.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/ladda.min.js}"></script>
@@ -107,11 +105,22 @@
         </div>
 
         <div id="yesLogin" class="col-md-4 top-forms mt-md-3 mt-2 mb-md-0 mb-3">
-            <a id="nameSpan" href="#"><i class="fas fa-user"></i> </a>
-            <a href="#" data-toggle="modal" aria-pressed="false" data-target="#changePass">
-                <i class="fas fa-lock"></i> 修改密码</a>
-            <a th:href="@{/route/logout}">
-                <i class="fas fa-outdent"></i> 退出</a>
+            <div class="btn-group">
+                <button id="nameSpan" style="color:#fff" type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-user"></i>
+                </button>
+                <div class="dropdown-menu">
+                    <a href="#" class="dropdown-item" data-toggle="modal" aria-pressed="false" data-target="#changePass">
+                        <i class="fas fa-lock"></i> 修改密码</a>
+                    <a href="#" class="dropdown-item" data-toggle="modal" aria-pressed="false" data-target="#changePass">
+                        <i class="fas fa-superpowers"></i> 升级VIP</a>
+                    <a href="#" class="dropdown-item" data-toggle="modal" aria-pressed="false" data-target="#changePass">
+                        <i class="fas fa-money-bill-alt"></i> 充值</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" th:href="@{/route/logout}">
+                        <i class="fas fa-outdent"></i> 安全退出</a>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -344,6 +353,40 @@
         </div>
     </div>
 </div>
+<script type="text/javascript" th:inline="javascript">
+    /*<![CDATA[*/
+    $(function(){
+
+
+    });
+    $("#sub").on("click",function(){
+        login();
+    });
+    function login(){
+        var username = $("#username").val();
+        var password = $("#password").val();
+        var empPattern = /^\s*$/;
+        if (empPattern.test(username) || empPattern.test(password)){
+            toastr.warning("用户名或密码不能为空");
+            return;
+        }
+        password = encode64(password);
+        $.ajax({
+            url:[[@{/login}]],
+            data:{"username":username,"password":password, "type":"2"},
+            type:"post",
+                dataType:"json",
+                success:function(result){
+                if(result.success){
+                    window.location.reload();
+                }else{
+                    toastr.warning(result.msg);
+                }
+            }
+        })
+    }
+    /*]]>*/
+</script>
 <div class="modal fade" id="changePass" tabindex="-1" role="dialog" aria-labelledby="changePassModel"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -379,6 +422,43 @@
         </div>
     </div>
 </div>
+<script type="text/javascript" th:inline="javascript">
+    /*<![CDATA[*/
+    $(function(){
+
+    });
+    $("#subPass").on("click",function(){
+        editPass();
+    });
+    function editPass(){
+        var passwordO = $("#oldPassword").val();
+        var password = $("#newPassword").val();
+        var conPassword = $("#conPassword").val();
+        var id = $("#accountId").val();
+        if(password !== conPassword){
+            toastr.warning("两次密码输入不一致");
+            return false;
+        }
+        password = encode64(password);
+        passwordO = encode64(passwordO);
+        $.ajax({
+            url:[[@{/user/update}]],
+        data:{"password":password,"passwordO":passwordO,"id":id},
+        type:"post",
+            dataType:"json",
+            success:function(result){
+            if(result.success){
+                toastr.success("保存成功");
+                window.location.reload();
+                }else{
+                    toastr.warning(result.msg);
+                }
+            },
+        });
+
+    }
+    /*]]>*/
+</script>
 <div class="modal fade" id="leasePanel" tabindex="-1" role="dialog" aria-labelledby="leaseModel" aria-hidden="true">
     <div class="modal-dialog" style="max-width: 100% !important;">
         <div class="lease-modal-content">
@@ -469,6 +549,171 @@
         </div>
     </div>
 </div>
+<script type="text/javascript" th:inline="javascript">
+    /*<![CDATA[*/
+    $(function(){
+        $("#obtainTime").val(formatDate("yyyy-MM-dd hh:mm", new Date()));
+        $("#returnTime").val(formatDate("yyyy-MM-dd hh:mm", new Date(new Date().getTime() + 24*60*60*1000)));
+        loadAddress("return");
+        loadAddress("obtain");
+    });
+    $('#obtainTime,#returnTime').datetimepicker(
+        {
+            language: 'zh-CN',
+            autoclose: true,
+            todayBtn : true
+        }
+    );
+    $("#leaseClose").on("click",function(){
+        $("#leasePanel").modal('hide');
+    });
+    $("#leaseSubmit").on("click",function(){
+        var data = $("#orderForm").serializeObject();
+        data.obtainTime = new Date(data.obtainTime + ':00');
+        data.returnTime = new Date(data.returnTime + ':00');
+        if(data.userId){
+            $.ajax({
+                url:[[@{/order/save}]],
+            data:data,
+                type:"post",
+                dataType:"json",
+                success:function(result){
+                if(result.success){
+                    toastr.success("订单提交成功，请支付");
+                    $("#leasePanel").modal("hide");
+                }else{
+                    toastr.error(result.msg);
+                }
+            }
+        });
+        }else{
+            toastr.warning("请先登录");
+            return;
+        }
+    });
+    function lease(id,imgSrc,rent){
+        var account = [[${account}]];
+        if(!account){
+            toastr.warning("请先登录");
+            return;
+        }
+        $("#imgDesc").empty();
+        $("#imgDesc").append('<img src="'+imgSrc+'" alt="" class="img-fluid">');
+        $("#vehicleId").val(id);
+        $("#rent").val(rent);
+        $("#userId").val(account.id);
+        $("#leasePanel").modal('show');
+    }
+    function loadAddress(id) {
+        $.ajax({
+            url:[[@{/unverify/getAddress}]],
+        type:"post",
+            dataType:"json",
+            success:function(result){
+            if(result.success){
+                for(var i =0;i<result.obj.length;i++){
+                    $("#"+id+"Prov").append('<option value="'+result.obj[i]+'">'+result.obj[i]+'</option>')
+                }
+
+            }else{
+                toastr.warning(result.msg);
+            }
+        }
+    })
+    }
+    function changeProv(id){
+        var prov = $("#"+id+"Prov").val();
+        if(prov){
+            $.ajax({
+                url:[[@{/unverify/getAddress}]],
+            type:"post",
+                data:{"prov":prov},
+            dataType:"json",
+                success:function(result){
+                if(result.success){
+                    resetObCity(id);
+                    for(var i =0;i<result.obj.length;i++){
+                        $("#"+id+"City").append('<option value="'+result.obj[i]+'">'+result.obj[i]+'</option>');
+                    }
+                    resetObArea(id);
+                    resetObShop(id);
+                }else{
+                    toastr.warning(result.msg);
+                }
+            }
+        })
+        }else{
+            resetObCity(id);
+            resetObArea(id);
+            resetObShop(id);
+        }
+    }
+    function changeCity(id){
+        var prov = $("#"+id+"Prov").val();
+        var city = $("#"+id+"City").val();
+        if(city){
+            $.ajax({
+                url:[[@{/unverify/getAddress}]],
+            type:"post",
+                data:{"prov":prov, "city":city},
+            dataType:"json",
+                success:function(result){
+                if(result.success){
+
+                    resetObArea(id);
+                    for(var i =0;i<result.obj.length;i++){
+                        $("#"+id+"Area").append('<option value="'+result.obj[i]+'">'+result.obj[i]+'</option>');
+                    }
+                    resetObShop(id);
+                }else{
+                    toastr.warning(result.msg);
+                }
+            }
+        })
+        }else{
+            resetObArea(id);
+            resetObShop(id);
+        }
+    }
+    function changeArea(id){
+        var prov = $("#"+id+"Prov").val();
+        var city = $("#"+id+"City").val();
+        var area = $("#"+id+"Area").val();
+        if(area){
+            $.ajax({
+                url:[[@{/unverify/getAddress}]],
+            type:"post",
+                data:{"prov":prov, "city":city, "area": area},
+            dataType:"json",
+                success:function(result){
+                if(result.success){
+                    resetObShop(id);
+                    for(var i =0;i<result.obj.length;i++){
+                        $("#"+id+"Shop").append('<option value="'+result.obj[i]+'">'+result.obj[i]+'</option>');
+                    }
+                }else{
+                    toastr.warning(result.msg);
+                }
+            }
+        })
+        }else{
+            resetObShop(id);
+        }
+    }
+    function resetObCity(id){
+        $("#"+id+"City").empty();
+        $("#"+id+"City").append('<option value="">请选择</option>');
+    }
+    function resetObArea(id){
+        $("#"+id+"Area").empty();
+        $("#"+id+"Area").append('<option value="">请选择</option>');
+    }
+    function resetObShop(id){
+        $("#"+id+"Shop").empty();
+        $("#"+id+"Shop").append('<option value="">请选择</option>');
+    }
+    /*]]>*/
+</script>
 <div class="modal fade" id="registeredPanel" tabindex="-1" role="dialog" aria-labelledby="regModel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -504,85 +749,9 @@
         </div>
     </div>
 </div>
-
-<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script> <!-- Necessary-JavaScript-File-For-Bootstrap -->
-<script type="text/javascript" th:src="@{/js/wickedpicker.js}"></script>
-<script type="text/javascript">
-    $('.timepicker').wickedpicker({
-        twentyFour: false
-    });
-</script>
-<script th:src="@{/js/jquery-ui.js}"></script>
-<script th:src="@{/js/owl.carousel.js}"></script>
-<script>
-    $(document).ready(function () {
-        $('.owl-carousel').owlCarousel({
-            loop: true,
-            margin: 10,
-            responsiveClass: true,
-            responsive: {
-                0: {
-                    items: 1,
-                    nav: true
-                },
-                600: {
-                    items: 1,
-                    nav: false
-                },
-                900: {
-                    items: 2,
-                    nav: false
-                },
-                1000: {
-                    items: 3,
-                    nav: true,
-                    loop: false,
-                    margin: 20
-                }
-            }
-        })
-    })
-</script>
-<script th:src="@{/js/responsiveslides.min.js}"></script>
-<script th:src="@{/js/SmoothScroll.min.js}"></script>
-<script type="text/javascript" th:src="@{/js/move-top.js}"></script>
-<script type="text/javascript" th:src="@{/js/easing.js}"></script>
-<script type="text/javascript">
-    jQuery(document).ready(function ($) {
-        $(".scroll").click(function (event) {
-            event.preventDefault();
-            $('html,body').animate({scrollTop: $(this.hash).offset().top}, 1000);
-        });
-    });
-</script>
 <script type="text/javascript" th:inline="javascript">
     /*<![CDATA[*/
-    $(function () {
-        $("#datepicker,#datepicker1,#datepicker2,#datepicker3").datepicker();
-        $("#slider1").responsiveSlides({
-            auto: true,
-            pager: true,
-            nav: true,
-            speed: 500,
-            namespace: "centered-btns"
-        });
-        $().UItoTop({easingType: 'easeOutQuart'});
-        var account = [[${account}]];
-        if (account) {
-            $("#noLogin").hide();
-            $("#yesLogin").show();
-            $("#nameSpan").append(account.username);
-            $("#accountId").val(account.id);
-        } else {
-            $("#noLogin").show();
-            $("#yesLogin").hide();
-        }
-        $("#obtainTime").val(formatDate("yyyy-MM-dd hh:mm", new Date()));
-        $("#returnTime").val(formatDate("yyyy-MM-dd hh:mm", new Date(new Date().getTime() + 24*60*60*1000)));
-        loadCarItem();
-        loadAddress("return");
-        loadAddress("obtain");
-
+    $(function(){
         $('#registeredForm').bootstrapValidator({
             message: 'This value is not valid',
             feedbackIcons: {
@@ -639,53 +808,11 @@
                 }
             }
         });
-    });
-    $("#sub").on("click",function(){
-        login();
+
     });
     $("#regSub").on("click",function(){
         registered();
     });
-    $('#obtainTime,#returnTime').datetimepicker(
-        {
-            language: 'zh-CN',
-            autoclose: true,
-            todayBtn : true
-        }
-    );
-    $("#leaseClose").on("click",function(){
-        $("#leasePanel").modal('hide');
-    });
-
-    $("#leaseSubmit").on("click",function(){
-        var data = $("#orderForm").serializeObject();
-        data.obtainTime = new Date(data.obtainTime + ':00');
-        data.returnTime = new Date(data.returnTime + ':00');
-        if(data.userId){
-            $.ajax({
-                url:[[@{/order/save}]],
-                data:data,
-                type:"post",
-                dataType:"json",
-                success:function(result){
-                if(result.success){
-                    toastr.success("订单提交成功，请支付");
-                    $("#leasePanel").modal("hide");
-                }else{
-                    toastr.error(result.msg);
-                }
-            }
-        });
-        }else{
-            toastr.warning("请先登录");
-            return;
-        }
-
-
-        /*console.log($(".title").find('span[data-count="district"]').eq(0).data("code"));
-        console.log($(".title").find('span[data-count="district"]').eq(1).data("code"));*/
-    });
-
     function registered(){
         var bootstrapValidator = $("#registeredForm").data('bootstrapValidator').isValid();
         if(bootstrapValidator){
@@ -696,23 +823,57 @@
             }
             data.ConfirmPassword = "";
             data.password = encode64(data.password);
-            console.log($("#registeredForm").serialize());
             $.ajax({
                 url:[[@{/user/saveUser}]],
-                data:data,
+            data:data,
                 type:"post",
                 dataType:"json",
                 success:function(result){
-                    if(result.success){
-                        toastr.success("保存成功，请登录");
-                        $("#registeredPanel").modal("hide");
-                    }else{
-                        toastr.error(result.msg);
-                    }
+                if(result.success){
+                    toastr.success("保存成功，请登录");
+                    $("#registeredPanel").modal("hide");
+                }else{
+                    toastr.error(result.msg);
                 }
-            });
+            }
+        });
         }
     }
+    /*]]>*/
+</script>
+
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script> <!-- Necessary-JavaScript-File-For-Bootstrap -->
+<script type="text/javascript" th:src="@{/js/wickedpicker.js}"></script>
+<script th:src="@{/js/jquery-ui.js}"></script>
+<script th:src="@{/js/owl.carousel.js}"></script>
+<script th:src="@{/js/responsiveslides.min.js}"></script>
+<script th:src="@{/js/SmoothScroll.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/move-top.js}"></script>
+<script type="text/javascript" th:src="@{/js/easing.js}"></script>
+<script type="text/javascript">
+    jQuery(document).ready(function ($) {
+        $(".scroll").click(function (event) {
+            event.preventDefault();
+            $('html,body').animate({scrollTop: $(this.hash).offset().top}, 1000);
+        });
+    });
+</script>
+<script type="text/javascript" th:inline="javascript">
+    /*<![CDATA[*/
+    $(function () {
+        $().UItoTop({easingType: 'easeOutQuart'});
+        var account = [[${account}]];
+        if (account) {
+            $("#noLogin").hide();
+            $("#yesLogin").show();
+            $("#nameSpan").append(account.username);
+            $("#accountId").val(account.id);
+        } else {
+            $("#noLogin").show();
+            $("#yesLogin").hide();
+        }
+        loadCarItem();
+    });
 
     function loadCarItem(type){
         $.ajax({
@@ -756,138 +917,6 @@
         $("#rent").val(rent);
         $("#userId").val(account.id);
         $("#leasePanel").modal('show');
-    }
-    function login(){
-        var username = $("#username").val();
-        var password = $("#password").val();
-        var empPattern = /^\s*$/;
-        if (empPattern.test(username) || empPattern.test(password)){
-            toastr.warning("用户名或密码不能为空");
-            return;
-        }
-        password = encode64(password);
-        $.ajax({
-            url:[[@{/login}]],
-            data:{"username":username,"password":password, "type":"2"},
-            type:"post",
-                dataType:"json",
-                success:function(result){
-                if(result.success){
-                    window.location.reload();
-                }else{
-                    toastr.warning(result.msg);
-                }
-            }
-        })
-    }
-
-    function loadAddress(id) {
-        $.ajax({
-            url:[[@{/unverify/getAddress}]],
-            type:"post",
-                dataType:"json",
-                success:function(result){
-                if(result.success){
-                    for(var i =0;i<result.obj.length;i++){
-                        $("#"+id+"Prov").append('<option value="'+result.obj[i]+'">'+result.obj[i]+'</option>')
-                    }
-
-                }else{
-                    toastr.warning(result.msg);
-                }
-            }
-        })
-    }
-    function changeProv(id){
-        var prov = $("#"+id+"Prov").val();
-        if(prov){
-            $.ajax({
-                url:[[@{/unverify/getAddress}]],
-                type:"post",
-                data:{"prov":prov},
-                dataType:"json",
-                success:function(result){
-                    if(result.success){
-                        resetObCity(id);
-                        for(var i =0;i<result.obj.length;i++){
-                            $("#"+id+"City").append('<option value="'+result.obj[i]+'">'+result.obj[i]+'</option>');
-                        }
-                        resetObArea(id);
-                        resetObShop(id);
-                    }else{
-                        toastr.warning(result.msg);
-                    }
-            }
-        })
-        }else{
-            resetObCity(id);
-            resetObArea(id);
-            resetObShop(id);
-        }
-    }
-    function changeCity(id){
-        var prov = $("#"+id+"Prov").val();
-        var city = $("#"+id+"City").val();
-        if(city){
-            $.ajax({
-                url:[[@{/unverify/getAddress}]],
-                type:"post",
-                data:{"prov":prov, "city":city},
-                dataType:"json",
-                success:function(result){
-                if(result.success){
-
-                    resetObArea(id);
-                    for(var i =0;i<result.obj.length;i++){
-                        $("#"+id+"Area").append('<option value="'+result.obj[i]+'">'+result.obj[i]+'</option>');
-                    }
-                    resetObShop(id);
-                }else{
-                    toastr.warning(result.msg);
-                }
-            }
-        })
-        }else{
-            resetObArea(id);
-            resetObShop(id);
-        }
-    }
-    function changeArea(id){
-        var prov = $("#"+id+"Prov").val();
-        var city = $("#"+id+"City").val();
-        var area = $("#"+id+"Area").val();
-        if(area){
-            $.ajax({
-                url:[[@{/unverify/getAddress}]],
-                type:"post",
-                data:{"prov":prov, "city":city, "area": area},
-                dataType:"json",
-                success:function(result){
-                if(result.success){
-                    resetObShop(id);
-                    for(var i =0;i<result.obj.length;i++){
-                        $("#"+id+"Shop").append('<option value="'+result.obj[i]+'">'+result.obj[i]+'</option>');
-                    }
-                }else{
-                    toastr.warning(result.msg);
-                }
-            }
-        })
-        }else{
-            resetObShop(id);
-        }
-    }
-    function resetObCity(id){
-        $("#"+id+"City").empty();
-        $("#"+id+"City").append('<option value="">请选择</option>');
-    }
-    function resetObArea(id){
-        $("#"+id+"Area").empty();
-        $("#"+id+"Area").append('<option value="">请选择</option>');
-    }
-    function resetObShop(id){
-        $("#"+id+"Shop").empty();
-        $("#"+id+"Shop").append('<option value="">请选择</option>');
     }
     /*]]>*/
 </script>

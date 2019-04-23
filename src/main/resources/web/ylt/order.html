@@ -32,7 +32,8 @@
     <link th:href="@{/css/city-picker.css}" rel="stylesheet" type="text/css" />
     <link th:href="@{/css/main.css}" rel="stylesheet" type="text/css" />
 
-    <script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/popper.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/jquery-2.1.4.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script> <!-- Necessary-JavaScript-File-For-Bootstrap -->
     <script type="text/javascript" th:src="@{/js/encode64.js}"></script>
     <script type="text/javascript" th:src="@{/js/toastr.min.js}"></script>
@@ -146,11 +147,22 @@
         </div>
 
         <div id="yesLogin" class="col-md-4 top-forms mt-md-3 mt-2 mb-md-0 mb-3">
-            <a id="nameSpan" href="#"><i class="fas fa-user"></i> </a>
-            <a href="#" data-toggle="modal" aria-pressed="false" data-target="#changePass">
-                <i class="fas fa-lock"></i> 修改密码</a>
-            <a th:href="@{/route/logout}">
-                <i class="fas fa-outdent"></i> 退出</a>
+            <div class="btn-group">
+                <button id="nameSpan" style="color:#fff" type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-user"></i>
+                </button>
+                <div class="dropdown-menu">
+                    <a href="#" class="dropdown-item" data-toggle="modal" aria-pressed="false" data-target="#changePass">
+                        <i class="fas fa-lock"></i> 修改密码</a>
+                    <a href="#" class="dropdown-item" data-toggle="modal" aria-pressed="false" data-target="#changePass">
+                        <i class="fas fa-superpowers"></i> 升级VIP</a>
+                    <a href="#" class="dropdown-item" data-toggle="modal" aria-pressed="false" data-target="#changePass">
+                        <i class="fas fa-money-bill-alt"></i> 充值</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" th:href="@{/route/logout}">
+                        <i class="fas fa-outdent"></i> 安全退出</a>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -374,6 +386,40 @@
         </div>
     </div>
 </div>
+<script type="text/javascript" th:inline="javascript">
+    /*<![CDATA[*/
+    $(function(){
+
+
+    });
+    $("#sub").on("click",function(){
+        login();
+    });
+    function login(){
+        var username = $("#username").val();
+        var password = $("#password").val();
+        var empPattern = /^\s*$/;
+        if (empPattern.test(username) || empPattern.test(password)){
+            toastr.warning("用户名或密码不能为空");
+            return;
+        }
+        password = encode64(password);
+        $.ajax({
+            url:[[@{/login}]],
+            data:{"username":username,"password":password, "type":"2"},
+            type:"post",
+                dataType:"json",
+                success:function(result){
+                if(result.success){
+                    window.location.reload();
+                }else{
+                    toastr.warning(result.msg);
+                }
+            }
+        })
+    }
+    /*]]>*/
+</script>
 <div class="modal fade" id="changePass" tabindex="-1" role="dialog" aria-labelledby="changePassModel"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -409,6 +455,43 @@
         </div>
     </div>
 </div>
+<script type="text/javascript" th:inline="javascript">
+    /*<![CDATA[*/
+    $(function(){
+
+    });
+    $("#subPass").on("click",function(){
+        editPass();
+    });
+    function editPass(){
+        var passwordO = $("#oldPassword").val();
+        var password = $("#newPassword").val();
+        var conPassword = $("#conPassword").val();
+        var id = $("#accountId").val();
+        if(password !== conPassword){
+            toastr.warning("两次密码输入不一致");
+            return false;
+        }
+        password = encode64(password);
+        passwordO = encode64(passwordO);
+        $.ajax({
+            url:[[@{/user/update}]],
+        data:{"password":password,"passwordO":passwordO,"id":id},
+        type:"post",
+            dataType:"json",
+            success:function(result){
+            if(result.success){
+                toastr.success("保存成功");
+                window.location.reload();
+            }else{
+                toastr.warning(result.msg);
+            }
+        },
+    });
+
+    }
+    /*]]>*/
+</script>
 <div class="modal fade" id="registeredPanel" tabindex="-1" role="dialog" aria-labelledby="regModel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -444,6 +527,98 @@
         </div>
     </div>
 </div>
+<script type="text/javascript" th:inline="javascript">
+    /*<![CDATA[*/
+    $(function(){
+        $('#registeredForm').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                password: {
+                    message: '密码验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '密码不能为空'
+                        },
+                        regexp: {
+                            regexp: /^[\S]{6,12}$/,
+                            message: '密码必须6到12位，且不能出现空格'
+                        }
+                    }
+                },
+                ConfirmPassword: {
+                    message: '密码验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '密码不能为空'
+                        },
+                        regexp: {
+                            regexp: /^[\S]{6,12}$/,
+                            message: '密码必须6到12位，且不能出现空格'
+                        }
+                    }
+                },
+                mail: {
+                    validators: {
+                        notEmpty: {
+                            message: '邮箱地址不能为空'
+                        },
+                        regexp: {
+                            regexp: /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/,
+                            message: '邮箱格式错误'
+                        }
+                    }
+                },
+                username: {
+                    validators: {
+                        notEmpty: {
+                            message: '用户名不能为空'
+                        },
+                        regexp: {
+                            regexp: /^[a-zA-Z0-9_-]{4,16}$/,
+                            message: '用户名必须4到16位（数字，字码，下划线，减号）'
+                        }
+                    }
+                }
+            }
+        });
+
+    });
+    $("#regSub").on("click",function(){
+        registered();
+    });
+    function registered(){
+        var bootstrapValidator = $("#registeredForm").data('bootstrapValidator').isValid();
+        if(bootstrapValidator){
+            var data = $("#registeredForm").serializeObject();
+            if(data.password !== data.ConfirmPassword){
+                toastr.error("两次密码输入不一致");
+                return false;
+            }
+            data.ConfirmPassword = "";
+            data.password = encode64(data.password);
+            $.ajax({
+                url:[[@{/user/saveUser}]],
+            data:data,
+                type:"post",
+                dataType:"json",
+                success:function(result){
+                if(result.success){
+                    toastr.success("保存成功，请登录");
+                    $("#registeredPanel").modal("hide");
+                }else{
+                    toastr.error(result.msg);
+                }
+            }
+        });
+        }
+    }
+    /*]]>*/
+</script>
 <div class="modal fade" id="payConfirm">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -461,7 +636,35 @@
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+</div>
+<script type="text/javascript" th:inline="javascript">
+    /*<![CDATA[*/
+    function onPay(){
+        var orderId = $("#orderId").val();
+        if(orderId){
+            var data = {
+                "orderId":orderId,
+                "userId":$("#accountId").val()
+            };
+            $.ajax({
+                url:[[@{/order/payOrder}]],
+            data:data,
+                type:"post",
+                dataType:"json",
+                success:function(result){
+                if(result.success){
+                    toastr.success("支付成功");
+                    $("#payConfirm").modal("hide");
+                    $('#orderTable').bootstrapTable("refresh");
+                }else{
+                    toastr.error(result.msg);
+                }
+            }
+        });
+        }
+    }
+    /*]]>*/
+</script>
 <div class="modal fade" id="payCancel">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -478,10 +681,37 @@
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+</div>
+<script type="text/javascript" th:inline="javascript">
+    /*<![CDATA[*/
+    function onCancel(){
+        var orderId = $("#orderId").val();
+        if(orderId){
+            var data = {
+                "orderId":orderId,
+                "userId":$("#accountId").val()
+            };
+            $.ajax({
+                url:[[@{/order/cancelOrder}]],
+            data:data,
+                type:"post",
+                dataType:"json",
+                success:function(result){
+                if(result.success){
+                    toastr.success("取消成功");
+                    $("#payCancel").modal("hide");
+                    $('#orderTable').bootstrapTable("refresh");
+                }else{
+                    toastr.error(result.msg);
+                }
+            }
+        });
+        }
+    }
+    /*]]>*/
+</script>
 
 <script type="text/javascript" th:src="@{/js/wickedpicker.js}"></script>
-
 <script th:src="@{/js/jquery-ui.js}"></script>
 <script th:src="@{/js/owl.carousel.js}"></script>
 <script th:src="@{/js/responsiveslides.min.js}"></script>
@@ -498,6 +728,19 @@
 </script>
 <script type="text/javascript" th:inline="javascript">
 /*<![CDATA[*/
+    $(function () {
+        $().UItoTop({easingType: 'easeOutQuart'});
+        var account = [[${account}]];
+        if (account) {
+            $("#noLogin").hide();
+            $("#yesLogin").show();
+            $("#nameSpan").append(account.username);
+            $("#accountId").val(account.id);
+        } else {
+            $("#noLogin").show();
+            $("#yesLogin").hide();
+        }
+    });
     $('#orderTable').bootstrapTable({
         url: [[@{/order/getOrderInfo}]],         //请求后台的URL（*）
         method: 'get',                      //请求方式（*）
@@ -597,209 +840,7 @@ function formatButton(value, row, index) {
 function bindValue(id){
     $("#orderId").val(id);
 }
-function onPay(){
-    var orderId = $("#orderId").val();
-    if(orderId){
-        var data = {
-            "orderId":orderId,
-            "userId":$("#accountId").val()
-        };
-        $.ajax({
-            url:[[@{/order/payOrder}]],
-            data:data,
-            type:"post",
-            dataType:"json",
-            success:function(result){
-            if(result.success){
-                toastr.success("支付成功");
-                $("#payConfirm").modal("hide");
-                $('#orderTable').bootstrapTable("refresh");
-            }else{
-                toastr.error(result.msg);
-            }
-        }
-    });
-    }
-}
-
-function onCancel(){
-    var orderId = $("#orderId").val();
-    if(orderId){
-        var data = {
-            "orderId":orderId,
-            "userId":$("#accountId").val()
-    };
-        $.ajax({
-            url:[[@{/order/cancelOrder}]],
-        data:data,
-            type:"post",
-            dataType:"json",
-            success:function(result){
-            if(result.success){
-                toastr.success("取消成功");
-                $("#payCancel").modal("hide");
-                $('#orderTable').bootstrapTable("refresh");
-            }else{
-                toastr.error(result.msg);
-            }
-        }
-    });
-    }
-}
 /*]]>*/
-</script>
-<script type="text/javascript" th:inline="javascript">
-    /*<![CDATA[*/
-    $(function () {
-        $().UItoTop({easingType: 'easeOutQuart'});
-        var account = [[${account}]];
-        if (account) {
-            $("#noLogin").hide();
-            $("#yesLogin").show();
-            $("#nameSpan").append(account.username);
-            $("#accountId").val(account.id);
-        } else {
-            $("#noLogin").show();
-            $("#yesLogin").hide();
-        }
-        loadOrders();
-
-        $('#registeredForm').bootstrapValidator({
-            message: 'This value is not valid',
-            feedbackIcons: {
-                valid: 'glyphicon glyphicon-ok',
-                invalid: 'glyphicon glyphicon-remove',
-                validating: 'glyphicon glyphicon-refresh'
-            },
-            fields: {
-                password: {
-                    message: '密码验证失败',
-                    validators: {
-                        notEmpty: {
-                            message: '密码不能为空'
-                        },
-                        regexp: {
-                            regexp: /^[\S]{6,12}$/,
-                            message: '密码必须6到12位，且不能出现空格'
-                        }
-                    }
-                },
-                ConfirmPassword: {
-                    message: '密码验证失败',
-                    validators: {
-                        notEmpty: {
-                            message: '密码不能为空'
-                        },
-                        regexp: {
-                            regexp: /^[\S]{6,12}$/,
-                            message: '密码必须6到12位，且不能出现空格'
-                        }
-                    }
-                },
-                mail: {
-                    validators: {
-                        notEmpty: {
-                            message: '邮箱地址不能为空'
-                        },
-                        regexp: {
-                            regexp: /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/,
-                            message: '邮箱格式错误'
-                        }
-                    }
-                },
-                username: {
-                    validators: {
-                        notEmpty: {
-                            message: '用户名不能为空'
-                        },
-                        regexp: {
-                            regexp: /^[a-zA-Z0-9_-]{4,16}$/,
-                            message: '用户名必须4到16位（数字，字码，下划线，减号）'
-                        }
-                    }
-                }
-            }
-        });
-    });
-    $("#sub").on("click",function(){
-        login();
-    });
-    $("#regSub").on("click",function(){
-        registered();
-    });
-
-    function registered(){
-        var bootstrapValidator = $("#registeredForm").data('bootstrapValidator').isValid();
-        if(bootstrapValidator){
-            var data = $("#registeredForm").serializeObject();
-            if(data.password !== data.ConfirmPassword){
-                toastr.error("两次密码输入不一致");
-                return false;
-            }
-            data.ConfirmPassword = "";
-            data.password = encode64(data.password);
-            $.ajax({
-                url:[[@{/user/saveUser}]],
-                data:data,
-                type:"post",
-                dataType:"json",
-                success:function(result){
-                    if(result.success){
-                        toastr.success("保存成功，请登录");
-                        $("#registeredPanel").modal("hide");
-                    }else{
-                        toastr.error(result.msg);
-                    }
-                }
-            });
-        }
-    }
-
-    function loadOrders(){
-        $.ajax({
-            url:[[@{/order/getOrderInfo}]],
-            type:"post",
-            dataType:"json",
-            success:function(result) {
-                if (result.success) {
-                    /*for(var i =0;i<result.obj.length;i++){
-                        var item = result.obj[i];
-                        var imgSrc = [[@{/uploaded/}]]+item.vehicle.imgPath;
-                        var orderDesc = '<h4 class="text-capitalize"><i class="fas fa-car clr1"></i>Luxury Cars</h4><p class="mb-4"> Vestibulum et augue eunibh metus diam.</p>';
-                        var orderImg = '<img src="'+imgSrc+'" alt="" class="img-fluid" />';
-                        $("#orderDesc").append(orderDesc);
-                        $("#orderImg").append(orderImg);
-
-                    }*/
-                }
-            }
-        });
-    }
-    function login(){
-        var username = $("#username").val();
-        var password = $("#password").val();
-        var empPattern = /^\s*$/;
-        if (empPattern.test(username) || empPattern.test(password)){
-            toastr.warning("用户名或密码不能为空");
-            return;
-        }
-        password = encode64(password);
-        $.ajax({
-            url:[[@{/login}]],
-            data:{"username":username,"password":password, "type":"2"},
-            type:"post",
-                dataType:"json",
-                success:function(result){
-                if(result.success){
-                    window.location.reload();
-                }else{
-                    toastr.warning(result.msg);
-                }
-            }
-        })
-    }
-
-    /*]]>*/
 </script>
 </body>
 </html>

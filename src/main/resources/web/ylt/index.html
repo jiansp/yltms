@@ -40,9 +40,10 @@
 	<script type="text/javascript" th:src="@{/js/ladda.min.js}"></script>
 	<script type="text/javascript" th:src="@{/js/spin.min.js}"></script>
 	<script type="text/javascript" th:src="@{/js/utils.js}"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+	<script type="text/javascript" th:src="@{/js/toastr.min.js}"></script>
 	<script type="text/javascript" th:src="@{/js/bootstrap-datetimepicker.min.js}"></script>
 	<script type="text/javascript" th:src="@{/js/bootstrap-datetimepicker.zh-CN.js}"></script>
+	<script type="text/javascript" th:src="@{/js/bootstrapValidator.js}"></script>
 
     <style>
 		#yesLogin a{
@@ -132,11 +133,6 @@
 						<i class="fas fa-outdent"></i> 安全退出</a>
 				</div>
 			</div>
-			<!--<a id="nameSpan" href="#"><i class="fas fa-user"></i> </a>-->
-			<!--<a href="#" data-toggle="modal" aria-pressed="false" data-target="#changePass">
-				<i class="fas fa-lock"></i> 修改密码</a>-->
-			<!--<a th:href="@{/route/logout}">
-				<i class="fas fa-outdent"></i> 退出</a>-->
 		</div>
 	</div>
 </div>
@@ -396,9 +392,7 @@
 		<!-- //copyright -->
 	</div>
 </footer>
-<!-- //footer -->
-			
-<!-- login and register modal -->
+
 <div class="modal fade" id="loginPanel" tabindex="-1" role="dialog" aria-labelledby="loginModel" aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
@@ -429,8 +423,42 @@
 		</div>
 	</div>
 </div>
+<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+	$(function(){
 
-<div class="modal fade" id="changePass" tabindex="-1" role="dialog" aria-labelledby="changePassModel" aria-hidden="true">
+
+	});
+	$("#sub").on("click",function(){
+		login();
+	});
+	function login(){
+		var username = $("#username").val();
+		var password = $("#password").val();
+		var empPattern = /^\s*$/;
+		if (empPattern.test(username) || empPattern.test(password)){
+			toastr.warning("用户名或密码不能为空");
+			return;
+		}
+		password = encode64(password);
+		$.ajax({
+			url:[[@{/login}]],
+			data:{"username":username,"password":password, "type":"2"},
+			type:"post",
+					dataType:"json",
+					success:function(result){
+				if(result.success){
+					window.location.reload();
+				}else{
+					toastr.warning(result.msg);
+				}
+			}
+		})
+	}
+	/*]]>*/
+</script>
+<div class="modal fade" id="changePass" tabindex="-1" role="dialog" aria-labelledby="changePassModel"
+	 aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -442,62 +470,65 @@
 			<div class="modal-body">
 				<div class="form-group">
 					<label for="oldPassword" class="col-form-label">旧密码</label>
-					<input type="password" class="form-control" lay-verify="pass" placeholder="旧密码" id="oldPassword" required="">
+					<input type="password" class="form-control" lay-verify="pass" placeholder="旧密码" id="oldPassword"
+						   required="">
 				</div>
 				<div class="form-group">
 					<label for="newPassword" class="col-form-label">新密码</label>
-					<input type="password" class="form-control" lay-verify="pass" placeholder="新密码" id="newPassword" required="">
+					<input type="password" class="form-control" lay-verify="pass" placeholder="新密码" id="newPassword"
+						   required="">
 				</div>
 				<div class="form-group">
 					<label for="conPassword" class="col-form-label">确认密码</label>
-					<input type="password" class="form-control" lay-verify="pass" placeholder="确认密码" id="conPassword" required="">
+					<input type="password" class="form-control" lay-verify="pass" placeholder="确认密码" id="conPassword"
+						   required="">
 				</div>
 
 				<div class="right-w3l">
-                    <input type="hidden" id="accountId" />
+					<input type="hidden" id="accountId"/>
 					<input type="submit" id="subPass" class="form-control" value="确认">
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
-<div class="modal fade" id="registeredPanel" tabindex="-1" role="dialog" aria-labelledby="regModel" aria-hidden="true">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="regModel">注册你的账户</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<div class="modal-body">
-				<form class="layui-form" action="">
-					<div class="form-group">
-						<label for="recipient-name" class="col-form-label">用户名</label>
-						<input type="text" class="form-control" lay-verify="username" placeholder="用户名" name="username" id="recipient-name" required="">
-					</div>
-					<div class="form-group">
-						<label for="recipient-email" class="col-form-label">邮箱</label>
-						<input type="email" class="form-control" lay-verify="mail" placeholder="邮箱" name="mail" id="recipient-email" required="">
-					</div>
-					<div class="form-group">
-						<label for="password1" class="col-form-label">密码</label>
-						<input type="password" class="form-control" lay-verify="pass" placeholder="密码" name="password" id="password1" required="">
-					</div>
-					<div class="form-group">
-						<label for="password2" class="col-form-label">确认密码</label>
-						<input type="password" class="form-control" lay-verify="pass" placeholder="确认密码" name="ConfirmPassword" id="password2" required="">
-					</div>
+<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+	$(function(){
 
-					<div class="right-w3l">
-						<input type="button" id="regsub" class="form-control" value="注册">
-						<button style="display: none" id="subForm" class="layui-btn" lay-submit lay-filter="subForm">提交</button>
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
-</div>
+	});
+	$("#subPass").on("click",function(){
+		editPass();
+	});
+	function editPass(){
+		var passwordO = $("#oldPassword").val();
+		var password = $("#newPassword").val();
+		var conPassword = $("#conPassword").val();
+		var id = $("#accountId").val();
+		if(password !== conPassword){
+			toastr.warning("两次密码输入不一致");
+			return false;
+		}
+		password = encode64(password);
+		passwordO = encode64(passwordO);
+		$.ajax({
+			url:[[@{/user/update}]],
+		data:{"password":password,"passwordO":passwordO,"id":id},
+		type:"post",
+				dataType:"json",
+				success:function(result){
+			if(result.success){
+				toastr.success("保存成功");
+				window.location.reload();
+			}else{
+				toastr.warning(result.msg);
+			}
+		},
+	});
+
+	}
+	/*]]>*/
+</script>
 <div class="modal fade" id="leasePanel" tabindex="-1" role="dialog" aria-labelledby="leaseModel" aria-hidden="true">
 	<div class="modal-dialog" style="max-width: 100% !important;">
 		<div class="lease-modal-content">
@@ -588,36 +619,300 @@
 		</div>
 	</div>
 </div>
-	<script th:src="@{/js/owl.carousel.js}"></script>
-	<script>
-		$(document).ready(function () {
-			$('.owl-carousel').owlCarousel({
-				loop: true,
-				margin: 10,
-				responsiveClass: true,
-				responsive: {
-					0: {
-						items: 1,
-						nav: true
-					},
-					600: {
-						items: 1,
-						nav: false
-					},
-					900: {
-						items: 2,
-						nav: false
-					},
-					1000: {
-						items: 3,
-						nav: true,
-						loop: false,
-						margin: 20
+<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+	$(function(){
+		$("#obtainTime").val(formatDate("yyyy-MM-dd hh:mm", new Date()));
+		$("#returnTime").val(formatDate("yyyy-MM-dd hh:mm", new Date(new Date().getTime() + 24*60*60*1000)));
+		loadAddress("return");
+		loadAddress("obtain");
+	});
+	$('#obtainTime,#returnTime').datetimepicker(
+			{
+				language: 'zh-CN',
+				autoclose: true,
+				todayBtn : true
+			}
+	);
+	$("#leaseClose").on("click",function(){
+		$("#leasePanel").modal('hide');
+	});
+	$("#leaseSubmit").on("click",function(){
+		var data = $("#orderForm").serializeObject();
+		data.obtainTime = new Date(data.obtainTime + ':00');
+		data.returnTime = new Date(data.returnTime + ':00');
+		if(data.userId){
+			$.ajax({
+				url:[[@{/order/save}]],
+			data:data,
+					type:"post",
+					dataType:"json",
+					success:function(result){
+				if(result.success){
+					toastr.success("订单提交成功，请支付");
+					$("#leasePanel").modal("hide");
+				}else{
+					toastr.error(result.msg);
+				}
+			}
+		});
+		}else{
+			toastr.warning("请先登录");
+			return;
+		}
+	});
+	function lease(id,imgSrc,rent){
+		var account = [[${account}]];
+		if(!account){
+			toastr.warning("请先登录");
+			return;
+		}
+		$("#imgDesc").empty();
+		$("#imgDesc").append('<img src="'+imgSrc+'" alt="" class="img-fluid">');
+		$("#vehicleId").val(id);
+		$("#rent").val(rent);
+		$("#userId").val(account.id);
+		$("#leasePanel").modal('show');
+	}
+	function loadAddress(id) {
+		$.ajax({
+			url:[[@{/unverify/getAddress}]],
+		type:"post",
+				dataType:"json",
+				success:function(result){
+			if(result.success){
+				for(var i =0;i<result.obj.length;i++){
+					$("#"+id+"Prov").append('<option value="'+result.obj[i]+'">'+result.obj[i]+'</option>')
+				}
+
+			}else{
+				toastr.warning(result.msg);
+			}
+		}
+	})
+	}
+	function changeProv(id){
+		var prov = $("#"+id+"Prov").val();
+		if(prov){
+			$.ajax({
+				url:[[@{/unverify/getAddress}]],
+			type:"post",
+					data:{"prov":prov},
+			dataType:"json",
+					success:function(result){
+				if(result.success){
+					resetObCity(id);
+					for(var i =0;i<result.obj.length;i++){
+						$("#"+id+"City").append('<option value="'+result.obj[i]+'">'+result.obj[i]+'</option>');
+					}
+					resetObArea(id);
+					resetObShop(id);
+				}else{
+					toastr.warning(result.msg);
+				}
+			}
+		})
+		}else{
+			resetObCity(id);
+			resetObArea(id);
+			resetObShop(id);
+		}
+	}
+	function changeCity(id){
+		var prov = $("#"+id+"Prov").val();
+		var city = $("#"+id+"City").val();
+		if(city){
+			$.ajax({
+				url:[[@{/unverify/getAddress}]],
+			type:"post",
+					data:{"prov":prov, "city":city},
+			dataType:"json",
+					success:function(result){
+				if(result.success){
+
+					resetObArea(id);
+					for(var i =0;i<result.obj.length;i++){
+						$("#"+id+"Area").append('<option value="'+result.obj[i]+'">'+result.obj[i]+'</option>');
+					}
+					resetObShop(id);
+				}else{
+					toastr.warning(result.msg);
+				}
+			}
+		})
+		}else{
+			resetObArea(id);
+			resetObShop(id);
+		}
+	}
+	function changeArea(id){
+		var prov = $("#"+id+"Prov").val();
+		var city = $("#"+id+"City").val();
+		var area = $("#"+id+"Area").val();
+		if(area){
+			$.ajax({
+				url:[[@{/unverify/getAddress}]],
+			type:"post",
+					data:{"prov":prov, "city":city, "area": area},
+			dataType:"json",
+					success:function(result){
+				if(result.success){
+					resetObShop(id);
+					for(var i =0;i<result.obj.length;i++){
+						$("#"+id+"Shop").append('<option value="'+result.obj[i]+'">'+result.obj[i]+'</option>');
+					}
+				}else{
+					toastr.warning(result.msg);
+				}
+			}
+		})
+		}else{
+			resetObShop(id);
+		}
+	}
+	function resetObCity(id){
+		$("#"+id+"City").empty();
+		$("#"+id+"City").append('<option value="">请选择</option>');
+	}
+	function resetObArea(id){
+		$("#"+id+"Area").empty();
+		$("#"+id+"Area").append('<option value="">请选择</option>');
+	}
+	function resetObShop(id){
+		$("#"+id+"Shop").empty();
+		$("#"+id+"Shop").append('<option value="">请选择</option>');
+	}
+	/*]]>*/
+</script>
+<div class="modal fade" id="registeredPanel" tabindex="-1" role="dialog" aria-labelledby="regModel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="regModel">注册你的账户</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form id="registeredForm" class="layui-form" action="">
+					<div class="form-group">
+						<label class="col-form-label">用户名</label>
+						<input type="text" class="form-control" placeholder="用户名" name="username" />
+					</div>
+					<div class="form-group">
+						<label class="col-form-label">邮箱</label>
+						<input type="email" class="form-control" placeholder="邮箱" name="mail" />
+					</div>
+					<div class="form-group">
+						<label class="col-form-label">密码</label>
+						<input type="password" class="form-control" placeholder="密码" name="password"/>
+					</div>
+					<div class="form-group">
+						<label class="col-form-label">确认密码</label>
+						<input type="password" class="form-control" placeholder="确认密码" name="ConfirmPassword" />
+					</div>
+				</form>
+				<div class="right-w3l">
+					<input type="submit" class="form-control" id="regSub" value="注册">
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+	$(function(){
+		$('#registeredForm').bootstrapValidator({
+			message: 'This value is not valid',
+			feedbackIcons: {
+				valid: 'glyphicon glyphicon-ok',
+				invalid: 'glyphicon glyphicon-remove',
+				validating: 'glyphicon glyphicon-refresh'
+			},
+			fields: {
+				password: {
+					message: '密码验证失败',
+					validators: {
+						notEmpty: {
+							message: '密码不能为空'
+						},
+						regexp: {
+							regexp: /^[\S]{6,12}$/,
+							message: '密码必须6到12位，且不能出现空格'
+						}
+					}
+				},
+				ConfirmPassword: {
+					message: '密码验证失败',
+					validators: {
+						notEmpty: {
+							message: '密码不能为空'
+						},
+						regexp: {
+							regexp: /^[\S]{6,12}$/,
+							message: '密码必须6到12位，且不能出现空格'
+						}
+					}
+				},
+				mail: {
+					validators: {
+						notEmpty: {
+							message: '邮箱地址不能为空'
+						},
+						regexp: {
+							regexp: /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/,
+							message: '邮箱格式错误'
+						}
+					}
+				},
+				username: {
+					validators: {
+						notEmpty: {
+							message: '用户名不能为空'
+						},
+						regexp: {
+							regexp: /^[a-zA-Z0-9_-]{4,16}$/,
+							message: '用户名必须4到16位（数字，字码，下划线，减号）'
+						}
 					}
 				}
-			})
-		})
-	</script>
+			}
+		});
+
+	});
+	$("#regSub").on("click",function(){
+		registered();
+	});
+	function registered(){
+		var bootstrapValidator = $("#registeredForm").data('bootstrapValidator').isValid();
+		if(bootstrapValidator){
+			var data = $("#registeredForm").serializeObject();
+			if(data.password !== data.ConfirmPassword){
+				toastr.error("两次密码输入不一致");
+				return false;
+			}
+			data.ConfirmPassword = "";
+			data.password = encode64(data.password);
+			$.ajax({
+				url:[[@{/user/saveUser}]],
+			data:data,
+					type:"post",
+					dataType:"json",
+					success:function(result){
+				if(result.success){
+					toastr.success("保存成功，请登录");
+					$("#registeredPanel").modal("hide");
+				}else{
+					toastr.error(result.msg);
+				}
+			}
+		});
+		}
+	}
+	/*]]>*/
+</script>
+
+	<script th:src="@{/js/owl.carousel.js}"></script>
 	<script th:src="@{/js/responsiveslides.min.js}"></script>
 	<script th:src="@{/js/SmoothScroll.min.js}"></script>
 	<script type="text/javascript" th:src="@{/js/move-top.js}"></script>
@@ -630,7 +925,6 @@
 			});
 		});
 	</script>
-<script th:src="@{/layui/layui.js}"></script>
 <script type="text/javascript" th:inline="javascript">
     /*<![CDATA[*/
 	$(function(){
@@ -652,62 +946,8 @@
             $("#noLogin").show();
             $("#yesLogin").hide();
 		}
-
-		$("#obtainTime").val(formatDate("yyyy-MM-dd hh:mm", new Date()));
-		$("#returnTime").val(formatDate("yyyy-MM-dd hh:mm", new Date(new Date().getTime() + 24*60*60*1000)));
 		loadFavorable();
-		loadAddress("return");
-		loadAddress("obtain");
 	});
-
-    $("#leaseClose").on("click",function(){
-        $("#leasePanel").modal('hide');
-    });
-    $('#obtainTime,#returnTime').datetimepicker(
-        {
-            language: 'zh-CN',
-            autoclose: true,
-            todayBtn : true
-        }
-    );
-
-    $("#leaseSubmit").on("click",function(){
-        var data = $("#orderForm").serializeObject();
-        data.obtainTime = new Date(data.obtainTime + ':00');
-        data.returnTime = new Date(data.returnTime + ':00');
-        if(data.userId){
-            $.ajax({
-                url:[[@{/order/save}]],
-            data:data,
-                type:"post",
-                dataType:"json",
-                success:function(result){
-                if(result.success){
-                    toastr.success("订单提交成功，请支付");
-                    $("#leasePanel").modal("hide");
-                }else{
-                    toastr.error(result.msg);
-                }
-            }
-        });
-        }else{
-            toastr.warning("请先登录");
-            return;
-        }
-    });
-    function lease(id,imgSrc,rent){
-        var account = [[${account}]];
-        if(!account){
-            toastr.warning("请先登录");
-            return;
-        }
-        $("#imgDesc").empty();
-        $("#imgDesc").append('<img src="'+imgSrc+'" alt="" class="img-fluid">');
-        $("#vehicleId").val(id);
-        $("#rent").val(rent);
-        $("#userId").val(account.id);
-        $("#leasePanel").modal('show');
-    }
 	function loadFavorable() {
 		$.ajax({
 			url:[[@{/unverify/getFavorableInfo}]],
@@ -756,224 +996,6 @@
 		}
 	})
 	}
-    layui.use(['layer','form'],function(){
-        var layer = layui.layer;
-        var form = layui.form;
-        //登录的点击事件
-        $("#sub").on("click",function(){
-            login();
-        });
-		$("#regsub").on("click",function(){
-			$("#subForm").click();
-		});
-        $("#subPass").on("click",function(){
-            editPass();
-        });
-		function editPass(){
-			var passwordO = $("#oldPassword").val();
-			var password = $("#newPassword").val();
-			var conPassword = $("#conPassword").val();
-			var id = $("#accountId").val();
-            var index_ = layer.load(1);
-            if(password !== conPassword){
-                toastr.warning("两次密码输入不一致");
-                layer.close(index_);
-                return false;
-            }
-            password = encode64(password);
-            passwordO = encode64(passwordO);
-            $.ajax({
-                url:[[@{user/update}]],
-            	data:{"password":password,"passwordO":passwordO,"id":id},
-                type:"post",
-                dataType:"json",
-                success:function(result){
-                if(result.success){
-                    toastr.success("保存成功");
-                    window.location = [[@{/}]];
-                }else{
-                        toastr.warning(result.msg);
-
-                }
-                layer.close(index_);
-            },
-        });
-
-		}
-
-        function login(){
-            var username = $("#username").val();
-            var password = $("#password").val();
-            var empPattern = /^\s*$/;
-            if (empPattern.test(username) || empPattern.test(password)){
-                toastr.warning("用户名或密码不能为空");
-                return;
-            }
-            password = encode64(password);
-            $.ajax({
-                url:[[@{/login}]],
-                data:{"username":username,"password":password, "type":"2"},
-                type:"post",
-                    dataType:"json",
-                    success:function(result){
-                    if(result.success){
-                        window.location.reload();
-                        }else{
-                            toastr.warning(result.msg);
-                        }
-                    }
-                })
-        }
-
-		form.verify({
-			pass: [
-				/^[\S]{6,12}$/
-				,'密码必须6到12位，且不能出现空格'
-			],
-			username: [
-				/^[a-zA-Z0-9_-]{4,16}$/
-				,'用户名必须4到16位（数字，字码，下划线，减号）'
-			],
-			mail: [
-				/^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/
-				,'邮箱格式错误'
-			]
-		});
-        //监听提交
-        form.on('submit(subForm)', function(data){
-            console.log(data);
-            if(data.field.password !== data.field.ConfirmPassword){
-                layer.msg("两次密码输入不一致");
-                return false;
-            }
-            data.field.ConfirmPassword = "";
-            data.field.password = encode64(data.field.password);
-            $.ajax({
-                url:[[@{/user/saveUser}]],
-            	data:data.field,
-                type:"post",
-                dataType:"json",
-                success:function(result){
-                if(result.success){
-                    layer.msg("保存成功，请登录");
-                    window.location=[[@{/}]]
-                    }else{
-                        layer.msg(result.msg);
-                    }
-                },
-
-            });
-            return false;
-        });
-    })
-    function loadAddress(id) {
-        $.ajax({
-            url:[[@{/unverify/getAddress}]],
-        type:"post",
-            dataType:"json",
-            success:function(result){
-            if(result.success){
-                for(var i =0;i<result.obj.length;i++){
-                    $("#"+id+"Prov").append('<option value="'+result.obj[i]+'">'+result.obj[i]+'</option>')
-                }
-
-            }else{
-                toastr.warning(result.msg);
-            }
-        }
-    })
-    }
-    function changeProv(id){
-        var prov = $("#"+id+"Prov").val();
-        if(prov){
-            $.ajax({
-                url:[[@{/unverify/getAddress}]],
-            type:"post",
-                data:{"prov":prov},
-            dataType:"json",
-                success:function(result){
-                if(result.success){
-                    resetObCity(id);
-                    for(var i =0;i<result.obj.length;i++){
-                        $("#"+id+"City").append('<option value="'+result.obj[i]+'">'+result.obj[i]+'</option>');
-                    }
-                    resetObArea(id);
-                    resetObShop(id);
-                }else{
-                    toastr.warning(result.msg);
-                }
-            }
-        })
-        }else{
-            resetObCity(id);
-            resetObArea(id);
-            resetObShop(id);
-        }
-    }
-    function changeCity(id){
-        var prov = $("#"+id+"Prov").val();
-        var city = $("#"+id+"City").val();
-        if(city){
-            $.ajax({
-                url:[[@{/unverify/getAddress}]],
-            type:"post",
-                data:{"prov":prov, "city":city},
-            dataType:"json",
-                success:function(result){
-                if(result.success){
-
-                    resetObArea(id);
-                    for(var i =0;i<result.obj.length;i++){
-                        $("#"+id+"Area").append('<option value="'+result.obj[i]+'">'+result.obj[i]+'</option>');
-                    }
-                    resetObShop(id);
-                }else{
-                    toastr.warning(result.msg);
-                }
-            }
-        })
-        }else{
-            resetObArea(id);
-            resetObShop(id);
-        }
-    }
-    function changeArea(id){
-        var prov = $("#"+id+"Prov").val();
-        var city = $("#"+id+"City").val();
-        var area = $("#"+id+"Area").val();
-        if(area){
-            $.ajax({
-                url:[[@{/unverify/getAddress}]],
-            type:"post",
-                data:{"prov":prov, "city":city, "area": area},
-            dataType:"json",
-                success:function(result){
-                if(result.success){
-                    resetObShop(id);
-                    for(var i =0;i<result.obj.length;i++){
-                        $("#"+id+"Shop").append('<option value="'+result.obj[i]+'">'+result.obj[i]+'</option>');
-                    }
-                }else{
-                    toastr.warning(result.msg);
-                }
-            }
-        })
-        }else{
-            resetObShop(id);
-        }
-    }
-    function resetObCity(id){
-        $("#"+id+"City").empty();
-        $("#"+id+"City").append('<option value="">请选择</option>');
-    }
-    function resetObArea(id){
-        $("#"+id+"Area").empty();
-        $("#"+id+"Area").append('<option value="">请选择</option>');
-    }
-    function resetObShop(id){
-        $("#"+id+"Shop").empty();
-        $("#"+id+"Shop").append('<option value="">请选择</option>');
-    }
     /*]]>*/
 </script>
 
