@@ -154,9 +154,9 @@
                 <div class="dropdown-menu">
                     <a href="#" class="dropdown-item" data-toggle="modal" aria-pressed="false" data-target="#changePass">
                         <i class="fas fa-lock"></i> 修改密码</a>
-                    <a href="#" class="dropdown-item" data-toggle="modal" aria-pressed="false" data-target="#changePass">
+                    <a href="#" class="dropdown-item" data-toggle="modal" aria-pressed="false" data-target="#upgradeVipPanel">
                         <i class="fas fa-superpowers"></i> 升级VIP</a>
-                    <a href="#" class="dropdown-item" data-toggle="modal" aria-pressed="false" data-target="#changePass">
+                    <a href="#" class="dropdown-item" data-toggle="modal" aria-pressed="false" data-target="#rechargePanel">
                         <i class="fas fa-money-bill-alt"></i> 充值</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" th:href="@{/route/logout}">
@@ -619,6 +619,52 @@
     }
     /*]]>*/
 </script>
+<div class="modal fade" id="upgradeVipPanel">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">请注意</h4>
+            </div>
+            <div class="modal-body">
+                <p>升级为VIP用户将扣除相应费用</p>
+                <span>本期12个月共899元</span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="onUpgrade()">确定</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<script type="text/javascript" th:inline="javascript">
+    /*<![CDATA[*/
+    function onUpgrade(){
+        var orderId = $("#orderId").val();
+        if(orderId){
+            var data = {
+                "id":$("#accountId").val(),
+                "isVip":"1"
+            };
+            $.ajax({
+                url:[[@{/user/update}]],
+            data:data,
+                type:"post",
+                dataType:"json",
+                success:function(result){
+                if(result.success){
+                    toastr.success("升级成功");
+                    $("#upgradeVipPanel").modal("hide");
+                    window.location.reload();
+                }else{
+                    toastr.error(result.msg);
+                }
+            }
+        });
+        }
+    }
+    /*]]>*/
+</script>
 <div class="modal fade" id="payConfirm">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -783,7 +829,6 @@
             }]
     });
 function formatOrderInfo(value, row, index) {
-    console.log(row);
     var vehicle = row.vehicle;
     var imgSrc =[[@{/uploaded/}]]+vehicle.imgPath;
     var html =
