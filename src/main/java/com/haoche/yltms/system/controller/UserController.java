@@ -17,6 +17,7 @@ import org.thymeleaf.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -119,5 +120,41 @@ public class UserController {
             tableData.setMsg(e.getMessage());
         }
         return tableData;
+    }
+
+    @ResponseBody
+    @RequestMapping("/upgradeVip")
+    public Result upgradeVip(String id){
+        Result result = new Result();
+        try {
+            User user = this.userService.findById(id);
+            user.setIsVip("1");
+            user.setBalance(user.getBalance().subtract(new BigDecimal("899")));
+            if(user.getBalance().compareTo(BigDecimal.ZERO) < 0){
+                result.setSuccess(false);
+                result.setMsg("余额不足");
+                return result;
+            }
+            this.userService.save(user);
+        } catch (Exception e){
+            e.printStackTrace();
+            result.setMsg(e.getMessage());
+        }
+        return result;
+    }
+
+    @ResponseBody
+    @RequestMapping("/recharge")
+    public Result recharge(String id, String money){
+        Result result = new Result();
+        try {
+            User user = this.userService.findById(id);
+            user.setBalance(user.getBalance().add(new BigDecimal(money)));
+            this.userService.save(user);
+        } catch (Exception e){
+            e.printStackTrace();
+            result.setMsg(e.getMessage());
+        }
+        return result;
     }
 }
