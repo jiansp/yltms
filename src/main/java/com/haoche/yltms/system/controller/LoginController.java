@@ -3,6 +3,7 @@ package com.haoche.yltms.system.controller;
 import com.haoche.yltms.config.LoginInterceptor;
 import com.haoche.yltms.system.model.User;
 import com.haoche.yltms.system.service.LoginService;
+import com.haoche.yltms.system.service.UserService;
 import com.haoche.yltms.system.vo.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,12 +18,14 @@ import javax.servlet.http.HttpSession;
 public class LoginController {
     @Autowired
     private LoginService loginService;
+    @Autowired
+    private UserService userService;
 
 
     @RequestMapping("/")
     public String login(HttpSession session, Model model) {
         User user = (User) session.getAttribute(LoginInterceptor.SESSION_KEY);
-        model.addAttribute("account",user);
+        model.addAttribute("account",user != null?userService.findById(user.getId()):null);
         return "ylt/index";
     }
 

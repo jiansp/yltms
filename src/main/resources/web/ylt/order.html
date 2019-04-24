@@ -146,11 +146,11 @@
 
         </div>
 
-        <div id="yesLogin" class="col-md-4 top-forms mt-md-3 mt-2 mb-md-0 mb-3">
+        <div id="yesLogin" class="col-md-4 top-forms mt-md-3 mt-2 mb-md-0 mb-3" style="margin-top: 5px !important;">
+            <img id="vipMark" th:src="@{/img/vip.png}" style="width: 45px;height: 38px">
             <div class="btn-group">
                 <button id="nameSpan" style="color:#fff" type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <!--<i id="ordinaryCard" class="fa fa-user"></i><i id="goldCard" class="fa fa-get-pocket"></i>-->
-                    <i id="ordinaryCard" class="base-icon ordinary-card"></i><i id="goldCard" class="base-icon gold-card"></i>
+                    <i class="fa fa-user"></i>
                 </button>
                 <div class="dropdown-menu">
                     <a href="#" class="dropdown-item" data-toggle="modal" aria-pressed="false" data-target="#changePass">
@@ -833,11 +833,8 @@
             $("#accountId").val(account.id);
             if(account.isVip === "1"){
                 $("#vipButton").hide();
-                $("#ordinaryCard").hide();
-                $("#goldCard").show();
             }else{
-                $("#ordinaryCard").show();
-                $("#goldCard").hide();
+                $("#vipMark").hide();
             }
 
         } else {

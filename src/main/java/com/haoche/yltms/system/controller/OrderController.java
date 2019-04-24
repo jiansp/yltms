@@ -4,6 +4,7 @@ import com.haoche.yltms.config.LoginInterceptor;
 import com.haoche.yltms.system.model.RentOrder;
 import com.haoche.yltms.system.model.User;
 import com.haoche.yltms.system.service.OrderService;
+import com.haoche.yltms.system.service.UserService;
 import com.haoche.yltms.system.vo.Result;
 import com.haoche.yltms.system.vo.TableData;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,8 @@ import java.util.Map;
 public class OrderController {
     @Autowired
     private OrderService orderService;
+    @Autowired
+    private UserService userService;
 
     @RequestMapping("/browseVehicle")
     public String browseVehicle(){
@@ -32,7 +35,7 @@ public class OrderController {
 
     @RequestMapping("/order")
     public String order(@SessionAttribute(LoginInterceptor.SESSION_KEY) User user, Model model){
-        model.addAttribute("account",user);
+        model.addAttribute("account",user != null?userService.findById(user.getId()):null);
         return "ylt/order";
     }
 

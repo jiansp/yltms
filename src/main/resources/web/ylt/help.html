@@ -1,11 +1,5 @@
-<!--
-	Author: W3layouts
-	Author URL: http://w3layouts.com
-	License: Creative Commons Attribution 3.0 Unported
-	License URL: http://creativecommons.org/licenses/by/3.0/
--->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 <title>Taxi Cab Transportation Category Flat Bootstrap Responsive Website Template | Contact :: W3layouts</title>
 	
@@ -23,17 +17,11 @@
 			window.scrollTo(0, 1);
 		}
 	</script>
-	<!--// Meta tag Keywords -->
-	
-	<!-- css files -->
-	<link rel="stylesheet" href="css/bootstrap.min.css"> <!-- Bootstrap-Core-CSS -->
-	<link rel="stylesheet" href="css/style.css" type="text/css" media="all" /> <!-- Style-CSS --> 
-	<link rel="stylesheet" href="css/fontawesome-all.css"> <!-- Font-Awesome-Icons-CSS -->
-	<!-- //css files -->
 
-	<!-- web-fonts -->
+	<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}"> <!-- Bootstrap-Core-CSS -->
+	<link rel="stylesheet" th:href="@{/css/style.css}" type="text/css" media="all" /> <!-- Style-CSS -->
+	<link rel="stylesheet" th:href="@{/css/fontawesome-all.css}"> <!-- Font-Awesome-Icons-CSS -->
 	<link href="//fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&amp;subset=latin-ext" rel="stylesheet">
-	<!-- //web-fonts -->
 	
 </head>
 
@@ -66,7 +54,7 @@
 		</div>
 	</div>
 	
-	<div class="banner" id="home">
+<div class="banner" id="home">
 		<!-- header -->
 		<header>
 			<nav class="navbar navbar-expand-lg navbar-light bg-light top-header">
@@ -103,7 +91,7 @@
 							</div>
 						</li>
 						<li class="nav-item active">
-							<a class="nav-link" href="contact.html">Contact</a>
+							<a class="nav-link" href="help.html">Contact</a>
 						</li>
 					</ul>
 
@@ -112,9 +100,7 @@
 		</header>
 		<!-- //header -->
 	</div>
-	<!-- //banner -->
 
-<!-- Contact -->
 <section class="contact py-5">
 	<div class="container py-lg-5">
 		<h1 class="heading text-capitalize text-center">Contact Us</h1>
@@ -187,10 +173,7 @@
 			
 	</div>
 </section>
-<!-- //Contact -->
-	
-	
-<!--footer-->
+
 <footer class="py-sm-5 py-4 px-md-5 px-3">
 	<div class="container-fluid pt-lg-5">
 		<div class="row">
@@ -216,7 +199,7 @@
 					<div class="blog-grids row mb-3">
 						<div class="col-4 pr-0 blog-grid-left">
 							<a href="#">
-								<img src="images/blog1.jpg" class="img-fluid" alt="">
+								<img th:src="@{/images/blog1.jpg}" class="img-fluid" alt="">
 							</a>
 						</div>
 						<div class="col-8 blog-grid-right">
@@ -234,7 +217,7 @@
 					<div class="blog-grids row mb-3">
 						<div class="col-4 pr-0 blog-grid-left">
 							<a href="#">
-								<img src="images/blog2.jpg" class="img-fluid" alt="">
+								<img th:src="@{/images/blog2.jpg}" class="img-fluid" alt="">
 							</a>
 						</div>
 						<div class="col-8 blog-grid-right">
@@ -252,7 +235,7 @@
 					<div class="blog-grids row">
 						<div class="col-4 pr-0 blog-grid-left">
 							<a href="#">
-								<img src="images/blog3.jpg" class="img-fluid" alt="">
+								<img th:src="@{/images/blog3.jpg}" class="img-fluid" alt="">
 							</a>
 						</div>
 						<div class="col-8 blog-grid-right">
@@ -328,9 +311,7 @@
 		<!-- //copyright -->
 	</div>
 </footer>
-<!-- //footer -->
-			
-<!-- login and register modal -->
+
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
@@ -414,96 +395,27 @@
 		</div>
 	</div>
 </div>
-<!-- //login and register modal -->
 
-<!-- js-scripts -->		
-
-	<!-- js -->
-	<script type="text/javascript" src="js/jquery.min.js"></script>
-	<script type="text/javascript" src="js/bootstrap.min.js"></script> <!-- Necessary-JavaScript-File-For-Bootstrap -->
-	<!-- //js -->
-	
-	<!-- carousel -->
-	<script src="js/owl.carousel.js"></script>
-	<script>
-		$(document).ready(function () {
-			$('.owl-carousel').owlCarousel({
-				loop: true,
-				margin: 10,
-				responsiveClass: true,
-				responsive: {
-					0: {
-						items: 1,
-						nav: true
-					},
-					600: {
-						items: 1,
-						nav: false
-					},
-					900: {
-						items: 2,
-						nav: false
-					},
-					1000: {
-						items: 3,
-						nav: true,
-						loop: false,
-						margin: 20
-					}
-				}
-			})
-		})
-	</script>
-	<!-- //carousel -->
-
-	<!--slider-->
-	<script src="js/responsiveslides.min.js"></script>
-	<script>
-		$(function () {
-			// Slideshow 1
-			$("#slider1").responsiveSlides({
-				auto: true,
-				pager: true,
-				nav: true,
-				speed: 500,
-				namespace: "centered-btns"
-			});
+<script type="text/javascript" th:src="@{/js/jquery-2.1.4.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/owl.carousel.js}"></script>
+<script th:src="@{/js/responsiveslides.min.js}"></script>
+<script th:src="@{/js/SmoothScroll.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/move-top.js}"></script>
+<script type="text/javascript" th:src="@{/js/easing.js}"></script>
+<script type="text/javascript">
+	jQuery(document).ready(function($) {
+		$(".scroll").click(function(event){
+			event.preventDefault();
+			$('html,body').animate({scrollTop:$(this.hash).offset().top},1000);
 		});
-	</script>
-	<!--//slider-->
-
-	<!-- start-smoth-scrolling -->
-	<script src="js/SmoothScroll.min.js"></script>
-	<script type="text/javascript" src="js/move-top.js"></script>
-	<script type="text/javascript" src="js/easing.js"></script>
-	<script type="text/javascript">
-		jQuery(document).ready(function($) {
-			$(".scroll").click(function(event){		
-				event.preventDefault();
-				$('html,body').animate({scrollTop:$(this.hash).offset().top},1000);
-			});
+	});
+</script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$().UItoTop({ easingType: 'easeOutQuart' });
 		});
-	</script>
-	<!-- here stars scrolling icon -->
-	<script type="text/javascript">
-		$(document).ready(function() {
-			/*
-				var defaults = {
-				containerID: 'toTop', // fading element id
-				containerHoverID: 'toTopHover', // fading element hover id
-				scrollSpeed: 1200,
-				easingType: 'linear' 
-				};
-			*/
-								
-			$().UItoTop({ easingType: 'easeOutQuart' });
-								
-			});
-	</script>
-	<!-- //here ends scrolling icon -->
-	<!-- start-smoth-scrolling -->
-	
-<!-- //js-scripts -->
+</script>
 
 </body>
 </html>
