@@ -16,3 +16,15 @@
   background-size: cover;
   outline: 0;
 }
+.ordinary-card{
+  width: 45px;
+  height: 20px;
+  background-position: -360px -465px;
+  display: -webkit-inline-box;
+}
+.gold-card{
+  width: 45px;
+  height: 20px;
+  background-position: -470px -465px;
+  display: -webkit-inline-box;
+}

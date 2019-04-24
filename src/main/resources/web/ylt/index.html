@@ -116,24 +116,25 @@
 
 		</div>
 
-		<div id="yesLogin" class="col-md-4 top-forms mt-md-3 mt-2 mb-md-0 mb-3">
-			<div class="btn-group">
-				<button id="nameSpan" style="color:#fff" type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-					<i class="fas fa-user"></i>
-				</button>
-				<div class="dropdown-menu">
-					<a href="#" class="dropdown-item" data-toggle="modal" aria-pressed="false" data-target="#changePass">
-						<i class="fas fa-lock"></i> 修改密码</a>
-					<a href="#" class="dropdown-item" data-toggle="modal" aria-pressed="false" data-target="#changePass">
-						<i class="fas fa-superpowers"></i> 升级VIP</a>
-					<a href="#" class="dropdown-item" data-toggle="modal" aria-pressed="false" data-target="#changePass">
-						<i class="fas fa-money-bill-alt"></i> 充值</a>
-					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" th:href="@{/route/logout}">
-						<i class="fas fa-outdent"></i> 安全退出</a>
-				</div>
-			</div>
-		</div>
+        <div id="yesLogin" class="col-md-4 top-forms mt-md-3 mt-2 mb-md-0 mb-3">
+            <div class="btn-group">
+                <button id="nameSpan" style="color:#fff" type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <!--<i id="ordinaryCard" class="fa fa-user"></i><i id="goldCard" class="fa fa-get-pocket"></i>-->
+                    <i id="ordinaryCard" class="base-icon ordinary-card"></i><i id="goldCard" class="base-icon gold-card"></i>
+                </button>
+                <div class="dropdown-menu">
+                    <a href="#" class="dropdown-item" data-toggle="modal" aria-pressed="false" data-target="#changePass">
+                        <i class="fas fa-lock"></i> 修改密码</a>
+                    <a id="vipButton" href="#" class="dropdown-item" data-toggle="modal" aria-pressed="false" data-target="#upgradeVipPanel">
+                        <i class="fas fa-superpowers"></i> 升级VIP</a>
+                    <a href="#" class="dropdown-item" data-toggle="modal" aria-pressed="false" data-target="#rechargePanel">
+                        <i class="fas fa-money-bill-alt"></i> 充值</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" th:href="@{/route/logout}">
+                        <i class="fas fa-outdent"></i> 安全退出</a>
+                </div>
+            </div>
+        </div>
 	</div>
 </div>
 <div class="banner" id="home">
@@ -661,12 +662,17 @@
 			return;
 		}
 	});
-	function lease(id,imgSrc,rent){
+	function lease(id,imgSrc,rent,isVip){
 		var account = [[${account}]];
 		if(!account){
 			toastr.warning("请先登录");
 			return;
 		}
+		if(isVip === "1" && account.isVip !== "1"){
+            toastr.warning("此优惠只限于VIP用户");
+            return;
+		}
+
 		$("#imgDesc").empty();
 		$("#imgDesc").append('<img src="'+imgSrc+'" alt="" class="img-fluid">');
 		$("#vehicleId").val(id);
@@ -911,6 +917,100 @@
 	}
 	/*]]>*/
 </script>
+<div class="modal fade" id="upgradeVipPanel">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">请注意</h4>
+            </div>
+            <div class="modal-body">
+                <p>升级为VIP用户将扣除相应费用</p>
+                <span>本期12个月共899元</span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="onUpgrade()">确定</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<script type="text/javascript" th:inline="javascript">
+    /*<![CDATA[*/
+    function onUpgrade(){
+        var data = {
+            "id":$("#accountId").val()
+        };
+        $.ajax({
+            url:[[@{/user/upgradeVip}]],
+        data:data,
+            type:"post",
+            dataType:"json",
+            success:function(result){
+            if(result.success){
+                toastr.success("升级成功");
+                $("#upgradeVipPanel").modal("hide");
+                window.location.reload();
+            }else{
+                toastr.error(result.msg);
+            }
+        }
+    });
+    }
+    /*]]>*/
+</script>
+<div class="modal fade" id="rechargePanel">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">充值</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="recharge" class="col-form-label">充值金额</label>
+                    <input type="text" class="form-control" placeholder="金额" id="recharge" required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="onRecharge()">确定</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<script type="text/javascript" th:inline="javascript">
+    /*<![CDATA[*/
+    function onRecharge(){
+        var reg = /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/;
+        var money = $("#recharge").val();
+        if(!reg.test(money)){
+            toastr.error("请输入有效的金额");
+            return;
+        }
+        var data = {
+            "id":$("#accountId").val(),
+            "money":money
+        };
+        $.ajax({
+            url:[[@{/user/recharge}]],
+        data:data,
+            type:"post",
+            dataType:"json",
+            success:function(result){
+            if(result.success){
+                toastr.success("充值成功");
+                $("#rechargePanel").modal("hide");
+                $("#recharge").val("");
+                // window.location.reload();
+            }else{
+                toastr.error(result.msg);
+            }
+        }
+    });
+    }
+    /*]]>*/
+</script>
 
 	<script th:src="@{/js/owl.carousel.js}"></script>
 	<script th:src="@{/js/responsiveslides.min.js}"></script>
@@ -942,6 +1042,14 @@
             $("#yesLogin").show();
             $("#nameSpan").append(account.username);
             $("#accountId").val(account.id);
+            if(account.isVip === "1"){
+                $("#vipButton").hide();
+                $("#ordinaryCard").hide();
+                $("#goldCard").show();
+            }else{
+                $("#ordinaryCard").show();
+                $("#goldCard").hide();
+            }
         }else{
             $("#noLogin").show();
             $("#yesLogin").hide();
