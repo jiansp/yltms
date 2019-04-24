@@ -1,6 +1,9 @@
 ﻿.base-icon{
   background: url(../img/icon.png) no-repeat;
 }
+.vip-icon{
+  background: url(../img/vip.png) no-repeat;
+}
 .lease-modal-content {
   position: relative;
   display: -webkit-box;
