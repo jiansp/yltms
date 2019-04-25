@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50637
 File Encoding         : 65001
 
-Date: 2019-04-22 22:39:26
+Date: 2019-04-25 22:46:23
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -39,6 +39,32 @@ CREATE TABLE `favorable` (
 -- ----------------------------
 INSERT INTO `favorable` VALUES ('9373148bfa164c9c9583885b8b2026d9', '2019-04-21 02:23:30', '9dd82f8709e2411a9f196defd9f2fbe0', '2019-04-21 02:26:56', '9dd82f8709e2411a9f196defd9f2fbe0', null, null, null, '98b060352d9040c9b05dd1408481ade9', '0.8', '1');
 INSERT INTO `favorable` VALUES ('c94165f4793449a9aa1859c4c0439369', '2019-04-22 14:18:56', '9dd82f8709e2411a9f196defd9f2fbe0', null, null, null, null, null, '6836d60cfe08454dbf92d2624bfd5388', '0.5', '0');
+
+-- ----------------------------
+-- Table structure for feedback
+-- ----------------------------
+DROP TABLE IF EXISTS `feedback`;
+CREATE TABLE `feedback` (
+  `ID` char(32) NOT NULL,
+  `CREATE_TIME` datetime DEFAULT NULL,
+  `CREATOR` char(32) DEFAULT NULL,
+  `MODIFY_TIME` datetime DEFAULT NULL,
+  `MODIFIER` char(32) DEFAULT NULL,
+  `DELETE_TIME` datetime DEFAULT NULL,
+  `DELETER` char(32) DEFAULT NULL,
+  `IS_DELETE` varchar(2) DEFAULT NULL COMMENT '1：删除',
+  `NAME` varchar(16) DEFAULT NULL,
+  `PHONE` varchar(16) DEFAULT NULL,
+  `EMAIL` varchar(64) DEFAULT NULL,
+  `MESSAGE` longtext,
+  `USER_ID` char(32) DEFAULT NULL,
+  `STATUS` varchar(2) DEFAULT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='反馈信息';
+
+-- ----------------------------
+-- Records of feedback
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for hibernate_sequence
@@ -211,7 +237,7 @@ INSERT INTO `user` VALUES ('badc904960f04bfabdcc16b67fe03e5e', 'a11111111111', '
 INSERT INTO `user` VALUES ('bf52cd0b4e634848a9bc43b99151e2da', 'a1222222222222', 'MTExMTEx', 'yiyue xie', '1', null, '2019-02-28 16:00:00', '18622909550', 'xieyiyue1991@163.com', '21A Bellecor Drive MANOR', '2019-03-22 12:13:29', null, null, null, null, null, null, '2', null, null);
 INSERT INTO `user` VALUES ('c8984d8aadbd48e6810118adb4731b9d', 'a12222222222222', 'MTExMTEx', 'yiyue xie', '1', null, '2019-02-28 16:00:00', '18622909550', 'xieyiyue1991@163.com', '21A Bellecor Drive MANOR', '2019-03-22 12:13:31', null, null, null, null, null, null, '2', null, null);
 INSERT INTO `user` VALUES ('cfb4a5908fac48b1bc8e47638d894ca6', 'a111111111111', 'MTExMTEx', 'yiyue xie', '1', null, '2019-02-28 16:00:00', '18622909550', 'xieyiyue1991@163.com', '21A Bellecor Drive MANOR', '2019-03-22 12:12:56', null, null, null, null, null, null, '2', null, null);
-INSERT INTO `user` VALUES ('cff71855a49549adac1379a3e46b26e5', 'qwerty', 'MTExMTEx', null, null, null, null, null, 'xieyiyue1991@163.com', null, '2019-04-02 15:22:00', null, null, null, null, null, null, '2', '999999579.00', null);
+INSERT INTO `user` VALUES ('cff71855a49549adac1379a3e46b26e5', 'qwerty', 'MTExMTEx', null, null, null, null, null, 'xieyiyue1991@163.com', null, '2019-04-02 15:22:00', null, '2019-04-24 14:14:25', null, null, null, null, '2', '4814.00', '1');
 INSERT INTO `user` VALUES ('d8c41871e9b543d1897b1c65674240ea', 'a1222222', 'MTExMTEx', 'yiyue xie', '1', null, '2019-02-28 16:00:00', '18622909550', 'xieyiyue1991@163.com', '21A Bellecor Drive MANOR', '2019-03-22 12:13:19', null, null, null, null, null, null, '2', null, null);
 INSERT INTO `user` VALUES ('e1afb76d77ad4268b56f4d3fe6e483fd', 'a1222', 'MTExMTEx', 'yiyue xie', '1', null, '2019-02-28 16:00:00', '18622909550', 'xieyiyue1991@163.com', '21A Bellecor Drive MANOR', '2019-03-22 12:13:15', null, null, null, null, null, null, '2', null, null);
 INSERT INTO `user` VALUES ('e3e8171e916145d7a604d3fb6927eea5', 'a333333333', 'MTExMTEx', 'yiyue xie', '1', null, '2019-02-28 16:00:00', '18622909550', 'xieyiyue1991@163.com', '21A Bellecor Drive MANOR', '2019-03-22 12:13:46', null, null, null, null, null, null, '2', null, null);

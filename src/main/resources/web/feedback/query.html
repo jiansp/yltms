@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="inc">
+<body>
+<div th:fragment="content">
+    <table class="layui-hide" id="feedbackTable" lay-filter="test"></table>
+</div>
+<footer  th:fragment="footer">
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-xs" lay-event="process">处理</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    </script>
+    <script th:src="@{/js/utils.js}"></script>
+    <script type="text/javascript" th:inline="javascript">
+        layui.use('table', function(){
+            var table = layui.table;
+            var feedbackTable = table.render({
+                elem: '#feedbackTable'
+                ,url:[[@{/feedback/getFeedbackTable}]]
+                ,toolbar: '#toolbarDemo'
+                ,title: '优惠信息表'
+                ,limit: 10
+                ,limits: [10, 15, 20]
+                ,cols: [
+                    [
+                    {field:'id', title:'id',width:50 }
+                    ,{field:'user', title:'用户名', templet: '<div>{{d.user.username}}</div>'}
+                    ,{field:'name', title:'称呼'}
+                    ,{field:'phone', title:'电话'}
+                    ,{field:'email', title:'邮箱'}
+                    ,{field:'message', title:'信息'}
+                    ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:120}
+                ]
+            ]
+                ,page: true
+                ,done:function(res,curr,count){
+                    $(".layui-table-box").find("[data-field='id']").css("display","none");
+                }
+            });
+
+            //监听行工具事件
+            table.on('tool(test)', function(obj){
+                var data = obj.data;
+                if(obj.event === 'del'){
+                    layer.confirm('真的删除行么', function(index){
+                        var index_ = layer.load(1);
+                        $.ajax({
+                            url:[[@{/feedback/del}]],
+                            data:{"id":data.id},
+                            type:"post",
+                            dataType:"json",
+                            success:function(result){
+                            if(result.success){
+                                layer.msg("删除成功");
+                                feedbackTable.reload();
+                                layer.close(index);
+                            }else{
+                                layer.msg(result.msg);
+                            }
+                            layer.close(index_);
+                        },
+                    });
+                    });
+                } else if(obj.event === 'process'){
+                    layer.confirm('确定处理此条信息吗', function(index){
+                        var index_ = layer.load(1);
+                        $.ajax({
+                            url:[[@{/feedback/process}]],
+                        data:{"id":data.id},
+                        type:"post",
+                            dataType:"json",
+                            success:function(result){
+                            if(result.success){
+                                layer.msg("处理成功");
+                                feedbackTable.reload();
+                                layer.close(index);
+                            }else{
+                                layer.msg(result.msg);
+                            }
+                            layer.close(index_);
+                        },
+                    });
+                    });
+                }
+            });
+        });
+    </script>
+</footer>
+</body>
+</html>
