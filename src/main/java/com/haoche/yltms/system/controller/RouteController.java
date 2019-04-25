@@ -31,11 +31,11 @@ public class RouteController {
         return "ylt/help";
     }
 
-    @RequestMapping("/aboutUs")
+    @RequestMapping("/feedback")
     public String about(HttpSession session, Model model){
         User user = (User) session.getAttribute(LoginInterceptor.SESSION_KEY);
         model.addAttribute("account",user != null?userService.findById(user.getId()):null);
-        return "ylt/about";
+        return "ylt/feedback";
     }
 
     @RequestMapping("/logout")
