@@ -183,12 +183,18 @@
                 </div>
                 <div class="agileinfo-contact-form-grid">
                     <form id="feedbackForm" action="#" method="post">
-                        <input type="text" name="name" placeholder="称呼" required="">
-                        <input type="text" name="phone" placeholder="电话" required="">
-                        <input type="email" name="email" placeholder="邮箱" required="">
+                        <div class="form-group">
+                            <input type="text" name="name" placeholder="称呼" required="">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="phone" placeholder="电话" required="">
+                        </div>
+                        <div class="form-group">
+                            <input type="email" name="email" placeholder="邮箱" required="">
+                        </div>
                         <textarea name="message" placeholder="意见建议" required=""></textarea>
-                        <button onclick="submit()" class="btn1">提交</button>
                     </form>
+                    <button onclick="submit()" class="btn1">提交</button>
                 </div>
             </div>
         </div>
@@ -821,9 +827,18 @@
     });
 
     function submit(){
+        var account = [[${account}]];
+        if (!account) {
+            toastr.error("请先登录");
+            return;
+        }
         var bootstrapValidator = $("#feedbackForm").data('bootstrapValidator').isValid();
-        if(bootstrapValidator){
+        if(!bootstrapValidator){
+            toastr.error("请填写正确的信息");
+            return;
+        }
             var data = $("#feedbackForm").serializeObject();
+            console.log(data);
             $.ajax({
                 url:[[@{/feedback/save}]],
                 data:data,
@@ -832,12 +847,12 @@
                 success:function(result){
                 if(result.success){
                     toastr.success("提交成功");
+                    $("#feedbackForm")[0].reset();
                 }else{
                     toastr.error(result.msg);
                 }
             }
         });
-        }
     }
 
     /*]]>*/

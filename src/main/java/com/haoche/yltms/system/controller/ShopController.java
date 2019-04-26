@@ -25,7 +25,8 @@ public class ShopController {
     private ShopService shopService;
 
     @RequestMapping("/query")
-    public String query(@SessionAttribute(LoginInterceptor.SESSION_KEY) User user, Model model){
+    public String query(@SessionAttribute(LoginInterceptor.SESSION_KEY) User user, Model model, String index){
+        user.setIndex(index);
         model.addAttribute("account",user);
         return "shop/query";
     }

@@ -6,8 +6,20 @@
     <table class="layui-hide" id="feedbackTable" lay-filter="test"></table>
 </div>
 <footer  th:fragment="footer">
+    <script type="text/html" id="toolbarDemo">
+        <div class="layui-input-block">
+            <div class="layui-input-inline">
+                <input id="username" type="text" placeholder="请输入称呼" class="layui-input">
+            </div>
+            <div class="layui-input-inline">
+                <button class="layui-btn" lay-event="search">搜索</button>
+            </div>
+        </div>
+    </script>
     <script type="text/html" id="barDemo">
+        {{#  if(d.status == 1){ }}
         <a class="layui-btn layui-btn-xs" lay-event="process">处理</a>
+        {{#  } }}
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
     </script>
     <script th:src="@{/js/utils.js}"></script>
@@ -29,6 +41,9 @@
                     ,{field:'phone', title:'电话'}
                     ,{field:'email', title:'邮箱'}
                     ,{field:'message', title:'信息'}
+                    ,{field:'status', title:'状态', templet: function(res){
+                            return feedbackStatus[res.status]
+                        }}
                     ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:120}
                 ]
             ]
@@ -36,6 +51,21 @@
                 ,done:function(res,curr,count){
                     $(".layui-table-box").find("[data-field='id']").css("display","none");
                 }
+            });
+
+            table.on('toolbar(test)', function(obj){
+                switch(obj.event){
+                    case 'search':
+                        feedbackTable.reload({
+                            where: { //设定异步数据接口的额外参数，任意设
+                                username: $("#username").val()
+                            }
+                            ,page: {
+                                curr: 1 //重新从第 1 页开始
+                            }
+                        });
+                        break;
+                };
             });
 
             //监听行工具事件

@@ -7,25 +7,21 @@
     <link rel="shortcut icon" type="image/x-icon" th:href="@{/img/car.ico}" />
     <script type="text/javascript" th:src="@{/jquery/jquery.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/encode64.js}"></script>
+
+    <style>
+        .layui-input-block{
+            margin-left: 0px;
+        }
+        .layui-table-view{
+            margin:0 0;
+        }
+    </style>
 </head>
 <body class="layui-layout-body">
 <div class="layui-layout layui-layout-admin">
     <div class="layui-header" th:fragment="header">
-        <div class="layui-logo">亿路通汽车</div>
+        <div class="layui-logo" style="width: 400px;font-size: 20px">浩车集团-亿路通汽车后台管理系统</div>
         <!-- 头部区域（可配合layui已有的水平导航） -->
-        <ul class="layui-nav layui-layout-left">
-            <li class="layui-nav-item"><a href="">控制台</a></li>
-            <li class="layui-nav-item"><a href="">商品管理</a></li>
-            <li class="layui-nav-item"><a href="">用户</a></li>
-            <li class="layui-nav-item">
-                <a href="javascript:">其它系统</a>
-                <dl class="layui-nav-child">
-                    <dd><a href="">邮件管理</a></dd>
-                    <dd><a href="">消息管理</a></dd>
-                    <dd><a href="">授权管理</a></dd>
-                </dl>
-            </li>
-        </ul>
         <ul class="layui-nav layui-layout-right">
             <li class="layui-nav-item">
                 <a href="javascript:">
@@ -43,17 +39,17 @@
         <div class="layui-side-scroll">
             <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
             <ul class="layui-nav layui-nav-tree" id="leftUl"  lay-filter="test">
-                <li class="layui-nav-item"><a th:title="用户管理" th:href="@{/user/query}">用户管理</a></li>
-                <li class="layui-nav-item"><a th:title="车辆管理" th:href="@{/vehicle/query}">车辆管理</a></li>
-                <li class="layui-nav-item"><a th:title="门店管理" th:href="@{/shop/query}">门店管理</a></li>
-                <li class="layui-nav-item"><a th:title="订单管理" th:href="@{/order/query}">订单管理</a></li>
-                <li class="layui-nav-item"><a th:title="优惠信息" th:href="@{/favorable/query}">优惠信息</a></li>
+                <li class="layui-nav-item"><a th:title="用户管理" th:href="@{/user/query(index=0)}">用户管理</a></li>
+                <li class="layui-nav-item"><a th:title="车辆管理" th:href="@{/vehicle/query(index=1)}">车辆管理</a></li>
+                <li class="layui-nav-item"><a th:title="门店管理" th:href="@{/shop/query(index=2)}">门店管理</a></li>
+                <li class="layui-nav-item"><a th:title="订单管理" th:href="@{/order/query(index=3)}">订单管理</a></li>
+                <li class="layui-nav-item"><a th:title="优惠信息" th:href="@{/favorable/query(index=4)}">优惠信息</a></li>
+                <li class="layui-nav-item"><a th:title="信息反馈" th:href="@{/feedback/query(index=5)}">信息反馈</a></li>
             </ul>
         </div>
     </div>
 
     <div class="layui-body" >
-        <div id="titleText" style="padding: 15px"></div>
         <div th:include="::content"></div>
     </div>
 
@@ -64,6 +60,12 @@
 <script th:src="@{/layui/layui.js}"></script>
 <script th:inline="javascript" type="text/javascript">
     /*<![CDATA[*/
+    $(function () {
+        var account = [[${account}]];
+        if(account){
+            $("#leftUl li:eq("+account.index+")").addClass("layui-this");
+        }
+    });
     $('#leftUl').find('li').each(function () {
         $(this).click(function () {
             var objTitle = $(this).children("a").attr('title');

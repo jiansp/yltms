@@ -31,11 +31,17 @@ public class FeedbackServiceImpl implements FeedbackService {
 
     @Override
     public Page<Feedback> findFeedbacks(Integer pageNo, Integer limit, Map<String, String> params) {
+        String username = params.get("username");
         Specification<Feedback> specification = (Specification<Feedback>) (root, criteriaQuery, criteriaBuilder) -> {
             Path<String> isDelete = root.get("isDelete");
             Predicate p1 = criteriaBuilder.isNull(isDelete);
             Predicate p3 = criteriaBuilder.notEqual(isDelete,"1");
             Predicate p = criteriaBuilder.or(p1,p3);
+            if (!StringUtils.isEmpty(username)) {
+                Path<String> usernamePath = root.get("name");
+                Predicate p2 = criteriaBuilder.like(usernamePath, "%" + username + "%");
+                return criteriaBuilder.and(p, p2);
+            }
             return p;
         };
         Sort sort = new Sort(Sort.DEFAULT_DIRECTION, "createTime");

@@ -27,7 +27,7 @@ public class User extends BaseModel {
     private String isVip;
 
     private String passwordO;
-
+    private String index;
 
     @Basic
     @Column(name = "address")
@@ -156,5 +156,14 @@ public class User extends BaseModel {
 
     public void setPasswordO(String passwordO) {
         this.passwordO = passwordO;
+    }
+
+    @Transient
+    public String getIndex() {
+        return index;
+    }
+
+    public void setIndex(String index) {
+        this.index = index;
     }
 }

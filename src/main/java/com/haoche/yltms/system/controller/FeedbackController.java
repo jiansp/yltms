@@ -24,17 +24,18 @@ public class FeedbackController {
     @Autowired
     private FeedbackService feedbackService;
     @RequestMapping("/query")
-    public String query(@SessionAttribute(LoginInterceptor.SESSION_KEY) User user, Model model){
+    public String query(@SessionAttribute(LoginInterceptor.SESSION_KEY) User user, Model model, String index){
+        user.setIndex(index);
         model.addAttribute("account",user);
         return "feedback/query";
     }
 
     @ResponseBody
     @RequestMapping("/getFeedbackTable")
-    public TableData getUserTable(Integer page, Integer limit, String model){
+    public TableData getUserTable(Integer page, Integer limit, String username){
         TableData tableData = new TableData();
         Map<String,String> params = new HashMap<>();
-        params.put("model",model);
+        params.put("username",username);
         try {
             Page<Feedback> feedbackPage = this.feedbackService.findFeedbacks(page,limit,params);
             tableData.setCode(TableData.SUCCESS);
