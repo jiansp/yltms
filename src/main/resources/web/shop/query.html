@@ -2,11 +2,17 @@
 <html xmlns:th="http://www.thymeleaf.org"
       th:replace="inc">
 <body>
-<div th:fragment="content">
-    <table class="layui-hide" id="shopTable" lay-filter="test"></table>
+<div class="layui-row" th:fragment="content">
+    <div class="layui-col-md5">
+        <table class="layui-hide" id="shopTable" lay-filter="shopFilter"></table>
+    </div>
+    <div class="layui-col-md7">
+        <table class="layui-hide" id="vehicleTable" lay-filter="vehicleFilter"></table>
+    </div>
+
 </div>
 <footer  th:fragment="footer">
-    <script type="text/html" id="toolbarDemo">
+    <script type="text/html" id="toolbarShop">
         <div class="layui-input-block">
             <div class="layui-input-inline">
                 <input id="shopName" type="text" placeholder="请输入门店名称" class="layui-input">
@@ -21,7 +27,26 @@
             </div>
         </div>
     </script>
-    <script type="text/html" id="barDemo">
+    <script type="text/html" id="barShop">
+        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    </script>
+    <script type="text/html" id="toolbarVehicle">
+        <div class="layui-input-block">
+            <div class="layui-input-inline">
+                <input id="model" type="text" placeholder="请输入车型" class="layui-input">
+            </div>
+            <div class="layui-input-inline">
+                <button class="layui-btn" lay-event="search">搜索</button>
+            </div>
+            <div class="layui-input-inline">
+                <button class="layui-btn" lay-event="add">
+                    <i class="layui-icon">&#xe654;</i>
+                </button>
+            </div>
+        </div>
+    </script>
+    <script type="text/html" id="barVehicle">
         <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
     </script>
@@ -32,18 +57,19 @@
             var shopTable = table.render({
                 elem: '#shopTable'
                 ,url:[[@{/shop/getShopTable}]]
-                ,toolbar: '#toolbarDemo'
+                ,toolbar: '#toolbarShop'
+                ,height:'full-104'
                 ,title: '门店数据表'
                 ,limit: 10
                 ,limits: [10, 15, 20]
                 ,cols: [
                     [
-                    {field:'id', title:'id',width:50 }
-                    ,{field:'address', title:'门店地址', fixed: 'left', templet: function(res){
+                    ,{field:'id', title:'id'}
+                    ,{field:'address', title:'门店地址', fixed: 'left',width:200, templet: function(res){
                             return '<em>'+ res.prov+'/' +res.city+'/' + res.area +'</em>'
                         }}
-                    ,{field:'shopName', title:'门店名称'}
-                    ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:120}
+                    ,{field:'shopName', title:'门店名称',width:150}
+                    ,{fixed: 'right', title:'操作', toolbar: '#barShop',width:120}
                 ]
             ]
                 ,page: true
@@ -52,8 +78,59 @@
                 }
             });
 
-            table.on('toolbar(test)', function(obj){
-                var checkStatus = table.checkStatus(obj.config.id);
+            //监听行单击事件（单击事件为：rowDouble）
+            table.on('row(shopFilter)', function(obj){
+                var data = obj.data;
+
+                layer.alert(JSON.stringify(data), {
+                    title: '当前行数据：'
+                });
+
+                //标注选中样式
+                obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
+            });
+
+            var vehicleTable = table.render({
+                elem: '#vehicleTable'
+                ,url:[[@{/vehicle/getVehicleTable}]]
+                ,toolbar: '#toolbarVehicle'
+                ,height:'full-104'
+                ,title: '车辆数据表'
+                ,limit: 10
+                ,limits: [10, 15, 20]
+                ,cols: [
+                [
+                    {field:'id', title:'id',width:50 }
+                    ,{field:'license', title:'车牌号', width:120,fixed: 'left'}
+                    ,{field:'brand', title:'品牌', width:120, edit: 'text'}
+                    ,{field:'model', title:'车型', width:80, edit: 'text'}
+                    ,{field:'seatNum', title:'座位数', width:100}
+                    ,{field:'colour', title:'颜色'}
+                    ,{field:'exhaust', title:'排量'}
+                    ,{field:'cubicles', title:'厢数'}
+                    ,{field:'type', title:'类型'}
+                    ,{field:'vin', title:'VIN码', edit: 'text', width:100}
+                    ,{field:'rent', title:'租金'}
+                    ,{field:'firstLicense', title:'首次上牌时间', width:120, templet: function(res){
+                        return '<em>'+ formatDate("yyyy-MM-dd",new Date(res.firstLicense)) +'</em>'
+                    }}
+                    ,{field:'createTime', title:'加入时间', width:120, templet: function(res){
+                        return '<em>'+ formatDate("yyyy-MM-dd hh:mm:ss",new Date(res.createTime)) +'</em>'
+                    }}
+                    ,{field:'imgPath', title:'图片', width:120, templet: function(res){
+                        var src = [[@{/uploaded/}]]+res.imgPath;
+                        return '<img src="'+src+'" height="100" width="100" />';
+                    }}
+                    ,{fixed: 'right', title:'操作', toolbar: '#barVehicle', width:120}
+                ]
+            ]
+                ,page: true
+                ,done:function(res,curr,count){
+                $(".layui-table-box").find("[data-field='id']").css("display","none");
+            }
+        });
+
+            table.on('toolbar(shopFilter)', function(obj){
                 switch(obj.event){
                     case 'add':
                         layer.open({
@@ -82,9 +159,8 @@
             });
 
             //监听行工具事件
-            table.on('tool(test)', function(obj){
+            table.on('tool(shopFilter)', function(obj){
                 var data = obj.data;
-                //console.log(obj)
                 if(obj.event === 'del'){
                     layer.confirm('真的删除行么', function(index){
                         var index_ = layer.load(1);
