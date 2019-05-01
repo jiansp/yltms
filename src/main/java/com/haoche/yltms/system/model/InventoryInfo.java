@@ -6,7 +6,6 @@ import org.hibernate.annotations.NotFoundAction;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "INVENTORY_INFO", schema = "ylt", catalog = "")
 public class InventoryInfo extends BaseModel{
     private String vehicleId;
     private Vehicle vehicle;

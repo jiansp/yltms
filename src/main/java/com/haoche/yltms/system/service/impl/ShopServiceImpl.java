@@ -1,5 +1,6 @@
 package com.haoche.yltms.system.service.impl;
 
+import com.haoche.yltms.system.model.BaseModel;
 import com.haoche.yltms.system.model.Shop;
 import com.haoche.yltms.system.model.User;
 import com.haoche.yltms.system.repository.ShopRepository;
@@ -74,7 +75,7 @@ public class ShopServiceImpl implements ShopService {
     public void del(String id, String userId) {
         Date now = new Date();
         Shop shop = this.shopRepository.getOne(id);
-        shop.setIsDelete(Shop.IS_DETELE);
+        shop.setIsDelete(BaseModel.IS_DETELE);
         shop.setDeleter(userId);
         shop.setDeleteTime(now);
         this.shopRepository.save(shop);
