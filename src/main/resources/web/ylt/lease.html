@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>亿路通汽车</title>
@@ -499,7 +499,7 @@
                     <div class="row ">
                         <div class="col-md-12 agileits-btm-spc form-text1">
                             <!--<input id="obtainCity" name="obtainCity" class="form-control" readonly type="text" data-toggle="city-picker">-->
-                            <select id="obtainShop" name="obtainShop" class="form-control">
+                            <select id="obtainShop" name="obtainShop" class="form-control" onchange="changeShop()">
                                 <option value="">请选择</option>
                             </select>
                         </div>
@@ -700,6 +700,31 @@
         }else{
             resetObShop(id);
         }
+    }
+    function changeShop(){
+        var shopId = $("#obtainShop").val();
+        var vehicleId = $("#vehicleId").val();
+        if(shopId){
+            $.ajax({
+                url:[[@{/inventory/getInventory}]],
+            type:"post",
+                data:{"shopId":shopId, "vehicleId":vehicleId},
+            dataType:"json",
+                success:function(result){
+                if(result.success){
+                    console.log(result);
+                    if(result.obj == null || result.obj.amount<1){
+                        $("#obtainShop").val("");
+                        toastr.warning("当前门店车辆不足");
+                    }
+
+                }else{
+                    toastr.warning(result.msg);
+                }
+            }
+        })
+        }
+
     }
     function resetObCity(id){
         $("#"+id+"City").empty();

@@ -10,37 +10,30 @@
     <script th:src="@{/js/utils.js}"></script>
     <script type="text/javascript" th:src="@{/js/data.js}"></script>
     <script type="text/javascript" th:src="@{/js/province.js}"></script>
+    <script>
+
+    </script>
 
 </head>
 <body>
     <div style="padding: 30px">
         <form class="layui-form" action="">
-            <input type="hidden" name="id" th:value="${obj.id}" class="layui-input">
-            <input type="hidden" name="address" th:value="${obj.address}" class="layui-input">
             <div class="layui-form-item">
-                <label class="layui-form-label">选择地区</label>
+                <label class="layui-form-label">库存量</label>
                 <div class="layui-input-inline">
-                    <select name="prov" id="prov" lay-filter="prov" >
-                        <option value="">请选择省</option>
-                    </select>
+                    <input type="text" name="amount" required lay-verify="amount" placeholder="请输入库存数量" autocomplete="off" class="layui-input">
                 </div>
+            </div>
+            <input type="hidden" name="shopId" th:value="${shopId}" class="layui-input">
+            <div class="layui-form-item">
+                <label class="layui-form-label">选择车辆</label>
                 <div class="layui-input-inline">
-                    <select name="city" id="city" lay-filter="city" >
-                        <option value="">请选择市</option>
-                    </select>
-                </div>
-                <div class="layui-input-inline">
-                    <select name="area" id="area" lay-filter="area" >
-                        <option value="">请选择县/区</option>
+                    <select id="vehicleSelect" name="vehicleId" lay-verify="required" lay-search="">
+                        <option value="">直接选择或搜索选择</option>
                     </select>
                 </div>
             </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">门店</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="shopName" th:value="${obj.shopName}" required placeholder="请输入门店地址" autocomplete="off" class="layui-input">
-                </div>
-            </div>
+
 
              <button style="display:none" id="onSubmit" class="layui-btn" lay-submit lay-filter="formSubmit">立即提交</button>
         </form>
@@ -48,9 +41,23 @@
 <script type="text/javascript" th:inline="javascript">
     /*<![CDATA[*/
     $(function(){
-        defaults.v1 = [[${obj.prov}]];
-        defaults.v2 = [[${obj.city}]];
-        defaults.v3 = [[${obj.area}]];
+        $.ajax({
+            url:[[@{/unverify/getVehicleInfo}]],
+            data:{},
+            type:"post",
+            dataType:"json",
+            success:function(result){
+            if(result.success){
+                var item = result.obj;
+                for(var i = 0;i<item.length;i++){
+                    var vehicle = item[i].brand+item[i].model;
+                    $("#vehicleSelect").append('<option value="'+item[i].id+'">'+vehicle+'</option>');
+                }
+            }else{
+                layer.msg(result.msg);
+            }
+        }
+    });
     });
     function onSubmit(){
         $("#onSubmit").click();
@@ -59,10 +66,17 @@
     layui.use(['form'], function(){
         var form = layui.form;
 
+        form.verify({
+            amount: [
+                /^100$|^(\d|[1-9]\d)$/
+                ,'库存量输入错误'
+            ]
+        });
+
         form.on('submit(formSubmit)', function(data){
             var index_ = layer.load(1);
             $.ajax({
-                url:[[@{/shop/save}]],
+                url:[[@{/inventory/save}]],
                 data:data.field,
                 type:"post",
                 dataType:"json",
@@ -71,13 +85,12 @@
                     parent.layer.msg("保存成功");
                     var index = parent.layer.getFrameIndex(window.name);
                     parent.layer.close(index);
-                    window.parent.location.reload();
-                    //window.parent.location.replace(location.href)//刷新父级页面
+                    window.parent.$("#reloadVehicle").click();
                 }else{
                     layer.msg(result.msg);
                 }
                 layer.close(index_);
-            },
+            }
         });
             return false;
         });

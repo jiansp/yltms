@@ -1,11 +1,14 @@
 package com.haoche.yltms.system.service.impl;
 
+import com.haoche.yltms.system.model.InventoryInfo;
 import com.haoche.yltms.system.model.RentOrder;
 import com.haoche.yltms.system.model.User;
 import com.haoche.yltms.system.model.Vehicle;
+import com.haoche.yltms.system.repository.InventoryRepository;
 import com.haoche.yltms.system.repository.OrderRepository;
 import com.haoche.yltms.system.repository.UserRepository;
 import com.haoche.yltms.system.repository.VehicleRepository;
+import com.haoche.yltms.system.service.InventoryService;
 import com.haoche.yltms.system.service.OrderService;
 import com.haoche.yltms.system.service.SerialNumberService;
 import com.haoche.yltms.utils.CopyUtils;
@@ -38,6 +41,8 @@ public class OrderServiceImpl implements OrderService {
     private UserRepository userRepository;
     @Autowired
     private VehicleRepository vehicleRepository;
+    @Autowired
+    private InventoryService inventoryService;
 
     @Override
     @Transient
@@ -65,6 +70,13 @@ public class OrderServiceImpl implements OrderService {
             order.setOrderStatus(RentOrder.UN_PAY);
             order.setOrderNo(date + orderNo);
             this.orderRepository.save(order);
+
+            InventoryInfo inventoryInfo = this.inventoryService.findInventory(order.getObtainShop(),order.getVehicleId());
+            if(inventoryInfo!=null){
+                inventoryInfo.setAmount(String.valueOf(Integer.valueOf(inventoryInfo.getAmount()) -1));
+                this.inventoryService.update(inventoryInfo,user);
+            }
+
         } else {
             RentOrder old = this.orderRepository.getOne(order.getId());
             order.setModifier(user.getId());

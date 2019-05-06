@@ -19,6 +19,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
@@ -57,7 +58,9 @@ public class InventoryServiceImpl implements InventoryService {
         TableData tableData = new TableData();
         List<Vehicle> inventoryInfos = new ArrayList<>();
         for (int i = 0; i < page.getContent().size(); i++) {
-            inventoryInfos.add(page.getContent().get(i).getVehicle());
+            InventoryInfo inventoryInfo = page.getContent().get(i);
+            inventoryInfo.getVehicle().setAmount(inventoryInfo.getAmount());
+            inventoryInfos.add(inventoryInfo.getVehicle());
         }
         tableData.setData(inventoryInfos);
         tableData.setCount(page.getTotalElements());
@@ -66,21 +69,51 @@ public class InventoryServiceImpl implements InventoryService {
 
     @Override
     public void saveAndUpdate(InventoryInfo inventoryInfo, User user) {
-        inventoryInfo.setVehicle(this.vehicleRepository.getOne(inventoryInfo.getVehicleId()));
-        inventoryInfo.setShop(this.shopRepository.getOne(inventoryInfo.getShopId()));
         Date now = new Date();
-        if (StringUtils.isEmpty(inventoryInfo.getId())) {
-            inventoryInfo.setId(UUIDGenerator.getUUID());
-            inventoryInfo.setCreateTime(now);
-            inventoryInfo.setCreator(user.getId());
-            this.inventoryRepository.save(inventoryInfo);
-        } else {
-            InventoryInfo old = this.inventoryRepository.getOne(inventoryInfo.getId());
+        List<InventoryInfo> inventoryInfos = this.inventoryRepository.findByShopAndVehicle(inventoryInfo.getShopId(),inventoryInfo.getVehicleId());
+        if(inventoryInfos != null && inventoryInfos.size()>0){
+            InventoryInfo old = inventoryInfos.get(0);
             inventoryInfo.setModifier(user.getId());
             inventoryInfo.setModifyTime(now);
+            Integer amount = Integer.valueOf(inventoryInfo.getAmount()) + Integer.valueOf(old.getAmount());
+            inventoryInfo.setAmount(String.valueOf(amount));
             CopyUtils.copyProperties(inventoryInfo, old);
             this.inventoryRepository.save(old);
+        }else{
+            inventoryInfo.setVehicle(this.vehicleRepository.getOne(inventoryInfo.getVehicleId()));
+            inventoryInfo.setShop(this.shopRepository.getOne(inventoryInfo.getShopId()));
 
+            if (StringUtils.isEmpty(inventoryInfo.getId())) {
+                inventoryInfo.setId(UUIDGenerator.getUUID());
+                inventoryInfo.setCreateTime(now);
+                inventoryInfo.setCreator(user.getId());
+                this.inventoryRepository.save(inventoryInfo);
+            } else {
+                this.update(inventoryInfo,user);
+
+            }
         }
+
+    }
+
+    @Override
+    public InventoryInfo findInventory(String shopId, String vehicleId) {
+        List<InventoryInfo> list = this.inventoryRepository.findByShopAndVehicle(shopId,vehicleId);
+        if(list!=null && list.size()>0){
+            return list.get(0);
+        }else{
+            return null;
+        }
+    }
+
+    @Override
+    public void update(InventoryInfo inventoryInfo,User user) {
+        Date now = new Date();
+        InventoryInfo old = this.inventoryRepository.getOne(inventoryInfo.getId());
+        inventoryInfo.setModifier(user.getId());
+        inventoryInfo.setModifyTime(now);
+        CopyUtils.copyProperties(inventoryInfo, old);
+        this.inventoryRepository.save(old);
+
     }
 }

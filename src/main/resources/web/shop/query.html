@@ -7,6 +7,8 @@
         <table class="layui-hide" id="shopTable" lay-filter="shopFilter"></table>
     </div>
     <div class="layui-col-md7">
+        <input id="shopId" type="hidden" />
+        <button style="display: none" id="reloadVehicle">reload</button>
         <table class="layui-hide" id="vehicleTable" lay-filter="vehicleFilter"></table>
     </div>
 
@@ -34,12 +36,6 @@
     <script type="text/html" id="toolbarVehicle">
         <div class="layui-input-block">
             <div class="layui-input-inline">
-                <input id="model" type="text" placeholder="请输入车型" class="layui-input">
-            </div>
-            <div class="layui-input-inline">
-                <button class="layui-btn" lay-event="search">搜索</button>
-            </div>
-            <div class="layui-input-inline">
                 <button class="layui-btn" lay-event="add">
                     <i class="layui-icon">&#xe654;</i>
                 </button>
@@ -47,7 +43,6 @@
         </div>
     </script>
     <script type="text/html" id="barVehicle">
-        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
     </script>
     <script th:src="@{/js/utils.js}"></script>
@@ -81,8 +76,7 @@
             //监听行单击事件（单击事件为：rowDouble）
             table.on('row(shopFilter)', function(obj){
                 var data = obj.data;
-                console.log(data.id);
-
+                $("#shopId").val(data.id);
                 //标注选中样式
                 obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
                 vehicleTable.reload({
@@ -174,6 +168,7 @@
                 [
                     {field:'id', title:'id',width:50 }
                     ,{field:'license', title:'车牌号', width:120,fixed: 'left'}
+                    ,{field:'amount', title:'库存量', width:100,fixed: 'left'}
                     ,{field:'brand', title:'品牌', width:120, edit: 'text'}
                     ,{field:'model', title:'车型', width:80, edit: 'text'}
                     ,{field:'seatNum', title:'座位数', width:100}
@@ -183,12 +178,6 @@
                     ,{field:'type', title:'类型'}
                     ,{field:'vin', title:'VIN码', edit: 'text', width:100}
                     ,{field:'rent', title:'租金'}
-                    ,{field:'firstLicense', title:'首次上牌时间', width:120, templet: function(res){
-                        return '<em>'+ formatDate("yyyy-MM-dd",new Date(res.firstLicense)) +'</em>'
-                    }}
-                    ,{field:'createTime', title:'加入时间', width:120, templet: function(res){
-                        return '<em>'+ formatDate("yyyy-MM-dd hh:mm:ss",new Date(res.createTime)) +'</em>'
-                    }}
                     ,{field:'imgPath', title:'图片', width:120, templet: function(res){
                         var src = [[@{/uploaded/}]]+res.imgPath;
                         return '<img src="'+src+'" height="100" width="100" />';
@@ -205,20 +194,26 @@
             table.on('toolbar(vehicleFilter)', function(obj){
                 switch(obj.event){
                     case 'add':
-                        layer.open({
-                            id: 'insert-form',
-                            type: 2,
-                            title:"编辑",
-                            area: ['400px', '420px'],
-                            btn: ['确定'],
-                            yes: function(index, layero){
-                                insertSubmit();
-                            },
-                            content: [[@{/shop/edit}]]
-                });
+                        var shopId = $("#shopId").val();
+                        if(shopId){
+                            layer.open({
+                                id: 'vehicle-form',
+                                type: 2,
+                                title:"编辑",
+                                area: ['400px', '420px'],
+                                btn: ['确定'],
+                                yes: function(index, layero){
+                                    insertVehicle();
+                                },
+                                content: [[@{/inventory/edit?shopId=}]]+shopId
+                            });
+                        }else{
+                            layer.msg("请先选择门店");
+                        }
+
                 break;
             case 'search':
-                shopTable.reload({
+                vehicleTable.reload({
                     where: { //设定异步数据接口的额外参数，任意设
                         shopName: $("#shopName").val()
                     }
@@ -237,14 +232,14 @@
                     layer.confirm('真的删除行么', function(index){
                         var index_ = layer.load(1);
                         $.ajax({
-                            url:[[@{/shop/del}]],
+                            url:[[@{/inventory/del}]],
                         data:{"id":data.id},
                         type:"post",
                             dataType:"json",
                             success:function(result){
                             if(result.success){
                                 layer.msg("删除成功");
-                                shopTable.reload();
+                                vehicleTable.reload();
                                 layer.close(index);
                             }else{
                                 layer.msg(result.msg);
@@ -271,7 +266,13 @@
             function insertVehicle(){
                 var frameId=document.getElementById('vehicle-form').getElementsByTagName("iframe")[0].id;
                 $('#'+frameId)[0].contentWindow.onSubmit();
+
             }
+            $("#reloadVehicle").click(function(){
+                vehicleTable.reload({
+                    where: {shopId:$("#shopId").val()}
+                })
+            });
         });
     </script>
 </footer>

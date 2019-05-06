@@ -11,4 +11,8 @@ public interface InventoryService {
     TableData findInventorys(Integer page, Integer limit, Map<String, String> params);
 
     void saveAndUpdate(InventoryInfo inventoryInfo, User user);
+
+    void update(InventoryInfo inventoryInfo, User user);
+
+    InventoryInfo findInventory(String shopId, String vehicleId);
 }

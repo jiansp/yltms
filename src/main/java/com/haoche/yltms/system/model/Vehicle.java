@@ -2,10 +2,7 @@ package com.haoche.yltms.system.model;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -33,6 +30,8 @@ public class Vehicle extends BaseModel {
     private String type;
     private String cubicles;
     private String exhaust;
+
+    private String amount;
 
     @Basic
     @Column(name = "IMG_PATH")
@@ -174,4 +173,13 @@ public class Vehicle extends BaseModel {
         this.exhaust = exhaust;
     }
 
+
+    @Transient
+    public String getAmount() {
+        return amount;
+    }
+
+    public void setAmount(String amount) {
+        this.amount = amount;
+    }
 }
