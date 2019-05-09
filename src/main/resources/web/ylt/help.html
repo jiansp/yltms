@@ -42,6 +42,12 @@
     <script type="text/javascript" th:src="@{/js/city-picker.js}"></script>
     <script type="text/javascript" th:src="@{/js/main.js}"></script>
     <script type="text/javascript" th:src="@{/js/utils.js}"></script>
+    <style type="text/css">
+        html,body{margin:0;padding:0;}
+        .iw_poi_title {color:#CC5522;font-size:14px;font-weight:bold;overflow:hidden;padding-right:13px;white-space:nowrap}
+        .iw_poi_content {font:12px arial,sans-serif;overflow:visible;padding-top:4px;white-space:-moz-pre-wrap;word-wrap:break-word}
+    </style>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?key=&v=1.1&services=true"></script>
 
     <style>
         .carItem img{
@@ -50,27 +56,12 @@
         .carItem div div{
             border-bottom: 2px solid #bbb;
         }
-        .city-picker-span {
-            border: 1px solid #646464;
-            background-color: #252525;
-            border-radius: 0.25rem;
-            width:100% !important;
-        }
+
         .form-control{
             border: 1px solid #646464;
             background-color: #252525;
             border-radius: 0.25rem;
             color: #a0a0a0;
-        }
-
-        .city-picker-span > .title > span {
-            color: #a0a0a0;
-        }
-        .city-picker-span.focus, .city-picker-span.open {
-            border-bottom-color: #646464;
-        }
-        .city-select-wrap {
-            width: 400px;
         }
     </style>
 
@@ -165,70 +156,36 @@
 
 <section class="contact py-5">
     <div class="container py-lg-5">
-        <h1 class="heading text-capitalize text-center">Contact Us</h1>
-        <h5 class="heading mb-5 text-center">Taxi Cab</h5>
+        <h1 class="heading text-capitalize text-center">帮助信息</h1>
         <div class="row agile-contact-form">
-            <div class="col-md-6 contact-form-left map">
+            <div class="col-md-8 contact-form-left map">
                 <div class="w3layouts-contact-form-top">
                     <div class="contact-form-top">
-                        <h3>Locate Us</h3>
+                        <h3>找到我们</h3>
                     </div>
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3381268.89304075!2d-108.26956901768942!3d34.145820117962906!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4b0d03d337cc6ad9%3A0x9968b72aa2438fa5!2sCanada!5e0!3m2!1sen!2sin!4v1524478277945" allowfullscreen></iframe>
+                    <!--<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3381268.89304075!2d-108.26956901768942!3d34.145820117962906!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4b0d03d337cc6ad9%3A0x9968b72aa2438fa5!2sCanada!5e0!3m2!1sen!2sin!4v1524478277945" allowfullscreen></iframe>
+                -->
+                    <div style="width:697px;height:550px;border:#ccc solid 1px;" id="dituContent"></div>
                 </div>
 
             </div>
-            <div class="col-md-6 mt-md-0 mt-4 contact-form-right">
+            <div class="col-md-4 mt-md-0 mt-4 contact-form-right">
                 <div class="contact-form-top">
-                    <h3>Send us a message</h3>
+                    <h3>限行查询</h3>
                 </div>
-                <div class="agileinfo-contact-form-grid">
-                    <form action="#" method="post">
-                        <input type="text" name="Name" placeholder="Name" required="">
-                        <input type="text" name="Subject" placeholder="Subject" required="">
-                        <input type="email" name="Email" placeholder="Email" required="">
-                        <textarea name="Message" placeholder="Message" required=""></textarea>
-                        <button class="btn1">Submit</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <div class="row top mt-5">
-            <div class="col-lg-4 mb-lg-0 mb-4 address-grid">
-                <div class="row address-info">
-                    <div class="col-lg-3 col-sm-2 mb-sm-0 mb-3 address-left">
-                        <i class="fas fa-map-marker-alt"></i>
+                <div style="margin-top: 20%">
+                    <div style="position: relative;">
+                        <input id="city-picker3" class="form-control" readonly type="text" value="北京市/北京市"
+                               data-toggle="city-picker">
                     </div>
-                    <div class="col-lg-9 col-sm-10 address-right text-left">
-                        <h6>Address</h6>
-                        <p> 3481 Jack Street Beverly Jack Hills<span> 90210 Block, USA </span>
-                        </p>
+                    <div style="position: absolute;top:30%;right: 0">
+                        <button class="btn btn-warning" id="reset" type="button">重置</button>
+                        <button class="btn btn-danger" id="destroy" onclick="queryXianhao()" type="button">确定</button>
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-4 mb-lg-0 mb-4 address-grid">
-                <div class="row address-info">
-                    <div class="col-lg-3 col-sm-2 mb-sm-0 mb-3 address-left">
-                        <i class="fas fa-envelope-open"></i>
-                    </div>
-                    <div class="col-lg-9 col-sm-10 address-right text-left">
-                        <h6>Email</h6>
-                        <p>Email :
-                            <a href="mailto:example@email.com"> mail@example.com</a>
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 address-grid">
-                <div class="row address-info">
-                    <div class="col-lg-3 col-sm-2 mb-sm-0 mb-3 address-left">
-                        <i class="fas fa-phone"></i>
-                    </div>
-                    <div class="col-lg-9 col-sm-10 address-right text-left">
-                        <h6>Phone</h6>
-                        <p>Phone : 112 367 896 2449</p>
-                        <p>Fax : 112 367 896 2449</p>
-                        </p>
-                    </div>
+                <div style="position: absolute;top: 50%;left: 20%;">
+                    <h3>今日限行  <span style="font-size:45px;font-family: 'Microsoft Sans Serif';color:#ffc107;" id="xianhao"></span></h3>
+
                 </div>
             </div>
         </div>
@@ -772,8 +729,128 @@
             $("#noLogin").show();
             $("#yesLogin").hide();
         }
+        queryXianhao();
     });
+    function queryXianhao(){
+        var city = $("#city-picker3").val();
+        console.log(city);
+        console.log(city.split("/")[1].replace("市", ""));
+        var data = {"city":city.split("/")[1].replace("市", "")};
+        $.ajax({
+            url:[[@{/unverify/getXianhao}]],
+        data:data,
+        type:"post",
+            dataType:"json",
+            success:function(result){
+            if(result.success){
+                console.log(result);
+                $("#xianhao").empty();
+                $("#xianhao").append(result.obj.data);
+            }else{
+                toastr.error(result.msg);
+            }
+        }
+    });
+    }
     /*]]>*/
+</script>
+<script type="text/javascript">
+    //创建和初始化地图函数：
+    function initMap(){
+        createMap();//创建地图
+        setMapEvent();//设置地图事件
+        addMapControl();//向地图添加控件
+        addMarker();//向地图中添加marker
+    }
+
+    //创建地图函数：
+    function createMap(){
+        var map = new BMap.Map("dituContent");//在百度地图容器中创建一个地图
+        var point = new BMap.Point(118.17439,39.636585);//定义一个中心点坐标
+        map.centerAndZoom(point,13);//设定地图的中心点和坐标并将地图显示在地图容器中
+        window.map = map;//将map变量存储在全局
+    }
+
+    //地图事件设置函数：
+    function setMapEvent(){
+        map.enableDragging();//启用地图拖拽事件，默认启用(可不写)
+        map.enableScrollWheelZoom();//启用地图滚轮放大缩小
+        map.enableDoubleClickZoom();//启用鼠标双击放大，默认启用(可不写)
+        map.enableKeyboard();//启用键盘上下左右键移动地图
+    }
+
+    //地图控件添加函数：
+    function addMapControl(){
+        //向地图中添加缩放控件
+        var ctrl_nav = new BMap.NavigationControl({anchor:BMAP_ANCHOR_TOP_LEFT,type:BMAP_NAVIGATION_CONTROL_LARGE});
+        map.addControl(ctrl_nav);
+        //向地图中添加缩略图控件
+        var ctrl_ove = new BMap.OverviewMapControl({anchor:BMAP_ANCHOR_BOTTOM_RIGHT,isOpen:1});
+        map.addControl(ctrl_ove);
+        //向地图中添加比例尺控件
+        var ctrl_sca = new BMap.ScaleControl({anchor:BMAP_ANCHOR_BOTTOM_LEFT});
+        map.addControl(ctrl_sca);
+    }
+
+    //标注点数组
+    var markerArr = [{title:"唐山站店",content:"电话：7891280<br/>24小时营业",point:"118.125091|39.63214",isOpen:0,icon:{w:21,h:21,l:0,t:0,x:6,lb:5}}
+        ,{title:"唐山学院店",content:"电话：8897061<br/>24小时营业",point:"118.196093|39.647698",isOpen:0,icon:{w:21,h:21,l:0,t:0,x:6,lb:5}}
+    ];
+    //创建marker
+    function addMarker(){
+        for(var i=0;i<markerArr.length;i++){
+            var json = markerArr[i];
+            var p0 = json.point.split("|")[0];
+            var p1 = json.point.split("|")[1];
+            var point = new BMap.Point(p0,p1);
+            var iconImg = createIcon(json.icon);
+            var marker = new BMap.Marker(point,{icon:iconImg});
+            var iw = createInfoWindow(i);
+            var label = new BMap.Label(json.title,{"offset":new BMap.Size(json.icon.lb-json.icon.x+10,-20)});
+            marker.setLabel(label);
+            map.addOverlay(marker);
+            label.setStyle({
+                borderColor:"#808080",
+                color:"#333",
+                cursor:"pointer"
+            });
+
+            (function(){
+                var index = i;
+                var _iw = createInfoWindow(i);
+                var _marker = marker;
+                _marker.addEventListener("click",function(){
+                    this.openInfoWindow(_iw);
+                });
+                _iw.addEventListener("open",function(){
+                    _marker.getLabel().hide();
+                })
+                _iw.addEventListener("close",function(){
+                    _marker.getLabel().show();
+                })
+                label.addEventListener("click",function(){
+                    _marker.openInfoWindow(_iw);
+                })
+                if(!!json.isOpen){
+                    label.hide();
+                    _marker.openInfoWindow(_iw);
+                }
+            })()
+        }
+    }
+    //创建InfoWindow
+    function createInfoWindow(i){
+        var json = markerArr[i];
+        var iw = new BMap.InfoWindow("<b class='iw_poi_title' title='" + json.title + "'>" + json.title + "</b><div class='iw_poi_content'>"+json.content+"</div>");
+        return iw;
+    }
+    //创建一个Icon
+    function createIcon(json){
+        var icon = new BMap.Icon("http://app.baidu.com/map/images/us_mk_icon.png", new BMap.Size(json.w,json.h),{imageOffset: new BMap.Size(-json.l,-json.t),infoWindowOffset:new BMap.Size(json.lb+5,1),offset:new BMap.Size(json.x,json.h)})
+        return icon;
+    }
+
+    initMap();//创建和初始化地图
 </script>
 </body>
 </html>

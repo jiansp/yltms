@@ -114,7 +114,7 @@
 
         defineDems: function () {
             var stop = false;
-            $.each([PROVINCE, CITY, DISTRICT], $.proxy(function (i, type) {
+            $.each([PROVINCE, CITY], $.proxy(function (i, type) {
                 if (!stop) {
                     this.dems.push(type);
                 }

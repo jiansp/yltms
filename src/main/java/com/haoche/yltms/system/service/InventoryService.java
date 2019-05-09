@@ -15,4 +15,6 @@ public interface InventoryService {
     void update(InventoryInfo inventoryInfo, User user);
 
     InventoryInfo findInventory(String shopId, String vehicleId);
+
+    void updateAmount(String shopId, String vehicleId, int n);
 }

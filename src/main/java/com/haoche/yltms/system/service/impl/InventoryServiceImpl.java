@@ -107,6 +107,18 @@ public class InventoryServiceImpl implements InventoryService {
     }
 
     @Override
+    public void updateAmount(String shopId, String vehicleId, int n) {
+        List<InventoryInfo> list = this.inventoryRepository.findByShopAndVehicle(shopId,vehicleId);
+        if(list!=null && list.size()>0){
+            InventoryInfo inventoryInfo =  list.get(0);
+            inventoryInfo.setAmount(String.valueOf(Integer.valueOf(inventoryInfo.getAmount()) + n));
+            this.inventoryRepository.save(inventoryInfo);
+        }else{
+            throw new RuntimeException("未找到库存，请先为门店分配车辆");
+        }
+    }
+
+    @Override
     public void update(InventoryInfo inventoryInfo,User user) {
         Date now = new Date();
         InventoryInfo old = this.inventoryRepository.getOne(inventoryInfo.getId());

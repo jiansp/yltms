@@ -21,6 +21,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.criteria.Path;
@@ -45,7 +47,7 @@ public class OrderServiceImpl implements OrderService {
     private InventoryService inventoryService;
 
     @Override
-    @Transient
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
     public void saveAndUpdate(RentOrder order, User user) {
         Date now = new Date();
         if (StringUtils.isEmpty(order.getId())) {
@@ -71,14 +73,18 @@ public class OrderServiceImpl implements OrderService {
             order.setOrderNo(date + orderNo);
             this.orderRepository.save(order);
 
-            InventoryInfo inventoryInfo = this.inventoryService.findInventory(order.getObtainShop(),order.getVehicleId());
-            if(inventoryInfo!=null){
-                inventoryInfo.setAmount(String.valueOf(Integer.valueOf(inventoryInfo.getAmount()) -1));
-                this.inventoryService.update(inventoryInfo,user);
-            }
+            this.inventoryService.updateAmount(order.getObtainShop(),order.getVehicleId(),-1);
 
         } else {
+
+
             RentOrder old = this.orderRepository.getOne(order.getId());
+            if(order.getOrderStatus().equals(RentOrder.INVALID) || order.getOrderStatus().equals(RentOrder.CANCEL)){
+                this.inventoryService.updateAmount(old.getObtainShop(),old.getVehicle().getId(),1);
+            }
+            if(order.getOrderStatus().equals(RentOrder.RETURN_CAR)){
+                this.inventoryService.updateAmount(old.getReturnShop(),old.getVehicle().getId(),1);
+            }
             order.setModifier(user.getId());
             order.setModifyTime(now);
             CopyUtils.copyProperties(order, old);
@@ -115,7 +121,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
     @Override
-    @Transient
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
     public void payOrder(String orderId, String userId) {
         RentOrder order = this.orderRepository.getOne(orderId);
         User user = this.userRepository.getOne(userId);
@@ -131,6 +137,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
     public void cancelOrder(String orderId, String userId) {
         RentOrder order = this.orderRepository.getOne(orderId);
         User user = this.userRepository.getOne(userId);
@@ -140,6 +147,8 @@ public class OrderServiceImpl implements OrderService {
         user.setBalance(balance.add(rent));
         this.userRepository.save(user);
         this.orderRepository.save(order);
+        this.inventoryService.updateAmount(order.getObtainShop(),order.getVehicle().getId(),1);
+
     }
 
 }

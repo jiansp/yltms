@@ -18,12 +18,7 @@
 <body>
     <div style="padding: 30px">
         <form class="layui-form" action="">
-            <div class="layui-form-item">
-                <label class="layui-form-label">库存量</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="amount" required lay-verify="amount" placeholder="请输入库存数量" autocomplete="off" class="layui-input">
-                </div>
-            </div>
+
             <input type="hidden" name="shopId" th:value="${shopId}" class="layui-input">
             <div class="layui-form-item">
                 <label class="layui-form-label">选择车辆</label>
@@ -31,6 +26,12 @@
                     <select id="vehicleSelect" name="vehicleId" lay-verify="required" lay-search="">
                         <option value="">直接选择或搜索选择</option>
                     </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">库存量</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="amount" required lay-verify="amount" placeholder="请输入库存数量" autocomplete="off" class="layui-input">
                 </div>
             </div>
 

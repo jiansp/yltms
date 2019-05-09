@@ -13,7 +13,7 @@ public class ToInterface {
      * @param path 对方或第三方提供的路径
      * @param data 向对方或第三方发送的数据，大多数情况下给对方发送JSON数据让对方解析
      */
-    public static void interfaceUtil(String path,String data) {
+    public static String interfaceUtil(String path,String data) {
         try {
             URL url = new URL(path);
             //打开和url之间的连接
@@ -41,8 +41,10 @@ public class ToInterface {
             //构造一个字符流缓存
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
             String str = "";
+            String res = "";
             while ((str = br.readLine()) != null) {
                 System.out.println(str);
+                res = str;
             }
             //关闭流
             is.close();
@@ -50,15 +52,18 @@ public class ToInterface {
             //固定多线程的话，如果不disconnect，链接会增多，直到收发不出信息。写上disconnect后正常一些。
             conn.disconnect();
             System.out.println("完整结束");
+            return res;
         } catch (Exception e) {
             e.printStackTrace();
+            return "查询失败";
         }
     }
 
+    public static String getInterfaceData(String param){
+        return interfaceUtil("http://soft.svip8.vip/api/Api/getXianhao?city="+param,"");
+    }
+
     public static void main(String[] args) {
-        interfaceUtil("http://soft.svip8.vip/api/Api/getXianhao?city=天津", "");
-//        interfaceUtil("http://192.168.10.89:8080/eoffice-restful/resources/sys/oadata", "usercode=10012");
-//        interfaceUtil("http://192.168.10.89:8080/eoffice-restful/resources/sys/oaholiday",
-//                    "floor=first&year=2017&month=9&isLeader=N");
+        System.out.println(getInterfaceData("天津"));
     }
 }

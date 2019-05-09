@@ -7,6 +7,7 @@
     <link rel="shortcut icon" type="image/x-icon" th:href="@{/img/car.ico}" />
     <script type="text/javascript" th:src="@{/jquery/jquery.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/encode64.js}"></script>
+    <script type="text/javascript" th:src="@{/js/echarts.js}"></script>
 
     <style>
         .layui-input-block{
@@ -39,12 +40,13 @@
         <div class="layui-side-scroll">
             <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
             <ul class="layui-nav layui-nav-tree" id="leftUl"  lay-filter="test">
-                <li class="layui-nav-item"><a th:title="用户管理" th:href="@{/user/query(index=0)}">用户管理</a></li>
-                <li class="layui-nav-item"><a th:title="车辆管理" th:href="@{/vehicle/query(index=1)}">车辆管理</a></li>
-                <li class="layui-nav-item"><a th:title="门店管理" th:href="@{/shop/query(index=2)}">门店管理</a></li>
-                <li class="layui-nav-item"><a th:title="订单管理" th:href="@{/order/query(index=3)}">订单管理</a></li>
-                <li class="layui-nav-item"><a th:title="优惠信息" th:href="@{/favorable/query(index=4)}">优惠信息</a></li>
-                <li class="layui-nav-item"><a th:title="信息反馈" th:href="@{/feedback/query(index=5)}">信息反馈</a></li>
+                <li class="layui-nav-item"><a th:title="首页" th:href="@{/statistics/index(index=0)}">首页</a></li>
+                <li class="layui-nav-item"><a th:title="用户管理" th:href="@{/user/query(index=1)}">用户管理</a></li>
+                <li class="layui-nav-item"><a th:title="车辆管理" th:href="@{/vehicle/query(index=2)}">车辆管理</a></li>
+                <li class="layui-nav-item"><a th:title="门店管理" th:href="@{/shop/query(index=3)}">门店管理</a></li>
+                <li class="layui-nav-item"><a th:title="订单管理" th:href="@{/order/query(index=4)}">订单管理</a></li>
+                <li class="layui-nav-item"><a th:title="优惠信息" th:href="@{/favorable/query(index=5)}">优惠信息</a></li>
+                <li class="layui-nav-item"><a th:title="信息反馈" th:href="@{/feedback/query(index=6)}">信息反馈</a></li>
             </ul>
         </div>
     </div>

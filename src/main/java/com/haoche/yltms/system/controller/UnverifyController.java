@@ -1,11 +1,13 @@
 package com.haoche.yltms.system.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.haoche.yltms.system.model.Favorable;
 import com.haoche.yltms.system.model.Vehicle;
 import com.haoche.yltms.system.service.FavorableService;
 import com.haoche.yltms.system.service.ShopService;
 import com.haoche.yltms.system.service.VehicleService;
 import com.haoche.yltms.system.vo.Result;
+import com.haoche.yltms.utils.ToInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -72,6 +74,23 @@ public class UnverifyController {
             List<Favorable> favorables = this.favorableService.findFavorables(params);
             result.setSuccess(true);
             result.setObj(favorables);
+        } catch (Exception e){
+            e.printStackTrace();
+            result.setSuccess(false);
+            result.setMsg(e.getMessage());
+        }
+        return result;
+    }
+
+    @ResponseBody
+    @RequestMapping("/getXianhao")
+    public Result getXianhao(String city){
+        Result result = new Result();
+        try {
+            String data = ToInterface.getInterfaceData(city);
+            JSONObject res = JSONObject.parseObject(data);
+            result.setObj(res);
+            result.setSuccess(true);
         } catch (Exception e){
             e.printStackTrace();
             result.setSuccess(false);

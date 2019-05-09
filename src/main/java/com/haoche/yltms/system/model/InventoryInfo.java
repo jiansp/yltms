@@ -14,10 +14,6 @@ public class InventoryInfo extends BaseModel{
     private String amount;
     private String isStop;
 
-    public InventoryInfo(String shopId, String vehicleId){
-        this.shopId = shopId;
-        this.vehicleId = vehicleId;
-    }
 
     @ManyToOne
     @NotFound(action = NotFoundAction.IGNORE)
